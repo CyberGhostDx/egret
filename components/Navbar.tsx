@@ -134,23 +134,27 @@ const Navbar = () => {
                           {link.name}
                         </NextLink>
                       ))}
-                      <div className="pt-4 border-t border-divider flex items-center justify-between">
+                      <div className="pt-4 border-t border-divider flex items-center justify-between gap-2">
                         <span className="text-sm font-medium text-muted-foreground">Language</span>
-                        <Tabs variant="primary" defaultSelectedKey="th" className="bg-muted/50 rounded-full border border-divider">
-                          <Tabs.List aria-label="Language selection" className="p-0.5 h-9 flex items-center">
-                            <Tabs.Tab
-                              id="en"
-                              className="px-3 h-7 rounded-full text-[10px] font-bold transition-all data-[selected=true]:bg-background data-[selected=true]:text-primary"
+                        <Tabs variant="primary" defaultSelectedKey="th" className="w-full max-w-sm">
+                          <Tabs.ListContainer>
+                            <Tabs.List aria-label="Language selection"
+                              className="w-fit *:h-6 *:w-fit *:px-3 *:text-sm *:font-normal *:data-[selected=true]:text-accent-foreground"
                             >
-                              EN
-                            </Tabs.Tab>
-                            <Tabs.Tab
-                              id="th"
-                              className="px-3 h-7 rounded-full text-[10px] font-bold transition-all data-[selected=true]:bg-background data-[selected=true]:text-primary"
-                            >
-                              ไทย
-                            </Tabs.Tab>
-                          </Tabs.List>
+                              <Tabs.Tab
+                                id="en"
+                              >
+                                EN
+                                <Tabs.Indicator className="bg-primary" />
+                              </Tabs.Tab>
+                              <Tabs.Tab
+                                id="th"
+                              >
+                                ไทย
+                                <Tabs.Indicator className="bg-primary" />
+                              </Tabs.Tab>
+                            </Tabs.List>
+                          </Tabs.ListContainer>
                         </Tabs>
                       </div>
                     </div>
