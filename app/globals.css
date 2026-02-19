@@ -3,4 +3,21 @@
 
 @theme {
   --font-sans: var(--font-ibm), ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary: #296374;
+  --color-primary-foreground: #ffffff;
+  --primary: #296374;
+  --primary-foreground: #ffffff;
+
+  --color-secondary: #629fad;
+  --color-secondary-foreground: #ffffff;
+  --secondary: #629fad;
+  --secondary-foreground: #ffffff;
+}
+
+:root {
+  --primary: #296374;
+  --primary-foreground: #ffffff;
+  --secondary: #629fad;
+  --secondary-foreground: #ffffff;
 }

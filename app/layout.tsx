@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Thai } from "next/font/google";
+import AuthGuard from "@/components/auth/AuthGuard";
 import "./globals.css";
 
 const ibmSans = IBM_Plex_Sans_Thai({
@@ -21,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${ibmSans.variable} ${ibmSans.className}  antialiased`}>
-        {children}
+        <AuthGuard>{children}</AuthGuard>
       </body>
     </html>
   );
