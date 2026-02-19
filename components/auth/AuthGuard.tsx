@@ -12,21 +12,16 @@ const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (isPending) return;
 
-    if (!session && pathname !== "/login") {
-      router.replace("/login");
-    } else if (session && pathname === "/login") {
-      router.replace("/");
-    }
+    if (!session) router.replace("/login");
   }, [session, isPending, pathname, router]);
 
-  if (isPending || (!session && pathname !== "/login") || (session && pathname === "/login")) {
+  if (isPending || !session) {
     return (
       <div className="w-full h-screen">
         <Loading />
       </div>
     );
   }
-
 
   return <>{children}</>;
 };

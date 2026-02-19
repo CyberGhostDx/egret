@@ -1,11 +1,23 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
+import { useEffect } from "react";
 import { Button } from "@heroui/react";
 import Image from "next/image";
 import { FcGoogle } from "react-icons/fc";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
+
+  useEffect(() => {
+    if (!isPending && session) {
+      router.replace("/");
+    }
+  }, [session, isPending, router]);
+
+
   const handleGoogleLogin = async () => {
     await authClient.signIn.social({
       provider: "google",
