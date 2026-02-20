@@ -54,9 +54,9 @@ export default function ExamCard({ exam }: { exam: Exam }) {
   });
 
   return (
-    <div className="bg-linear-to-r from-[#447D8B] to-[#008B6D] text-white rounded-2xl p-6 shadow-md flex items-center justify-between hover:bg-[#1b7a62] transition-colors relative overflow-hidden">
-      <div className="flex flex-col items-center justify-center px-4 w-1/3 border-r border-white/30">
-        <div className="text-4xl font-bold tracking-wider relative -left-2">
+    <div className="bg-linear-to-r from-[#447D8B] to-[#008B6D] text-white rounded-2xl p-5 sm:p-6 shadow-md flex flex-col sm:flex-row items-center gap-4 sm:gap-0 hover:bg-[#1b7a62] transition-colors relative overflow-hidden">
+      <div className="flex flex-col items-center justify-center px-2 sm:px-4 w-full sm:w-2/5 border-b sm:border-b-0 sm:border-r border-white/20 pb-4 sm:pb-0">
+        <div className="text-xl sm:text-4xl font-bold tracking-wider tabular-nums">
           {timeLeft.days.toString().padStart(2, "0")}:
           {timeLeft.hours.toString().padStart(2, "0")}:
           {timeLeft.minutes.toString().padStart(2, "0")}
@@ -68,14 +68,14 @@ export default function ExamCard({ exam }: { exam: Exam }) {
         </div>
       </div>
 
-      <div className="flex flex-col pl-6 w-2/3">
-        <span className="text-lg font-bold">{exam.courseCode}</span>
-        <h3 className="text-xl font-bold leading-tight mb-2 grow">
+      <div className="flex flex-col items-center sm:items-start text-center sm:text-left sm:pl-6 w-full sm:w-3/5">
+        <span className="text-sm font-bold opacity-70 uppercase tracking-wider">{exam.courseCode}</span>
+        <h3 className="text-xl font-bold leading-tight mb-1 sm:mb-2">
           {exam.courseName}
         </h3>
-        <div className="text-sm font-medium opacity-90 mt-2">
-          <p>
-            {exam.startTime} - {exam.endTime}
+        <div className="text-sm font-medium opacity-80 mt-1">
+          <p className="flex items-center gap-2 justify-center sm:justify-start">
+            <span>{exam.startTime} - {exam.endTime}</span>
           </p>
           <p>{formattedDate}</p>
         </div>

@@ -44,7 +44,7 @@ export default function ExamCalendar() {
   }
 
   return (
-    <div className="bg-white rounded-[2rem] p-6 shadow-sm border border-slate-100 grow w-full h-[550px] relative fc-custom-theme">
+    <div className="bg-white rounded-[2rem] p-6 pb-20 shadow-sm border border-slate-100 w-full h-fit relative fc-custom-theme flex flex-col">
       <FullCalendar
         plugins={[dayGridPlugin]}
         initialView="dayGridMonth"
@@ -53,6 +53,8 @@ export default function ExamCalendar() {
           center: "title",
           right: "next"
         }}
+        fixedWeekCount={false}
+        height="auto"
         dayCellContent={(arg) => {
           const dateStr = arg.date.toLocaleDateString("en-CA", { timeZone: "Asia/Bangkok" });
           const dayExams = groupedExams[dateStr];
@@ -91,15 +93,13 @@ export default function ExamCalendar() {
           const dateStr = arg.date.toLocaleDateString("en-CA", { timeZone: "Asia/Bangkok" });
           return groupedExams[dateStr] ? ["has-exam"] : [];
         }}
-        height="100%"
-        contentHeight="auto"
         dayMaxEvents={true}
       />
 
-      <div className="absolute bottom-6 left-6 font-bold text-sm text-slate-800">
+      <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 font-bold text-xs sm:text-sm text-slate-800">
         Time
       </div>
-      <div className="absolute bottom-4 right-6 bg-slate-200/50 text-slate-700 px-4 py-1 rounded-full text-xs font-medium">
+      <div className="absolute bottom-3 sm:bottom-4 right-4 sm:right-6 bg-slate-200/50 text-slate-700 px-3 sm:px-4 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium">
         {new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZoneName: 'short' })}
       </div>
     </div>

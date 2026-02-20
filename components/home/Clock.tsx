@@ -32,21 +32,21 @@ export default function Clock() {
   }).padStart(2, "0");
 
   return (
-    <div className="flex flex-col items-center justify-center text-[#2c5f66] py-10">
-      <div className="flex items-center gap-2 text-center">
-        <div className="flex flex-col min-w-[80px]">
-          <span className="text-7xl font-bold tracking-tight">{hours}</span>
-          <span className="text-sm font-medium opacity-70 mt-1">Hours</span>
+    <div className="flex flex-col items-center justify-center text-[#2c5f66] py-6 sm:py-10">
+      <div className="flex items-center gap-1 sm:gap-2 text-center">
+        <div className="flex flex-col min-w-[60px] sm:min-w-[80px]">
+          <span className="text-5xl sm:text-7xl font-bold tracking-tight">{hours}</span>
+          <span className="text-xs sm:text-sm font-medium opacity-70 mt-1">Hours</span>
         </div>
-        <span className="text-6xl font-bold mb-6 opacity-80">:</span>
-        <div className="flex flex-col min-w-[80px]">
-          <span className="text-7xl font-bold tracking-tight">{minutes}</span>
-          <span className="text-sm font-medium opacity-70 mt-1">Minutes</span>
+        <span className="text-4xl sm:text-6xl font-bold mb-4 sm:mb-6 opacity-80">:</span>
+        <div className="flex flex-col min-w-[60px] sm:min-w-[80px]">
+          <span className="text-5xl sm:text-7xl font-bold tracking-tight">{minutes}</span>
+          <span className="text-xs sm:text-sm font-medium opacity-70 mt-1">Minutes</span>
         </div>
-        <span className="text-6xl font-bold mb-6 opacity-80">:</span>
-        <div className="flex flex-col min-w-[80px]">
-          <span className="text-7xl font-bold tracking-tight">{seconds}</span>
-          <span className="text-sm font-medium opacity-70 mt-1">Seconds</span>
+        <span className="text-4xl sm:text-6xl font-bold mb-4 sm:mb-6 opacity-80">:</span>
+        <div className="flex flex-col min-w-[60px] sm:min-w-[80px]">
+          <span className="text-5xl sm:text-7xl font-bold tracking-tight">{seconds}</span>
+          <span className="text-xs sm:text-sm font-medium opacity-70 mt-1">Seconds</span>
         </div>
       </div>
     </div>

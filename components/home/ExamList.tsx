@@ -45,7 +45,7 @@ export default function ExamList() {
   }
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-xl">
+    <div className="flex flex-col gap-4 w-full lg:max-w-xl mx-auto lg:mx-0">
       {sortedExams.map((exam) => (
         <ExamCard key={exam.id} exam={exam} />
       ))}
