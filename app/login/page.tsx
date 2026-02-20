@@ -26,8 +26,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-white p-4 bg-linear-to-t from-primary/60 to-white">
-      <div className="absolute bg-white/30 z-10 w-full h-full inset-0"></div>
+    <div className="flex min-h-screen flex-col items-center justify-center p-4 primary-bg">
       <div className="flex w-full max-w-sm flex-col items-center space-y-6 z-20">
         <div className="relative h-32 w-32">
           <Image
