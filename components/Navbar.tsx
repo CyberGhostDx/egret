@@ -113,13 +113,13 @@ const Navbar = () => {
               {({ isExpanded }) => (
                 <>
                   <Disclosure.Trigger
-                    className="p-1 px-2 border border-transparent rounded-md hover:bg-muted transition-colors flex items-center justify-center h-10 w-10"
+                    className="p-1 px-2 border border-transparent rounded-md  transition-colors flex items-center justify-center size-10"
                     aria-label="Toggle Menu"
                   >
                     {isExpanded ? (
-                      <HiX className="h-6 w-6 text-muted-foreground" />
+                      <HiX className="h-6 w-6 text-primary" />
                     ) : (
-                      <HiMenu className="h-6 w-6 text-muted-foreground" />
+                      <HiMenu className="h-6 w-6 text-primary" />
                     )}
                   </Disclosure.Trigger>
                   <Disclosure.Content className="absolute top-full right-0 mt-2 w-48 bg-background border border-divider rounded-lg shadow-xl animate-in fade-in slide-in-from-top-2 duration-200 z-50">
