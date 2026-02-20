@@ -9,6 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.20",
+    "@fullcalendar/daygrid": "^6.1.20",
+    "@fullcalendar/react": "^6.1.20",
     "@heroui/react": "^3.0.0-beta.6",
     "@heroui/styles": "^3.0.0-beta.6",
     "axios": "^1.13.5",
