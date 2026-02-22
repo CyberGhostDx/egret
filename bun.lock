@@ -10,7 +10,6 @@
         "@fullcalendar/react": "^6.1.20",
         "@heroui/react": "^3.0.0-beta.6",
         "@heroui/styles": "^3.0.0-beta.6",
-        "add-to-calendar-button-react": "^2.13.8",
         "axios": "^1.13.5",
         "better-auth": "^1.4.18",
         "framer-motion": "^12.34.2",
@@ -577,10 +576,6 @@
 
     "acorn-jsx": ["acorn-jsx@5.3.2", "", { "peerDependencies": { "acorn": "^6.0.0 || ^7.0.0 || ^8.0.0" } }, "sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ=="],
 
-    "add-to-calendar-button": ["add-to-calendar-button@2.13.8", "", { "dependencies": { "timezones-ical-library": "^2.1.2" } }, "sha512-hgB2p3y05legI2x3lh3ye6unH4iDuZ7nSoCap/FQZlJ2zMoP6PltXuT4+zjM+ygMpRQ7AW1zcqhAufgmrCNqnw=="],
-
-    "add-to-calendar-button-react": ["add-to-calendar-button-react@2.13.8", "", { "dependencies": { "add-to-calendar-button": "^2.13.8" }, "peerDependencies": { "react": ">=18.0.0", "react-dom": ">=18.0.0" } }, "sha512-95FBSWCzLhhmeKkO5tLpw5spllxmV/d03Td0WOCAI4CQfN+XWmBowzR2edtDppnWiRvy/wzJEMiyf8vUoSKZaw=="],
-
     "ajv": ["ajv@6.12.6", "", { "dependencies": { "fast-deep-equal": "^3.1.1", "fast-json-stable-stringify": "^2.0.0", "json-schema-traverse": "^0.4.1", "uri-js": "^4.2.2" } }, "sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g=="],
 
     "ansi-styles": ["ansi-styles@4.3.0", "", { "dependencies": { "color-convert": "^2.0.1" } }, "sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg=="],
@@ -1140,8 +1135,6 @@
     "tailwindcss": ["tailwindcss@4.1.18", "", {}, "sha512-4+Z+0yiYyEtUVCScyfHCxOYP06L5Ne+JiHhY2IjR2KWMIWhJOYZKLSGZaP5HkZ8+bY0cxfzwDE5uOmzFXyIwxw=="],
 
     "tapable": ["tapable@2.3.0", "", {}, "sha512-g9ljZiwki/LfxmQADO3dEY1CbpmXT5Hm2fJ+QaGKwSXUylMybePR7/67YW7jOrrvjEgL1Fmz5kzyAjWVWLlucg=="],
-
-    "timezones-ical-library": ["timezones-ical-library@2.1.2", "", {}, "sha512-VW7gTRzrveUNdLaztWKlsgHRn1eagubRA/HHembnrh9xYDtDRwRWN+zWcNIE3QM+TpXikSJLp/jwxYQv7IJJvg=="],
 
     "tinyglobby": ["tinyglobby@0.2.15", "", { "dependencies": { "fdir": "^6.5.0", "picomatch": "^4.0.3" } }, "sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ=="],
 
