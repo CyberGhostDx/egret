@@ -2,7 +2,6 @@
 
 import { useUserStore } from "@/store/useUserStore";
 import ExamCard, { Exam } from "./ExamCard";
-import Loading from "../Loading";
 
 export default function ExamList() {
   const user = useUserStore((state) => state.user);
@@ -18,7 +17,8 @@ export default function ExamList() {
       return uc.offering.exams.map((e) => ({
         id: e.id,
         courseCode: uc.offering.courseId,
-        courseName: course.titleTh,
+        courseNameEn: course.titleEn || course.titleTh,
+        courseNameTh: course.titleTh,
         date: new Date(e.examDate),
         startTime: new Date(e.startTime).toLocaleTimeString("en-GB", {
           hour: "2-digit",
@@ -33,6 +33,7 @@ export default function ExamList() {
           timeZone: "Asia/Bangkok",
         }),
         sectionType: uc.offering.sectionType,
+        section: uc.offering.section,
       }));
     }) || [];
 
