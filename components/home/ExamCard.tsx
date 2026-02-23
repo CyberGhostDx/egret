@@ -2,13 +2,17 @@
 
 import { z } from "zod";
 import { useState, useEffect, useMemo } from "react";
-import { Modal, Button, Dropdown, Select, ListBox } from "@heroui/react";
+import { Modal, Button, Dropdown, Select, ListBox, useOverlayState } from "@heroui/react";
 import { useUserStore } from "@/store/useUserStore";
 import { LuCalendarPlus } from "react-icons/lu";
 import { google, outlook, office365, yahoo, ics } from "calendar-link";
+import axiosInstance from "@/lib/axiosInstance";
+import { AxiosError } from "axios";
+import { toast } from "@heroui/react";
 
 export const examSchema = z.object({
   id: z.string(),
+  offeringId: z.string(),
   courseCode: z.string(),
   courseNameTh: z.string(),
   courseNameEn: z.string(),
@@ -49,7 +53,8 @@ const formatCalendarTime = (date: Date, time: string) => {
 };
 
 export default function ExamCard({ exam }: { exam: Exam }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isPending, setIsPending] = useState(false)
+  const modalState = useOverlayState();
   const user = useUserStore((state) => state.user);
 
   const [timeLeft, setTimeLeft] = useState(() =>
@@ -131,10 +136,33 @@ export default function ExamCard({ exam }: { exam: Exam }) {
 
   }
 
+  const removeCourse = useUserStore((state) => state.removeCourse);
+
+  const handleUnenroll = async (offeringId: string) => {
+    try {
+      setIsPending(true);
+      await axiosInstance.delete(`/api/users/enroll/${offeringId}`);
+      removeCourse(offeringId);
+      toast.success("Unenrolled successfully.");
+      modalState.close();
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.data.error.code === "COURSE_ALREADY_ENROLLED") {
+          return toast.danger("You have already enrolled in this course.");
+        } else if (error.response?.data.error.code === "COURSE_NOT_FOUND") {
+          return toast.danger("Course not found.");
+        }
+      }
+      toast.danger("Failed to add course.");
+    } finally {
+      setIsPending(false);
+    }
+  }
+
   return (
     <>
       <div
-        onClick={() => setIsOpen(true)}
+        onClick={modalState.open}
         className="bg-linear-to-r from-[#447D8B] to-[#008B6D] text-white rounded-2xl p-5 sm:p-6 shadow-md flex flex-col sm:flex-row items-center gap-4 sm:gap-0 hover:bg-[#1b7a62] transition-colors cursor-pointer relative overflow-hidden"
       >
         <div className="flex flex-col items-center justify-center px-2 sm:px-4 w-full sm:w-2/5 border-b sm:border-b-0 sm:border-r border-white/20 pb-4 sm:pb-0">
@@ -169,7 +197,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
       </div>
 
       <Modal>
-        <Modal.Backdrop isOpen={isOpen} onOpenChange={setIsOpen}>
+        <Modal.Backdrop isOpen={modalState.isOpen} onOpenChange={modalState.setOpen}>
           <Modal.Container size="lg">
             <Modal.Dialog className=" px-10 pt-8 relative bg-white outline-none">
               <Modal.CloseTrigger />
@@ -268,8 +296,8 @@ export default function ExamCard({ exam }: { exam: Exam }) {
               </Modal.Body>
 
               <Modal.Footer className="flex justify-between mt-10">
-                <Button variant="danger" onPress={() => setIsOpen(false)}>
-                  Delete
+                <Button variant="danger" onPress={() => handleUnenroll(exam.offeringId)} isPending={isPending}>
+                  Unenroll
                 </Button>
 
                 <div className="flex gap-2 items-center">

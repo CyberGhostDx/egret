@@ -17,6 +17,7 @@ export default function ExamList() {
       return uc.offering.exams.map((e) => ({
         id: e.id,
         courseCode: uc.offering.courseId,
+        offeringId: uc.offering.id,
         courseNameEn: course.titleEn || course.titleTh,
         courseNameTh: course.titleTh,
         date: new Date(e.examDate),

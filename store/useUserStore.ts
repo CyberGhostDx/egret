@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import {
+  UserCourse,
   UserDashboardResponse,
   userDashboardSchema,
 } from "@/schema/backend.schema";
@@ -10,6 +11,8 @@ interface UserStore {
   isLoading: boolean;
   setUser: (user: UserDashboardResponse) => void;
   fetchUserDashboard: () => Promise<void>;
+  addCourse: (course: UserCourse) => void;
+  removeCourse: (offeringId: string) => void;
 }
 
 export const useUserStore = create<UserStore>((set) => ({
@@ -27,4 +30,24 @@ export const useUserStore = create<UserStore>((set) => ({
       set({ isLoading: false });
     }
   },
+  addCourse: (course: UserCourse) =>
+    set((state) => ({
+      user: state.user
+        ? {
+            ...state.user,
+            userCourses: [...state.user.userCourses, course],
+          }
+        : null,
+    })),
+  removeCourse: (offeringId: string) =>
+    set((state) => ({
+      user: state.user
+        ? {
+            ...state.user,
+            userCourses: state.user.userCourses.filter(
+              (uc) => uc.offering.id !== offeringId,
+            ),
+          }
+        : null,
+    })),
 }));

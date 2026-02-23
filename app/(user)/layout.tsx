@@ -4,6 +4,7 @@ import AuthGuard from "@/components/auth/AuthGuard";
 import Navbar from "@/components/Navbar";
 import { useEffect } from "react";
 import { useUserStore } from "@/store/useUserStore";
+import { Toast } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -18,6 +19,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthGuard>
+      <Toast.Provider />
       <Navbar />
       <main className="flex-1">{children}</main>
     </AuthGuard>

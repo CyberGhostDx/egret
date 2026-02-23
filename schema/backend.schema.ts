@@ -32,10 +32,10 @@ export const courseOfferingSchema = z.object({
 });
 
 export const userCourseSchema = z.object({
-  userId: z.string(),
-  offeringId: z.string(),
   offering: courseOfferingSchema,
 });
+
+export type UserCourse = z.infer<typeof userCourseSchema>;
 
 export const userDashboardSchema = z.object({
   name: z.string().nullable(),
