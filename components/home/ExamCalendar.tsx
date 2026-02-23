@@ -35,6 +35,7 @@ export default function ExamCalendar() {
             id: e.id,
             courseId: uc.offering.courseId,
             courseTitle: uc.offering.course.titleTh,
+            sectionType: uc.offering.sectionType,
             time: new Date(e.startTime).toLocaleTimeString("en-GB", {
               hour: "2-digit",
               minute: "2-digit",
@@ -73,7 +74,7 @@ export default function ExamCalendar() {
 
           if (dayExams && dayExams.length > 0) {
             return (
-              <Tooltip>
+              <Tooltip delay={0}>
                 <Tooltip.Trigger>
                   <div className="w-full flex justify-center cursor-default">
                     {arg.dayNumberText}
