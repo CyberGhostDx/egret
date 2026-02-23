@@ -1,5 +1,8 @@
 import { create } from "zustand";
-import { UserDashboardResponse } from "@/schema/backend.schema";
+import {
+  UserDashboardResponse,
+  userDashboardSchema,
+} from "@/schema/backend.schema";
 import axiosInstance from "@/lib/axiosInstance";
 
 interface UserStore {
@@ -17,7 +20,7 @@ export const useUserStore = create<UserStore>((set) => ({
     set({ isLoading: true });
     try {
       const response = await axiosInstance.get("/api/users/me");
-      set({ user: response.data.data });
+      set({ user: userDashboardSchema.parse(response.data.data) });
     } catch (error) {
       console.error("Failed to fetch user dashboard:", error);
     } finally {

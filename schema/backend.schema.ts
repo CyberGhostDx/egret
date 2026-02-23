@@ -44,3 +44,13 @@ export const userDashboardSchema = z.object({
 });
 
 export type UserDashboardResponse = z.infer<typeof userDashboardSchema>;
+
+export const coursesResponseSchema = z.array(
+  z.object({
+    id: z.string(),
+    titleTh: z.string(),
+    titleEn: z.string().nullable(),
+  }),
+);
+
+export type CoursesResponse = z.infer<typeof coursesResponseSchema>;
