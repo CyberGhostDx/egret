@@ -45,12 +45,15 @@ export const userDashboardSchema = z.object({
 
 export type UserDashboardResponse = z.infer<typeof userDashboardSchema>;
 
-export const coursesResponseSchema = z.array(
+export const coursesOfferingsResponseSchema = z.array(
   z.object({
     id: z.string(),
     titleTh: z.string(),
     titleEn: z.string().nullable(),
+    offerings: z.array(
+      courseOfferingSchema.omit({ exams: true, course: true }),
+    ),
   }),
 );
 
-export type CoursesResponse = z.infer<typeof coursesResponseSchema>;
+export type CoursesResponse = z.infer<typeof coursesOfferingsResponseSchema>;

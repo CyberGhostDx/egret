@@ -2,7 +2,7 @@ import { create } from "zustand";
 import axiosInstance from "@/lib/axiosInstance";
 import {
   CoursesResponse,
-  coursesResponseSchema,
+  coursesOfferingsResponseSchema,
 } from "@/schema/backend.schema";
 
 interface CoursesStore {
@@ -19,8 +19,10 @@ export const useCoursesStore = create<CoursesStore>((set) => ({
   fetchCourses: async () => {
     set({ isLoading: true });
     try {
-      const response = await axiosInstance.get("/api/courses");
-      set({ courses: coursesResponseSchema.parse(response.data.data) });
+      const response = await axiosInstance.get("/api/courses/offerings");
+      set({
+        courses: coursesOfferingsResponseSchema.parse(response.data.data),
+      });
     } catch (error) {
       console.error("Failed to fetch courses:", error);
     } finally {

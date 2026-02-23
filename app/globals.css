@@ -151,11 +151,10 @@
 }
 
 @utility primary-bg {
-  background:
-    linear-gradient(
-      135deg,
-      rgba(252, 252, 252, 0.1) 0%,
-      rgba(41, 99, 116, 0.2) 100%
-    ),
-    #ffffff;
+  background: linear-gradient(
+    180deg,
+    rgba(252, 252, 252, 0.1) 0%,
+    rgba(41, 99, 116, 0.2) 100%
+  );
+  background-color: #ffffff;
 }
