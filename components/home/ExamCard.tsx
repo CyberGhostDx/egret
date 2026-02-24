@@ -77,7 +77,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
 
   const courseOfferings =
     user?.userCourses
-      ?.filter((uc) => uc.offering.courseId === exam.courseCode && uc.offering.section === exam.section)
+      ?.filter((uc) => uc.offering.courseId === exam.courseCode)
       .map((uc) => uc.offering) || [];
 
   const availableExams = useMemo(() => courseOfferings.flatMap((o) =>
