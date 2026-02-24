@@ -79,17 +79,19 @@ const Navbar = () => {
           <div className="flex items-center gap-2 shadow-none border-none">
             {user ? (
               <Dropdown>
-                <Button variant="ghost" className="relative h-10 w-auto rounded-full p-0 flex items-center gap-2 px-2 border-none">
-                  <span className="hidden lg:inline-block text-sm font-medium pr-1">
-                    {user.name}
-                  </span>
-                  <Avatar className="h-8 w-8">
-                    {user.image && <Avatar.Image src={user.image} alt={user.name} />}
-                    <Avatar.Fallback color="accent">
-                      {user.name?.charAt(0).toUpperCase() || "U"}
-                    </Avatar.Fallback>
-                  </Avatar>
-                </Button>
+                <Dropdown.Trigger>
+                  <div className="relative h-10 w-auto rounded-full p-0 flex items-center gap-2 px-2 border-none cursor-pointer hover:bg-gray-200 transition-colors transition-duration-200">
+                    <span className="hidden lg:inline-block text-sm font-medium pr-1">
+                      {user.name}
+                    </span>
+                    <Avatar className="h-8 w-8">
+                      {user.image && <Avatar.Image src={user.image} alt={user.name} />}
+                      <Avatar.Fallback color="accent">
+                        {user.name?.charAt(0).toUpperCase() || "U"}
+                      </Avatar.Fallback>
+                    </Avatar>
+                  </div>
+                </Dropdown.Trigger>
                 <Dropdown.Popover>
                   <Dropdown.Menu className="min-w-48" onAction={(key) => key === "logout" && authClient.signOut()}>
                     <Dropdown.Item
@@ -112,15 +114,17 @@ const Navbar = () => {
             <Disclosure className="md:hidden relative">
               {({ isExpanded }) => (
                 <>
-                  <Disclosure.Trigger
-                    className="p-1 px-2 border border-transparent rounded-md  transition-colors flex items-center justify-center size-10"
-                    aria-label="Toggle Menu"
-                  >
-                    {isExpanded ? (
-                      <HiX className="h-6 w-6 text-primary" />
-                    ) : (
-                      <HiMenu className="h-6 w-6 text-primary" />
-                    )}
+                  <Disclosure.Trigger>
+                    <div
+                      className="p-1 px-2 border border-transparent rounded-md transition-colors flex items-center justify-center size-10"
+                      aria-label="Toggle Menu"
+                    >
+                      {isExpanded ? (
+                        <HiX className="h-6 w-6 text-primary" />
+                      ) : (
+                        <HiMenu className="h-6 w-6 text-primary" />
+                      )}
+                    </div>
                   </Disclosure.Trigger>
                   <Disclosure.Content className="absolute top-full right-0 mt-2 w-48 bg-background border border-divider rounded-lg shadow-xl animate-in fade-in slide-in-from-top-2 duration-200 z-50">
                     <div className="px-4 py-6 flex flex-col gap-4">

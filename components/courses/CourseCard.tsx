@@ -26,6 +26,7 @@ export default function CourseCard({
   const modalState = useOverlayState();
   const [isLoading, setIsLoading] = useState(false);
   const addCourse = useUserStore((state) => state.addCourse);
+  const userCourses = useUserStore((state) => state.user?.userCourses);
 
   const handleEnroll = async (offeringId: string) => {
     try {
@@ -99,31 +100,46 @@ export default function CourseCard({
                   </Modal.Header>
                   <Modal.Body>
                     <div className="flex flex-col gap-3">
-                      {course.offerings.map((offering) => (
-                        <div
-                          key={offering.id}
-                          className="border-2 border-primary/10 hover:border-primary/40 rounded-xl p-4 flex justify-between items-center transition-all group"
-                        >
-                          <div className="flex flex-col">
-                            <span className="text-lg font-bold text-primary">Section {offering.section}</span>
-                            <span className="text-sm text-gray-500">
-                              {offering.instructorEn || offering.instructorTh || "No instructor assigned"}
-                            </span>
-                            <span className="text-xs text-primary/60 font-medium">
-                              {offering.credits} Credits • {offering.sectionType || "Standard"}
-                            </span>
-                          </div>
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            onPress={() => handleEnroll(offering.id)}
-                            isPending={isLoading}
-                            className="font-bold"
+                      {course.offerings.map((offering) => {
+                        const isEnrolled = userCourses?.some(
+                          (uc) => uc.offering.id === offering.id
+                        );
+
+                        return (
+                          <div
+                            key={offering.id}
+                            className={`border-2 rounded-xl p-4 flex justify-between items-center transition-all group ${isEnrolled
+                              ? "border-success-soft-hover bg-success/5"
+                              : "border-primary/10 hover:border-primary/40"
+                              }`}
                           >
-                            Select
-                          </Button>
-                        </div>
-                      ))}
+                            <div className="flex flex-col">
+                              <span className="text-lg font-bold text-primary">
+                                Section {offering.section}
+                              </span>
+                              <span className="text-sm text-gray-500">
+                                {offering.instructorEn ||
+                                  offering.instructorTh ||
+                                  "No instructor assigned"}
+                              </span>
+                              <span className="text-xs text-primary/60 font-medium">
+                                {offering.credits} Credits •{" "}
+                                {offering.sectionType || "Standard"}
+                              </span>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant={isEnrolled ? "primary" : "secondary"}
+                              onPress={() => !isEnrolled && handleEnroll(offering.id)}
+                              isPending={isLoading}
+                              isDisabled={isEnrolled}
+                              className="font-bold"
+                            >
+                              {isEnrolled ? "Enrolled" : "Select"}
+                            </Button>
+                          </div>
+                        );
+                      })}
                     </div>
                   </Modal.Body>
                   <Modal.Footer>

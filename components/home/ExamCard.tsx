@@ -80,17 +80,18 @@ export default function ExamCard({ exam }: { exam: Exam }) {
       ?.filter((uc) => uc.offering.courseId === exam.courseCode)
       .map((uc) => uc.offering) || [];
 
-  const availableExams = useMemo(() => courseOfferings.flatMap((o) =>
-    o.exams
+  const availableExams = useMemo(() => courseOfferings.flatMap((co) =>
+    co.exams
       .map((e) => ({
-        credits: o.credits,
-        instructorEn: o.instructorEn,
-        instructorTh: o.instructorTh,
+        credits: co.credits,
+        offeringId: co.id,
+        instructorEn: co.instructorEn,
+        instructorTh: co.instructorTh,
         ...e,
-        section: o.section,
-        sectionType: o.sectionType,
+        section: co.section,
+        sectionType: co.sectionType,
       })),
-  ), [courseOfferings]);
+  ), [courseOfferings, user]);
   const [selectedExamId, setSelectedExamId] = useState(exam.id);
   const examDetails = useMemo(() => availableExams.find((e) => e.id === selectedExamId), [selectedExamId, availableExams]);
 
@@ -138,6 +139,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
 
   const removeCourse = useUserStore((state) => state.removeCourse);
 
+
   const handleUnenroll = async (offeringId: string) => {
     try {
       setIsPending(true);
@@ -153,7 +155,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
           return toast.danger("Course not found.");
         }
       }
-      toast.danger("Failed to add course.");
+      toast.danger("Failed to unenroll.");
     } finally {
       setIsPending(false);
     }
@@ -163,7 +165,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
     <>
       <div
         onClick={modalState.open}
-        className="bg-linear-to-r from-[#447D8B] to-[#008B6D] text-white rounded-2xl p-5 sm:p-6 shadow-md flex flex-col sm:flex-row items-center gap-4 sm:gap-0 hover:bg-[#1b7a62] transition-colors cursor-pointer relative overflow-hidden"
+        className="w-full bg-linear-to-r from-[#447D8B] to-[#008B6D] text-white rounded-2xl p-5 sm:p-6 shadow-md flex flex-col sm:flex-row items-center gap-4 sm:gap-0 transition-colors cursor-pointer relative overflow-hidden h-auto text-left flex-nowrap border-none"
       >
         <div className="flex flex-col items-center justify-center px-2 sm:px-4 w-full sm:w-2/5 border-b sm:border-b-0 sm:border-r border-white/20 pb-4 sm:pb-0">
           <div className="text-xl sm:text-4xl font-bold tracking-wider tabular-nums">
@@ -182,7 +184,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
           <span className="text-sm font-bold opacity-70 uppercase tracking-wider">
             {exam.courseCode}
           </span>
-          <h3 className="text-xl font-bold leading-tight mb-1 sm:mb-2">
+          <h3 className="text-xl font-bold leading-tight mb-1 sm:mb-2 whitespace-normal">
             {exam.courseNameEn}
           </h3>
           <div className="text-sm font-medium opacity-80 mt-1">
@@ -199,7 +201,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
       <Modal>
         <Modal.Backdrop isOpen={modalState.isOpen} onOpenChange={modalState.setOpen}>
           <Modal.Container size="lg">
-            <Modal.Dialog className=" px-10 pt-8 relative bg-white outline-none">
+            <Modal.Dialog className="px-10 pt-8 relative bg-white outline-none">
               <Modal.CloseTrigger />
               <Modal.Header className="flex flex-col gap-1 border-none">
                 <h2 className="text-2xl font-bold text-primary">
@@ -296,7 +298,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
               </Modal.Body>
 
               <Modal.Footer className="flex justify-between mt-10">
-                <Button variant="danger" onPress={() => handleUnenroll(exam.offeringId)} isPending={isPending}>
+                <Button variant="danger" onPress={() => handleUnenroll(availableExams.find((e) => e.id === selectedExamId)?.offeringId || "")} isPending={isPending}>
                   Unenroll
                 </Button>
 
