@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useMemo, useDeferredValue } from "react";
 import { useCoursesStore } from "@/store/useCoursesStore";
 import CourseCard from "@/components/courses/CourseCard";
 import { InputGroup } from "@heroui/react";
@@ -8,11 +8,32 @@ import { LuSearch } from "react-icons/lu";
 
 export default function CoursesPage() {
   const { courses, isLoading, fetchCourses } = useCoursesStore();
+  const [searchQuery, setSearchQuery] = useState("");
+  const deferredSearchQuery = useDeferredValue(searchQuery);
 
   useEffect(() => {
     fetchCourses();
   }, [fetchCourses]);
 
+  const filterCourses = useMemo(() => {
+    if (!courses) return [];
+    const query = deferredSearchQuery.toLowerCase().trim();
+    if (!query) return courses;
+
+    return courses.filter((course) => {
+      const courseId = course.id.toLowerCase();
+      const titleTh = course.titleTh.toLowerCase();
+      const titleEn = course.titleEn?.toLowerCase() || "";
+
+      return (
+        courseId.includes(query) ||
+        titleTh.includes(query) ||
+        titleEn.includes(query) ||
+        `${courseId} ${titleTh}`.includes(query) ||
+        `${courseId} ${titleEn}`.includes(query)
+      );
+    });
+  }, [courses, deferredSearchQuery]);
 
   return (
     <div className="w-full min-h-screen primary-bg bg-fixed">
@@ -34,6 +55,8 @@ export default function CoursesPage() {
               <InputGroup.Input
                 className="w-full"
                 placeholder="Search Course"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </InputGroup>
           </div>
@@ -43,9 +66,9 @@ export default function CoursesPage() {
           <div className="text-center py-10 text-primary">Loading courses...</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
-            {courses?.map((course, index) => (
+            {filterCourses.map((course) => (
               <CourseCard
-                key={index}
+                key={course.id}
                 course={course}
                 difficulty={0}
               />
@@ -54,6 +77,5 @@ export default function CoursesPage() {
         )}
       </div>
     </div>
-
   );
 }

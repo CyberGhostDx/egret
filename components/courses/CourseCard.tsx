@@ -1,7 +1,7 @@
+import { memo, useState } from "react";
 import { Tooltip, Modal, Button, useOverlayState } from "@heroui/react";
 import { CoursesResponse } from "@/schema/backend.schema";
 import { LuPlus } from "react-icons/lu";
-import { useState } from "react";
 import { useUserStore } from "@/store/useUserStore";
 
 interface CourseCardProps {
@@ -16,10 +16,10 @@ const getDifficultyColor = (level: number) => {
   return "bg-[#fa5252]";
 };
 
-export default function CourseCard({
+const CourseCard = memo(({
   course,
   difficulty = 3,
-}: CourseCardProps) {
+}: CourseCardProps) => {
   const activeColor = getDifficultyColor(difficulty);
   const modalState = useOverlayState();
   const [isLoading, setIsLoading] = useState(false);
@@ -139,4 +139,8 @@ export default function CourseCard({
       </Modal>
     </div >
   );
-}
+});
+
+CourseCard.displayName = "CourseCard";
+
+export default CourseCard;
