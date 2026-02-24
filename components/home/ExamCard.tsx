@@ -4,6 +4,7 @@ import { z } from "zod";
 import { useState, useEffect, useMemo } from "react";
 import { Modal, Button, Dropdown, Select, ListBox, useOverlayState } from "@heroui/react";
 import { useUserStore } from "@/store/useUserStore";
+import { useTimeStore } from "@/store/useTimeStore";
 import { LuCalendarPlus } from "react-icons/lu";
 import { google, outlook, office365, yahoo, ics } from "calendar-link";
 import axiosInstance from "@/lib/axiosInstance";
@@ -24,9 +25,7 @@ export const examSchema = z.object({
 
 export type Exam = z.infer<typeof examSchema>;
 
-const calculateTimeLeft = (examDate: Date, startTimeStr: string) => {
-  const now = new Date();
-
+const calculateTimeLeft = (examDate: Date, startTimeStr: string, now: Date) => {
   const [hoursStr, minutesStr] = startTimeStr.split(":");
   const targetTime = new Date(examDate);
   targetTime.setHours(parseInt(hoursStr, 10), parseInt(minutesStr, 10), 0, 0);
@@ -57,17 +56,11 @@ export default function ExamCard({ exam }: { exam: Exam }) {
   const modalState = useOverlayState();
   const user = useUserStore((state) => state.user);
 
-  const [timeLeft, setTimeLeft] = useState(() =>
-    calculateTimeLeft(exam.date, exam.startTime),
-  );
+  const now = useTimeStore((state) => state.now);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft(exam.date, exam.startTime));
-    }, 1000); // 1 second
-
-    return () => clearInterval(timer);
-  }, [exam.date, exam.startTime]);
+  const timeLeft = useMemo(() =>
+    calculateTimeLeft(exam.date, exam.startTime, now),
+    [exam.date, exam.startTime, now]);
 
   const formattedDate = exam.date.toLocaleDateString("en-GB", {
     day: "numeric",

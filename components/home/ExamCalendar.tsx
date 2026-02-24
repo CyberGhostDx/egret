@@ -5,10 +5,12 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import { useEffect, useState, useMemo } from "react";
 import { useUserStore } from "@/store/useUserStore";
 import { Tooltip } from "@heroui/react";
+import { useTimeStore } from "@/store/useTimeStore";
 
 export default function ExamCalendar() {
   const [mounted, setMounted] = useState(false);
   const user = useUserStore((state) => state.user);
+  const now = useTimeStore((state) => state.now);
 
   useEffect(() => {
     setMounted(true);
@@ -115,7 +117,7 @@ export default function ExamCalendar() {
         Time
       </div>
       <div className="absolute bottom-3 sm:bottom-4 right-4 sm:right-6 bg-slate-200/50 text-slate-700 px-3 sm:px-4 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium">
-        {new Date().toLocaleTimeString("en-US", {
+        {now.toLocaleTimeString("en-US", {
           hour: "numeric",
           minute: "2-digit",
           timeZoneName: "short",

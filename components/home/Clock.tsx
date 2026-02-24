@@ -1,18 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useTimeStore } from "@/store/useTimeStore";
 
 export default function Clock() {
-  const [time, setTime] = useState<Date | null>(null);
-
-  useEffect(() => {
-    setTime(new Date());
-    const timer = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
+  const time = useTimeStore((state) => state.now);
 
   if (!time) {
     return <div className="h-24"></div>;
