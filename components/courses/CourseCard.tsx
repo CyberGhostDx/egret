@@ -1,9 +1,7 @@
-import { Tooltip, Modal, Button, useOverlayState, toast } from "@heroui/react";
+import { Tooltip, Modal, Button, useOverlayState } from "@heroui/react";
 import { CoursesResponse } from "@/schema/backend.schema";
 import { LuPlus } from "react-icons/lu";
-import axiosInstance from "@/lib/axiosInstance";
 import { useState } from "react";
-import { AxiosError } from "axios";
 import { useUserStore } from "@/store/useUserStore";
 
 interface CourseCardProps {
@@ -25,30 +23,16 @@ export default function CourseCard({
   const activeColor = getDifficultyColor(difficulty);
   const modalState = useOverlayState();
   const [isLoading, setIsLoading] = useState(false);
-  const addCourse = useUserStore((state) => state.addCourse);
+  const enrollCourse = useUserStore((state) => state.enrollCourse);
   const userCourses = useUserStore((state) => state.user?.userCourses);
 
   const handleEnroll = async (offeringId: string) => {
-    try {
-      setIsLoading(true);
-      const response = await axiosInstance.post(`/api/users/enroll`, {
-        offeringId,
-      });
-      addCourse({ offering: response.data.data });
-      toast.success("Course added successfully.");
+    setIsLoading(true);
+    const success = await enrollCourse(offeringId);
+    if (success) {
       modalState.close();
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response?.data.error.code === "COURSE_ALREADY_ENROLLED") {
-          return toast.danger("You have already enrolled in this course.");
-        } else if (error.response?.data.error.code === "COURSE_NOT_FOUND") {
-          return toast.danger("Course not found.");
-        }
-      }
-      toast.danger("Failed to add course.");
-    } finally {
-      setIsLoading(false);
     }
+    setIsLoading(false);
   };
 
   return (

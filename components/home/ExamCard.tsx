@@ -3,13 +3,11 @@
 import { z } from "zod";
 import { useState, useEffect, useMemo } from "react";
 import { Modal, Button, Dropdown, Select, ListBox, useOverlayState } from "@heroui/react";
+import axiosInstance from "@/lib/axiosInstance";
 import { useUserStore } from "@/store/useUserStore";
 import { useTimeStore } from "@/store/useTimeStore";
 import { LuCalendarPlus } from "react-icons/lu";
 import { google, outlook, office365, yahoo, ics } from "calendar-link";
-import axiosInstance from "@/lib/axiosInstance";
-import { AxiosError } from "axios";
-import { toast } from "@heroui/react";
 
 export const examSchema = z.object({
   id: z.string(),
@@ -130,28 +128,16 @@ export default function ExamCard({ exam }: { exam: Exam }) {
 
   }
 
-  const removeCourse = useUserStore((state) => state.removeCourse);
+  const unenrollCourse = useUserStore((state) => state.unenrollCourse);
 
 
   const handleUnenroll = async (offeringId: string) => {
-    try {
-      setIsPending(true);
-      await axiosInstance.delete(`/api/users/enroll/${offeringId}`);
-      removeCourse(offeringId);
-      toast.success("Unenrolled successfully.");
+    setIsPending(true);
+    const success = await unenrollCourse(offeringId);
+    if (success) {
       modalState.close();
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response?.data.error.code === "COURSE_ALREADY_ENROLLED") {
-          return toast.danger("You have already enrolled in this course.");
-        } else if (error.response?.data.error.code === "COURSE_NOT_FOUND") {
-          return toast.danger("Course not found.");
-        }
-      }
-      toast.danger("Failed to unenroll.");
-    } finally {
-      setIsPending(false);
     }
+    setIsPending(false);
   }
 
   return (
