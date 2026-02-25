@@ -3,6 +3,7 @@ import { Tooltip, Modal, Button, useOverlayState } from "@heroui/react";
 import { CoursesResponse } from "@/schema/backend.schema";
 import { LuPlus } from "react-icons/lu";
 import { useUserStore } from "@/store/useUserStore";
+import Link from "next/link";
 
 interface CourseCardProps {
   course: CoursesResponse[0];
@@ -36,39 +37,48 @@ const CourseCard = memo(({
   };
 
   return (
-    <div className="bg-white border-2 border-primary rounded-xl p-5 flex flex-col justify-between min-h-[160px] relative">
-      <div>
-        <h3 className="text-xl font-extrabold text-primary mb-1">
-          {course.id}
-        </h3>
-        <p className="text-lg font-semibold text-primary/80 line-clamp-2">
-          {course.titleEn || course.titleTh}
-        </p>
-      </div>
-
-      <div className="mt-6 flex items-center gap-2">
-        <span className="text-xs font-bold text-primary">Difficulty:</span>
-        <div className="flex gap-1.5 items-center">
-          {[1, 2, 3, 4, 5].map((level) => (
-            <div
-              key={level}
-              className={`w-2.5 h-2.5 rounded-full ${level <= difficulty ? activeColor : "bg-gray-300"
-                }`}
-            />
-          ))}
+    <>
+      <Link href={`/courses/${course.id}`} className="bg-white border-2 border-primary rounded-xl p-5 flex flex-col justify-between min-h-[160px] relative">
+        <div>
+          <h3 className="text-xl font-extrabold text-primary mb-1">
+            {course.id}
+          </h3>
+          <p className="text-lg font-semibold text-primary/80 line-clamp-2">
+            {course.titleEn || course.titleTh}
+          </p>
         </div>
-      </div>
 
-      <Tooltip delay={0}>
-        <Tooltip.Trigger className="absolute bottom-4 right-4" >
-          <button onClick={modalState.open} className=" text-primary border border-primary rounded-full p-0.5 hover:bg-primary/10 transition-colors hover:cursor-pointer">
-            <LuPlus className="w-4 h-4" />
-          </button>
-        </Tooltip.Trigger>
-        <Tooltip.Content showArrow offset={10}>
-          <p>Add to my courses</p>
-        </Tooltip.Content>
-      </Tooltip>
+        <div className="mt-6 flex items-center gap-2">
+          <span className="text-xs font-bold text-primary">Difficulty:</span>
+          <div className="flex gap-1.5 items-center">
+            {[1, 2, 3, 4, 5].map((level) => (
+              <div
+                key={level}
+                className={`w-2.5 h-2.5 rounded-full ${level <= difficulty ? activeColor : "bg-gray-300"
+                  }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        <Tooltip delay={0}>
+          <Tooltip.Trigger className="absolute bottom-4 right-4 z-40">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                modalState.open();
+              }}
+              className=" text-primary border border-primary rounded-full p-0.5 hover:bg-primary/10 transition-colors hover:cursor-pointer"
+            >
+              <LuPlus className="w-4 h-4" />
+            </button>
+          </Tooltip.Trigger>
+          <Tooltip.Content showArrow offset={10}>
+            <p>Add to my courses</p>
+          </Tooltip.Content>
+        </Tooltip>
+      </Link>
 
       <Modal>
         <Modal.Backdrop variant="blur" isOpen={modalState.isOpen} onOpenChange={modalState.setOpen}>
@@ -137,7 +147,8 @@ const CourseCard = memo(({
           </Modal.Container>
         </Modal.Backdrop>
       </Modal>
-    </div >
+    </>
+
   );
 });
 
