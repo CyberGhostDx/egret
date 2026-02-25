@@ -7,10 +7,9 @@ interface ExamEssentialsProps {
   courseId: string
   title: string
   difficulty: string
-  note?: string
 }
 
-export const ExamEssentials = ({ courseId, title, difficulty, note }: ExamEssentialsProps) => {
+export const ExamEssentials = ({ courseId, title, difficulty }: ExamEssentialsProps) => {
   return (
     <Card className="p-8 shadow-sm border-none rounded-3xl mt-4 bg-white">
       <div className="flex flex-col gap-2">
@@ -24,17 +23,7 @@ export const ExamEssentials = ({ courseId, title, difficulty, note }: ExamEssent
         </div>
       </div>
 
-      <div className="mt-12">
-        <span className="font-bold text-[#194b59] mb-2 block">NOTE</span>
-        <div className="bg-[#eff5f5] rounded-xl p-5 border border-[#c3dcdd] flex gap-4 items-start">
-          <PiNotePencil className="size-20 min-w-20 text-primary self-center" />
-          <div className="">
-            {note && (
-              <p className="font-bold text-primary">{note}</p>
-            )}
-          </div>
-        </div>
-      </div>
+
     </Card>
   )
 }
