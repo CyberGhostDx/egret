@@ -65,10 +65,9 @@ export const reviewCourseSchema = z.object({
     z.object({
       _id: z.string(),
       username: z.string(),
-      text: z.string(),
+      content: z.string(),
       difficulty: z.number(),
       vote: z.number(),
-      content: z.string(),
       createdAt: z.coerce.date(),
     }),
   ),

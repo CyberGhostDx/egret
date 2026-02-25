@@ -89,7 +89,7 @@ export default function CoursePage() {
         <div className="flex flex-col gap-6">
           <h2 className="text-3xl font-bold text-[#2e6d7d] lg:mt-18">Review</h2>
 
-          <AddReviewForm />
+          <AddReviewForm id={reviewCourse.id} />
 
           <div className="flex flex-col gap-4 mt-4">
             <div className="flex justify-between items-center mb-2">
@@ -121,7 +121,7 @@ export default function CoursePage() {
                 <ReviewItem
                   key={review._id}
                   name={review.username}
-                  text={review.text}
+                  text={review.content}
                   rating={review.difficulty}
                   upvotes={review.vote}
                   timestamp={formatTimestamp(review.createdAt)}

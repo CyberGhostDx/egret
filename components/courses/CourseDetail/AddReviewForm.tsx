@@ -1,13 +1,46 @@
-"use client"
-
-import { Card, Input, Switch, Button } from "@heroui/react"
+import { Card, Input, Switch, Button, toast } from "@heroui/react"
 import { LuMessageCirclePlus } from 'react-icons/lu'
 import { useState } from "react"
+import axiosInstance from "@/lib/axiosInstance"
+import { TbGhost, TbGhostOff } from "react-icons/tb"
 
-export const AddReviewForm = () => {
+export const AddReviewForm = ({ id }: { id: string }) => {
+  const [content, setContent] = useState("")
   const [difficulty, setDifficulty] = useState(0)
   const [isAnonymous, setIsAnonymous] = useState(false)
+  const [isPending, setIsPending] = useState(false)
 
+  const handleReviewSubmit = async () => {
+    if (!content.trim()) {
+      toast.danger("Please enter your review content.")
+      return
+    }
+
+    if (difficulty === 0) {
+      toast.danger("Please select a difficulty level.")
+      return
+    }
+
+    setIsPending(true)
+    try {
+      await axiosInstance.post(`/api/reviews/${id}`, {
+        content: content.trim(),
+        difficulty,
+        isAnonymous,
+      })
+
+      toast.success("Your review has been posted successfully!")
+
+      setContent("")
+      setDifficulty(0)
+      setIsAnonymous(false)
+    } catch (error) {
+      console.error("Failed to post review:", error)
+      toast.danger("Failed to post review. Please try again later.")
+    } finally {
+      setIsPending(false)
+    }
+  }
 
   return (
     <Card className="p-8 shadow-sm border-none rounded-3xl flex flex-col gap-6 bg-white">
@@ -16,6 +49,14 @@ export const AddReviewForm = () => {
       <Input
         placeholder="Add your review here"
         className="border-[#b6d0d4] bg-white border rounded-full px-4 py-2 w-full shadow-none"
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault()
+            handleReviewSubmit()
+          }
+        }}
       />
 
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -38,11 +79,30 @@ export const AddReviewForm = () => {
             isSelected={isAnonymous}
             onChange={setIsAnonymous}
             className="group-data-[selected=true]:bg-[#4a7c8c] scale-90"
+            size="lg"
           >
-            <span className="text-sm font-medium ml-1">Anonymous</span>
+            {
+              ({ isSelected }) => (
+                <>
+                  <Switch.Control className={isSelected ? 'bg-blue-500 text-blue-500' : ''}>
+
+                    <Switch.Thumb>
+                      <Switch.Icon>
+                        {isSelected ? <TbGhost /> : <TbGhostOff />}
+                      </Switch.Icon>
+                    </Switch.Thumb>
+                  </Switch.Control>
+                  <Switch.Content>
+                    <span className="text font-medium ml-1">Anonymous</span>
+                  </Switch.Content>
+                </>
+              )
+            }
           </Switch>
           <Button
             className="bg-primary text-white rounded-full font-medium px-6 hover:opacity-90 transition-opacity"
+            onPress={handleReviewSubmit}
+            isPending={isPending}
           >
             <LuMessageCirclePlus className="size-5 mr-1" />
             Post
