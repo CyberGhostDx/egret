@@ -1,12 +1,11 @@
 "use client"
 
 import { Card } from "@heroui/react"
-import { PiNotePencil } from "react-icons/pi"
 
 interface ExamEssentialsProps {
   courseId: string
   title: string
-  difficulty: string
+  difficulty: number
 }
 
 export const ExamEssentials = ({ courseId, title, difficulty }: ExamEssentialsProps) => {
@@ -17,13 +16,21 @@ export const ExamEssentials = ({ courseId, title, difficulty }: ExamEssentialsPr
         <h2 className="text-xl font-bold text-[#2e6d7d] uppercase leading-tight max-w-[80%]">
           {title}
         </h2>
-        <div className="flex items-center gap-1 mt-2">
-          <span className="font-bold text-[#2e6d7d]">DIFFICULTY</span>
-          <span className="font-bold text-[#2e6d7d]">{difficulty}</span>
+        <div className="flex flex-col gap-2 mt-4">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-[#2e6d7d]">DIFFICULTY</span>
+            <span className="font-bold text-[#2e6d7d]">{Math.round(difficulty)}/5</span>
+          </div>
+          <div className="flex gap-2">
+            {[1, 2, 3, 4, 5].map((level) => (
+              <div
+                key={level}
+                className={`w-10 h-10 rounded-full transition-colors duration-200 ${level <= Math.round(difficulty) ? 'bg-secondary' : 'bg-[#e2ebf0]'}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
-
-
     </Card>
   )
 }

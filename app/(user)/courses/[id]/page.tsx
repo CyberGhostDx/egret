@@ -82,7 +82,7 @@ export default function CoursePage() {
           <ExamEssentials
             courseId={reviewCourse.id}
             title={reviewCourse.titleEn || reviewCourse.titleTh}
-            difficulty={`${reviewCourse.difficulty.toFixed(1)}/5`}
+            difficulty={reviewCourse.difficulty}
           />
         </div>
 
