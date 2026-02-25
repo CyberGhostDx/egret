@@ -56,4 +56,24 @@ export const coursesOfferingsResponseSchema = z.array(
   }),
 );
 
+export const reviewCourseSchema = z.object({
+  id: z.string(),
+  titleTh: z.string(),
+  titleEn: z.string().nullable(),
+  difficulty: z.number(),
+  reviews: z.array(
+    z.object({
+      _id: z.string(),
+      username: z.string(),
+      text: z.string(),
+      difficulty: z.number(),
+      vote: z.number(),
+      content: z.string(),
+      createdAt: z.coerce.date(),
+    }),
+  ),
+});
+
+export type ReviewCourseResponse = z.infer<typeof reviewCourseSchema>;
+
 export type CoursesResponse = z.infer<typeof coursesOfferingsResponseSchema>;

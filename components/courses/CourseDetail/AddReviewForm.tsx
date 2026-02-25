@@ -5,8 +5,9 @@ import { LuMessageCirclePlus } from 'react-icons/lu'
 import { useState } from "react"
 
 export const AddReviewForm = () => {
-  const [intensity, setIntensity] = useState(0)
+  const [difficulty, setDifficulty] = useState(0)
   const [isAnonymous, setIsAnonymous] = useState(false)
+
 
   return (
     <Card className="p-8 shadow-sm border-none rounded-3xl flex flex-col gap-6 bg-white">
@@ -19,14 +20,14 @@ export const AddReviewForm = () => {
 
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-4">
-          <span className="font-bold text-[#2e6d7d]">Intensity</span>
+          <span className="font-bold text-[#2e6d7d]">Difficulty</span>
           <div className="flex gap-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
-                onClick={() => setIntensity(star)}
-                className={`w-5 h-5 rounded-full transition-all duration-200 hover:scale-125 hover:shadow-sm ${star <= intensity ? 'bg-secondary' : 'bg-slate-200 hover:bg-slate-300'}`}
-                aria-label={`Select intensity ${star}`}
+                onClick={() => setDifficulty(star)}
+                className={`w-5 h-5 rounded-full transition-all duration-200 hover:scale-125 hover:shadow-sm ${star <= difficulty ? 'bg-secondary' : 'bg-slate-200 hover:bg-slate-300'}`}
+                aria-label={`Select difficulty ${star}`}
               />
             ))}
           </div>

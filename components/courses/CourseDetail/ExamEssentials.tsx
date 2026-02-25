@@ -6,11 +6,11 @@ import { PiNotePencil } from "react-icons/pi"
 interface ExamEssentialsProps {
   courseId: string
   title: string
-  intensity: string
+  difficulty: string
   note?: string
 }
 
-export const ExamEssentials = ({ courseId, title, intensity, note }: ExamEssentialsProps) => {
+export const ExamEssentials = ({ courseId, title, difficulty, note }: ExamEssentialsProps) => {
   return (
     <Card className="p-8 shadow-sm border-none rounded-3xl mt-4 bg-white">
       <div className="flex flex-col gap-2">
@@ -19,8 +19,8 @@ export const ExamEssentials = ({ courseId, title, intensity, note }: ExamEssenti
           {title}
         </h2>
         <div className="flex items-center gap-1 mt-2">
-          <span className="font-bold text-[#2e6d7d]">INTENSITY</span>
-          <span className="font-bold text-[#2e6d7d]">{intensity}</span>
+          <span className="font-bold text-[#2e6d7d]">DIFFICULTY</span>
+          <span className="font-bold text-[#2e6d7d]">{difficulty}</span>
         </div>
       </div>
 

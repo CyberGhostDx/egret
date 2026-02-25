@@ -2,26 +2,68 @@
 import { useParams, useRouter } from 'next/navigation'
 import { Button, Select, ListBox } from "@heroui/react"
 import { IoIosArrowBack } from "react-icons/io"
-import { useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { ExamEssentials } from '@/components/courses/CourseDetail/ExamEssentials'
 import { AddReviewForm } from '@/components/courses/CourseDetail/AddReviewForm'
 import { ReviewItem } from '@/components/courses/CourseDetail/ReviewItem'
-
-const mockReviews = [
-  { id: 1, name: 'Jirattakan JUNHOR', text: 'ยากจัด เว่อๆๆๆ 1-1 RoV @&@&@&@&@&@&@&', rating: 4, upvotes: 22, timestamp: '2 ชั่วโมงที่แล้ว' },
-  { id: 2, name: 'Jirattakan JUNHOR', text: 'ยากจัด เว่อๆๆๆ 1-1 RoV @&@&@&@&@&@&@&', rating: 4, upvotes: 21, timestamp: '5 ชั่วโมงที่แล้ว' },
-]
-
-const mockCourseData = {
-  title: "DISCRETE MATHEMATICS AND THEORY OF COMPUTATION",
-  intensity: "3.5/5",
-  note: "โน้ตย่อ A4 ลายมือตนเอง จำนวน 1 แผ่น 2 หน้า อนุญาต เครื่องคิดเลข P ไม่ต้อง Reset เครื่อง อนุญาต เครื่องคิดเลข NP ไม่ต้อง Reset เครื่อง พจนานุกรมอังกฤษ-ไทย 1 เล่ม"
-}
+import axiosInstance from '@/lib/axiosInstance'
+import { ReviewCourseResponse } from '@/schema/backend.schema'
 
 export default function CoursePage() {
+  const [reviewCourse, setReviewCourse] = useState<ReviewCourseResponse>()
   const { id } = useParams()
   const router = useRouter()
-  const [sortKey, setSortKey] = useState("intensity")
+  const [sortKey, setSortKey] = useState("difficulty")
+
+  useEffect(() => {
+    const fetchReview = async () => {
+      try {
+        const response = await axiosInstance.get(`/api/reviews/${id}`)
+        setReviewCourse(response.data.data)
+      } catch (error) {
+        console.error("Failed to fetch reviews:", error)
+      }
+    }
+    if (id) fetchReview()
+  }, [id])
+
+  const sortedReviews = useMemo(() => {
+    if (!reviewCourse?.reviews) return []
+
+    const reviewsCopy = [...reviewCourse.reviews]
+
+    return reviewsCopy.sort((a, b) => {
+      if (sortKey === "difficulty") {
+        return b.difficulty - a.difficulty
+      }
+      if (sortKey === "upvotes") {
+        return b.vote - a.vote
+      }
+      if (sortKey === "recent") {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      }
+      return 0
+    })
+  }, [reviewCourse?.reviews, sortKey])
+
+  const formatTimestamp = (date: Date) => {
+    return new Intl.DateTimeFormat('th-TH', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    }).format(new Date(date))
+  }
+
+  if (!reviewCourse) {
+    return (
+      <div className="w-full min-h-screen primary-bg flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-xl font-semibold text-primary">Loading course details...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="w-full min-h-screen primary-bg bg-fixed flex justify-center py-10 px-4 md:px-8">
@@ -38,10 +80,9 @@ export default function CoursePage() {
           <h2 className="text-3xl font-bold text-primary mt-2">Exam Essentials</h2>
 
           <ExamEssentials
-            courseId={id as string}
-            title={mockCourseData.title}
-            intensity={mockCourseData.intensity}
-            note={mockCourseData.note}
+            courseId={reviewCourse.id}
+            title={reviewCourse.titleEn || reviewCourse.titleTh}
+            difficulty={`${reviewCourse.difficulty.toFixed(1)}/5`}
           />
         </div>
 
@@ -66,7 +107,7 @@ export default function CoursePage() {
                   </Select.Trigger>
                   <Select.Popover>
                     <ListBox>
-                      <ListBox.Item id="intensity" textValue="Intensity">Intensity</ListBox.Item>
+                      <ListBox.Item id="difficulty" textValue="Difficulty">Difficulty</ListBox.Item>
                       <ListBox.Item id="recent" textValue="Recent">Recent</ListBox.Item>
                       <ListBox.Item id="upvotes" textValue="Upvotes">Upvotes</ListBox.Item>
                     </ListBox>
@@ -75,16 +116,23 @@ export default function CoursePage() {
               </div>
             </div>
 
-            {mockReviews.map((review) => (
-              <ReviewItem
-                key={review.id}
-                name={review.name}
-                text={review.text}
-                rating={review.rating}
-                upvotes={review.upvotes}
-                timestamp={review.timestamp}
-              />
-            ))}
+            {sortedReviews.length > 0 ? (
+              sortedReviews.map((review) => (
+                <ReviewItem
+                  key={review._id}
+                  name={review.username}
+                  text={review.text}
+                  rating={review.difficulty}
+                  upvotes={review.vote}
+                  timestamp={formatTimestamp(review.createdAt)}
+                />
+              ))
+            ) : (
+              <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-10 text-center flex flex-col items-center gap-3 border border-white/20">
+                <p className="text-xl font-bold text-[#2e6d7d]">No reviews yet</p>
+                <p className="text-gray-500">Be the first to share your thoughts on this course!</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

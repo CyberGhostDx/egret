@@ -32,7 +32,7 @@ export const ReviewItem = ({ name, text, rating, upvotes, timestamp }: ReviewIte
       </div>
       <div className="flex justify-between items-center mt-auto">
         <div className="flex items-center">
-          <span className="text font-bold text-[#2e6d7d]">Intensity Rate</span>
+          <span className="text font-bold text-[#2e6d7d]">Difficulty Rate</span>
           <div className="flex gap-1.5 ml-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <div
