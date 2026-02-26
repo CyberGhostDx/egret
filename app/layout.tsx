@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Thai } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
 import "./globals.css";
 import { SwrProvider } from "./providers";
 
@@ -22,9 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${ibmSans.variable} ${ibmSans.className}  antialiased`}>
-        <SwrProvider>
-          {children}
-        </SwrProvider>
+        <NextIntlClientProvider>
+          <SwrProvider>{children}</SwrProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

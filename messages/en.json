@@ -1,0 +1,40 @@
+{
+  "Navbar": {
+    "Home": "Home",
+    "Courses": "Courses"
+  },
+  "Home": {
+    "Time": {
+      "Hour": "Hours",
+      "Minute": "Minutes",
+      "Second": "Seconds"
+    },
+    "CourseCard": {
+      "Subject": "Subject Title"
+    },
+    "CourseModal": {
+      "Subject": "Subject Title",
+      "Credit": "Credit",
+      "Section": "Section",
+      "Section_Type": "Section Type",
+      "Building": "Building",
+      "Room": "Room",
+      "Instructor": "Instructor",
+      "Note": "Note",
+      "Delete": "Delete",
+      "AddToCalendar": "Add to Calendar",
+      "CourseReview": "Course Review"
+    }
+  },
+  "Courses": {
+    "SearchCourse": "Search Course",
+    "Difficulty": "Difficulty"
+  },
+  "CourseReview": {
+    "Subject": "Subject",
+    "ExamEssentials": "Exam Essentials",
+    "ExamPrepTips": "EXAM PREP TIPS",
+    "StudentReview": "STUDENT REVIEWS",
+    "ShareExperience": "Share your experience..."
+  }
+}

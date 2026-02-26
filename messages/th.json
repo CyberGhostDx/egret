@@ -1,0 +1,40 @@
+{
+  "Navbar": {
+    "Home": "หน้าแรก",
+    "Courses": "รายวิชา"
+  },
+  "Home": {
+    "Time": {
+      "Hour": "ชั่วโมง",
+      "Minute": "นาที",
+      "Second": "วินาที"
+    },
+    "CourseCard": {
+      "Subject": "ชื่อรายวิชา"
+    },
+    "CourseModal": {
+      "Subject": "ชื่อรายวิชา",
+      "Credit": "หน่วยกิต",
+      "Section": "หมู่เรียน",
+      "Section_Type": "ประเภทหมู่เรียน",
+      "Building": "อาคาร",
+      "Room": "ห้อง",
+      "Instructor": "อาจารย์ผู้สอน",
+      "Note": "หมายเหตุ",
+      "Delete": "ลบรายวิชา",
+      "AddToCalendar": "เพิ่มในปฏิทิน",
+      "CourseReview": "รีวิวรายวิชา"
+    }
+  },
+  "Courses": {
+    "SearchCourse": "ค้นหารายวิชา",
+    "Difficulty": "ความยาก"
+  },
+  "CourseReview": {
+    "Subject": "รายวิชา",
+    "ExamEssentials": "ข้อมูลสำหรับการสอบ",
+    "ExamPrepTips": "เทคนิคเตรียมสอบ",
+    "StudentReview": "รีวิวจากนิสิต",
+    "ShareExperience": "แบ่งปันประสบการณ์..."
+  }
+}
