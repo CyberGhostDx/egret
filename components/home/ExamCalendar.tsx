@@ -40,7 +40,10 @@ export default function ExamCalendar() {
           groups[dateStr].push({
             id: e.id,
             courseId: uc.offering.courseId,
-            courseTitle: locale === "en" ? uc.offering.course.titleEn || uc.offering.course.titleTh : uc.offering.course.titleTh || uc.offering.course.titleEn,
+            courseTitle:
+              locale === "en"
+                ? uc.offering.course.titleEn || uc.offering.course.titleTh
+                : uc.offering.course.titleTh || uc.offering.course.titleEn,
             sectionType: uc.offering.sectionType,
             time: new Date(e.startTime).toLocaleTimeString("en-GB", {
               hour: "2-digit",
@@ -56,12 +59,12 @@ export default function ExamCalendar() {
 
   if (!mounted) {
     return (
-      <div className="h-125 w-full bg-slate-50 rounded-2xl animate-pulse"></div>
+      <div className="h-125 w-full animate-pulse rounded-2xl bg-slate-50"></div>
     );
   }
 
   return (
-    <div className="bg-white rounded-[2rem] p-6 pb-20 shadow-sm border border-slate-100 w-full h-fit relative fc-custom-theme flex flex-col">
+    <div className="fc-custom-theme relative flex h-fit w-full flex-col rounded-[2rem] border border-slate-100 bg-white p-6 pb-20 shadow-sm">
       <FullCalendar
         plugins={[dayGridPlugin]}
         locales={[thLocale]}
@@ -85,19 +88,19 @@ export default function ExamCalendar() {
             return (
               <Tooltip delay={0}>
                 <Tooltip.Trigger>
-                  <div className="w-full flex justify-center cursor-default">
+                  <div className="flex w-full cursor-default justify-center">
                     {arg.dayNumberText}
                   </div>
                 </Tooltip.Trigger>
-                <Tooltip.Content className="py-2 px-3 shadow-xl text-black bg-white rounded-lg border border-divider">
-                  <div className="px-1 py-2 max-w-50">
-                    <div className="text-tiny font-bold mb-2 text-primary border-b border-divider pb-1">
+                <Tooltip.Content className="border-divider rounded-lg border bg-white px-3 py-2 text-black shadow-xl">
+                  <div className="max-w-50 px-1 py-2">
+                    <div className="text-tiny text-primary border-divider mb-2 border-b pb-1 font-bold">
                       {t("UpcomingExams")}
                     </div>
                     {dayExams.map((ex) => (
                       <div key={ex.id} className="text-tiny mb-1 last:mb-0">
                         <span className="font-semibold">{ex.courseId}</span>
-                        <div className="opacity-80 leading-tight">
+                        <div className="leading-tight opacity-80">
                           {ex.courseTitle}
                         </div>
                         <div className="text-[10px] opacity-60">{ex.time}</div>
@@ -120,10 +123,10 @@ export default function ExamCalendar() {
         dayMaxEvents={true}
       />
 
-      <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 font-bold text-xs sm:text-sm text-slate-800">
+      <div className="absolute bottom-4 left-4 text-xs font-bold text-slate-800 sm:bottom-6 sm:left-6 sm:text-sm">
         {t("Time")}
       </div>
-      <div className="absolute bottom-3 sm:bottom-4 right-4 sm:right-6 bg-slate-200/50 text-slate-700 px-3 sm:px-4 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium">
+      <div className="absolute right-4 bottom-3 rounded-full bg-slate-200/50 px-3 py-0.5 text-[10px] font-medium text-slate-700 sm:right-6 sm:bottom-4 sm:px-4 sm:py-1 sm:text-xs">
         {now.toLocaleTimeString("en-GB", {
           hour: "2-digit",
           minute: "2-digit",

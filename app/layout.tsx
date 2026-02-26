@@ -22,9 +22,7 @@ export default function RootLayout({
   return (
     <html lang="th">
       <body className={`${ibmSans.variable} ${ibmSans.className} antialiased`}>
-        <SwrProvider>
-          {children}
-        </SwrProvider>
+        <SwrProvider>{children}</SwrProvider>
       </body>
     </html>
   );

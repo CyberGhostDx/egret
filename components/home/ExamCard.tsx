@@ -74,11 +74,14 @@ export default function ExamCard({ exam }: { exam: Exam }) {
     [exam.date, exam.startTime, now],
   );
 
-  const formattedDate = exam.date.toLocaleDateString(locale === "en" ? "en-GB" : "th-TH", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  const formattedDate = exam.date.toLocaleDateString(
+    locale === "en" ? "en-GB" : "th-TH",
+    {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    },
+  );
 
   const courseOfferings =
     user?.userCourses
@@ -107,9 +110,15 @@ export default function ExamCard({ exam }: { exam: Exam }) {
   );
 
   const handleAddToCalendar = (key: React.Key) => {
-    const courseTitle = locale === "en" ? exam.courseNameEn || exam.courseNameTh : exam.courseNameTh || exam.courseNameEn;
+    const courseTitle =
+      locale === "en"
+        ? exam.courseNameEn || exam.courseNameTh
+        : exam.courseNameTh || exam.courseNameEn;
     const title = `[Exam] ${exam.courseCode} ${courseTitle}`;
-    const instructorName = locale === "en" ? examDetails?.instructorEn || examDetails?.instructorTh : examDetails?.instructorTh || examDetails?.instructorEn;
+    const instructorName =
+      locale === "en"
+        ? examDetails?.instructorEn || examDetails?.instructorTh
+        : examDetails?.instructorTh || examDetails?.instructorEn;
     const calendarDescription = `${t("Instructor")}: ${instructorName || "TBA"}\n${t("Section")}: ${examDetails?.section}\n${t("Proctor")}: ${examDetails?.proctor}\n${t("Note")}: ${examDetails?.note || t("NoNote")}`;
     const desc = calendarDescription;
     const location =
@@ -160,23 +169,27 @@ export default function ExamCard({ exam }: { exam: Exam }) {
     <>
       <div
         onClick={modalState.open}
-        className="w-full bg-linear-to-r from-[#447D8B] to-[#008B6D] text-white rounded-2xl p-5 sm:p-6 shadow-md flex flex-col sm:flex-row items-center gap-4 sm:gap-0 transition-colors cursor-pointer relative overflow-hidden h-auto text-left flex-nowrap border-none"
+        className="relative flex min-h-44 w-full cursor-pointer flex-col flex-nowrap items-center gap-4 overflow-hidden rounded-2xl border-none bg-linear-to-r from-[#447D8B] to-[#008B6D] p-5 text-left text-white shadow-md transition-colors sm:flex-row sm:gap-0 sm:p-6"
       >
-        <div className="flex items-center justify-center px-2 sm:px-4 w-full sm:w-2/5 border-b sm:border-b-0 sm:border-r border-white/20 pb-4 sm:pb-0">
+        <div className="flex w-full items-center justify-center border-b border-white/20 px-2 pb-4 sm:w-2/5 sm:border-r sm:border-b-0 sm:px-4 sm:pb-0">
           <div className="flex flex-col items-center gap-1 sm:gap-2">
             <span className="text-sm font-bold opacity-60">
               {t("StartsIn")}
             </span>
-            <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-center gap-x-1 sm:gap-x-1 w-full max-w-[200px] sm:max-w-[280px]">
-              <span className="text-xl sm:text-4xl font-bold tabular-nums">
+            <div className="grid w-full max-w-[200px] grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-x-1 text-center sm:max-w-[280px] sm:gap-x-1">
+              <span className="text-xl font-bold tabular-nums sm:text-4xl">
                 {timeLeft.days.toString().padStart(2, "0")}
               </span>
-              <span className="text-xl sm:text-4xl font-bold opacity-80 mb-1">:</span>
-              <span className="text-xl sm:text-4xl font-bold tabular-nums">
+              <span className="mb-1 text-xl font-bold opacity-80 sm:text-4xl">
+                :
+              </span>
+              <span className="text-xl font-bold tabular-nums sm:text-4xl">
                 {timeLeft.hours.toString().padStart(2, "0")}
               </span>
-              <span className="text-xl sm:text-4xl font-bold opacity-80 mb-1">:</span>
-              <span className="text-xl sm:text-4xl font-bold tabular-nums">
+              <span className="mb-1 text-xl font-bold opacity-80 sm:text-4xl">
+                :
+              </span>
+              <span className="text-xl font-bold tabular-nums sm:text-4xl">
                 {timeLeft.minutes.toString().padStart(2, "0")}
               </span>
 
@@ -195,15 +208,17 @@ export default function ExamCard({ exam }: { exam: Exam }) {
           </div>
         </div>
 
-        <div className="flex flex-col items-center sm:items-start text-center sm:text-left sm:pl-6 w-full sm:w-3/5">
-          <span className="text-sm font-bold opacity-70 uppercase tracking-wider">
+        <div className="flex w-full flex-col items-center text-center sm:w-3/5 sm:items-start sm:pl-6 sm:text-left">
+          <span className="text-sm font-bold tracking-wider uppercase opacity-70">
             {exam.courseCode}
           </span>
-          <h3 className="text-xl font-bold leading-tight mb-1 sm:mb-2 whitespace-normal">
-            {locale === "en" ? exam.courseNameEn || exam.courseNameTh : exam.courseNameTh || exam.courseNameEn}
+          <h3 className="mb-1 text-xl leading-tight font-bold whitespace-normal sm:mb-2">
+            {locale === "en"
+              ? exam.courseNameEn || exam.courseNameTh
+              : exam.courseNameTh || exam.courseNameEn}
           </h3>
-          <div className="text-sm font-medium opacity-80 mt-1">
-            <p className="flex items-center gap-2 justify-center sm:justify-start">
+          <div className="mt-1 text-sm font-medium opacity-80">
+            <p className="flex items-center justify-center gap-2 sm:justify-start">
               <span>
                 {exam.startTime} - {exam.endTime}
               </span>
@@ -219,14 +234,16 @@ export default function ExamCard({ exam }: { exam: Exam }) {
           onOpenChange={modalState.setOpen}
         >
           <Modal.Container size="lg">
-            <Modal.Dialog className="px-10 pt-8 relative bg-white outline-none">
+            <Modal.Dialog className="relative bg-white px-10 pt-8 outline-none">
               <Modal.CloseTrigger />
               <Modal.Header className="flex flex-col gap-1 border-none">
-                <h2 className="text-2xl font-bold text-primary">
+                <h2 className="text-primary text-2xl font-bold">
                   {exam.courseCode}
                 </h2>
-                <h2 className="text-2xl font-bold text-primary">
-                  {locale === "en" ? exam.courseNameEn || exam.courseNameTh : exam.courseNameTh || exam.courseNameEn}
+                <h2 className="text-primary text-2xl font-bold">
+                  {locale === "en"
+                    ? exam.courseNameEn || exam.courseNameTh
+                    : exam.courseNameTh || exam.courseNameEn}
                 </h2>
               </Modal.Header>
 
@@ -250,7 +267,9 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                   </p>
                   <p>
                     <span className="font-bold">{t("Instructor")} :</span>{" "}
-                    {locale === "en" ? examDetails?.instructorEn || examDetails?.instructorTh : examDetails?.instructorTh || examDetails?.instructorEn}
+                    {locale === "en"
+                      ? examDetails?.instructorEn || examDetails?.instructorTh
+                      : examDetails?.instructorTh || examDetails?.instructorEn}
                   </p>
 
                   <p>
@@ -261,7 +280,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                   <p>
                     <span className="font-bold text-red-500">*</span>
                     <span className="font-bold">{t("Note")} : </span>
-                    <span className="text-slate-600 font-normal">
+                    <span className="font-normal text-slate-600">
                       {examDetails?.note || t("NoNote")}
                     </span>
                   </p>
@@ -319,7 +338,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                 )}
               </Modal.Body>
 
-              <Modal.Footer className="flex justify-between mt-10">
+              <Modal.Footer className="mt-10 flex justify-between">
                 <Button
                   variant="danger"
                   onPress={() =>
@@ -333,7 +352,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                   {t("Unenroll")}
                 </Button>
 
-                <div className="flex gap-2 items-center">
+                <div className="flex items-center gap-2">
                   <Dropdown>
                     <Button
                       variant="secondary"
