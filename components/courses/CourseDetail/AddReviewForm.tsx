@@ -4,7 +4,13 @@ import { useState } from "react"
 import axiosInstance from "@/lib/axiosInstance"
 import { TbGhost, TbGhostOff } from "react-icons/tb"
 
-export const AddReviewForm = ({ id }: { id: string }) => {
+export const AddReviewForm = ({
+  id,
+  onSuccess
+}: {
+  id: string;
+  onSuccess: (newReview: any) => void
+}) => {
   const [content, setContent] = useState("")
   const [difficulty, setDifficulty] = useState(0)
   const [isAnonymous, setIsAnonymous] = useState(false)
@@ -23,11 +29,15 @@ export const AddReviewForm = ({ id }: { id: string }) => {
 
     setIsPending(true)
     try {
-      await axiosInstance.post(`/api/reviews/${id}`, {
+      const response = await axiosInstance.post(`/api/reviews/${id}`, {
         content: content.trim(),
         difficulty,
         isAnonymous,
       })
+
+      if (response.data.data) {
+        onSuccess(response.data.data);
+      }
 
       toast.success("Your review has been posted successfully!")
 

@@ -2,8 +2,11 @@
 
 import { Card, Button, Avatar } from "@heroui/react"
 import { FaArrowUp } from "react-icons/fa"
+import axiosInstance from "@/lib/axiosInstance"
+import { authClient } from "@/lib/auth-client"
 
 interface ReviewItemProps {
+  id: string
   name: string
   text: string
   rating: number
@@ -11,7 +14,8 @@ interface ReviewItemProps {
   timestamp: string
 }
 
-export const ReviewItem = ({ name, text, rating, upvotes, timestamp }: ReviewItemProps) => {
+export const ReviewItem = ({ id, name, text, rating, upvotes, timestamp }: ReviewItemProps) => {
+
   return (
     <Card className="p-4 shadow-sm border-none rounded-xl bg-white">
       <Card.Header>
@@ -42,12 +46,13 @@ export const ReviewItem = ({ name, text, rating, upvotes, timestamp }: ReviewIte
             ))}
           </div>
         </div>
-        <Button
+        {/* <Button
           size="sm"
-          className="bg-secondary text-white rounded-full font-medium min-w-16 h-8 text-xs gap-1"
+          className={` text-white rounded-full font-medium min-w-16 h-8 text-xs gap-1`}
+          onClick={handleUpvote}
         >
           <FaArrowUp /> {upvotes}
-        </Button>
+        </Button> */}
       </div>
     </Card >
   )

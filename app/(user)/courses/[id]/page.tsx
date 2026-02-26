@@ -54,6 +54,22 @@ export default function CoursePage() {
     }).format(new Date(date))
   }
 
+  const handleAddReview = (newReview: any) => {
+    setReviewCourse((prev) => {
+      if (!prev) return prev;
+
+      const updatedReviews = [newReview, ...prev.reviews];
+      const totalDifficulty = updatedReviews.reduce((acc, r) => acc + r.difficulty, 0);
+      const newAverageDifficulty = totalDifficulty / updatedReviews.length;
+
+      return {
+        ...prev,
+        reviews: updatedReviews,
+        difficulty: newAverageDifficulty
+      };
+    });
+  };
+
   if (!reviewCourse) {
     return (
       <div className="w-full min-h-screen primary-bg flex items-center justify-center">
@@ -89,7 +105,7 @@ export default function CoursePage() {
         <div className="flex flex-col gap-6">
           <h2 className="text-3xl font-bold text-[#2e6d7d] lg:mt-18">Review</h2>
 
-          <AddReviewForm id={reviewCourse.id} />
+          <AddReviewForm id={reviewCourse.id} onSuccess={handleAddReview} />
 
           <div className="flex flex-col gap-4 mt-4">
             <div className="flex justify-between items-center mb-2">
@@ -119,6 +135,7 @@ export default function CoursePage() {
             {sortedReviews.length > 0 ? (
               sortedReviews.map((review) => (
                 <ReviewItem
+                  id={review._id}
                   key={review._id}
                   name={review.username}
                   text={review.content}
