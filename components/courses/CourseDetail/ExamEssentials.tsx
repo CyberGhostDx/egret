@@ -5,19 +5,23 @@ import { getDifficultyColor } from "@/lib/difficulty-utils"
 
 interface ExamEssentialsProps {
   courseId: string
-  title: string
+  titleTh: string
+  titleEn: string
   difficulty: number
 }
 
-export const ExamEssentials = ({ courseId, title, difficulty }: ExamEssentialsProps) => {
+export const ExamEssentials = ({ courseId, titleTh, titleEn, difficulty }: ExamEssentialsProps) => {
   const activeColor = getDifficultyColor(Math.round(difficulty));
 
   return (
     <Card className="p-8 shadow-sm border-none rounded-3xl mt-4 bg-white">
       <div className="flex flex-col gap-2">
         <h1 className="text-4xl font-extrabold text-[#194b59]">{courseId}</h1>
-        <h2 className="text-xl font-bold text-[#2e6d7d] uppercase leading-tight max-w-[80%]">
-          {title}
+        <h2 className="text-xl font-bold text-[#2e6d7d] uppercase leading-tight">
+          {titleEn}
+        </h2>
+        <h2 className="text-xl font-bold text-[#2e6d7d] uppercase leading-tight">
+          {titleTh}
         </h2>
         <div className="flex flex-col gap-2 mt-4">
           <div className="flex items-center gap-2">

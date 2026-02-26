@@ -7,14 +7,14 @@ import Link from "next/link";
 
 interface CourseCardProps {
   course: CoursesResponse[0];
-  difficulty?: number;
+  difficulty: number;
 }
 
 import { getDifficultyColor } from "@/lib/difficulty-utils";
 
 const CourseCard = memo(({
   course,
-  difficulty = 3,
+  difficulty,
 }: CourseCardProps) => {
   const activeColor = getDifficultyColor(difficulty);
   const modalState = useOverlayState();
@@ -146,7 +146,5 @@ const CourseCard = memo(({
 
   );
 });
-
-CourseCard.displayName = "CourseCard";
 
 export default CourseCard;

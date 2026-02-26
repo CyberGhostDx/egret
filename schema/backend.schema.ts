@@ -16,7 +16,7 @@ export const examSchema = z.object({
 export const courseSchema = z.object({
   id: z.string(),
   titleTh: z.string(),
-  titleEn: z.string().nullable(),
+  titleEn: z.string(),
 });
 
 export const courseOfferingSchema = z.object({
@@ -49,7 +49,7 @@ export const coursesOfferingsResponseSchema = z.array(
   z.object({
     id: z.string(),
     titleTh: z.string(),
-    titleEn: z.string().nullable(),
+    titleEn: z.string(),
     difficulty: z.number(),
     offerings: z.array(
       courseOfferingSchema.omit({ exams: true, course: true }),
@@ -60,7 +60,7 @@ export const coursesOfferingsResponseSchema = z.array(
 export const reviewCourseSchema = z.object({
   id: z.string(),
   titleTh: z.string(),
-  titleEn: z.string().nullable(),
+  titleEn: z.string(),
   difficulty: z.number(),
   reviews: z.array(
     z.object({

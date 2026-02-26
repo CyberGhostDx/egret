@@ -3,12 +3,15 @@ import axiosInstance from "@/lib/axiosInstance";
 import { userDashboardSchema } from "@/schema/backend.schema";
 import { AxiosError } from "axios";
 import { toast } from "@heroui/react";
+import { useMemo } from "react";
 
 export function useUser() {
   const { data, error, isLoading, isValidating, mutate } =
     useSWR("/api/users/me");
 
-  const user = data ? userDashboardSchema.parse(data) : null;
+  const user = useMemo(() => {
+    return data ? userDashboardSchema.parse(data) : null;
+  }, [data]);
 
   const enrollCourse = async (offeringId: string) => {
     try {
