@@ -70,7 +70,7 @@ export default function CoursesPage() {
               <CourseCard
                 key={course.id}
                 course={course}
-                difficulty={0}
+                difficulty={course.difficulty}
               />
             ))}
           </div>

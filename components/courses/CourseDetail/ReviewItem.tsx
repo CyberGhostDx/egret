@@ -5,6 +5,8 @@ import { FaArrowUp } from "react-icons/fa"
 import axiosInstance from "@/lib/axiosInstance"
 import { authClient } from "@/lib/auth-client"
 
+import { getDifficultyColor } from "@/lib/difficulty-utils"
+
 interface ReviewItemProps {
   id: string
   name: string
@@ -15,6 +17,7 @@ interface ReviewItemProps {
 }
 
 export const ReviewItem = ({ id, name, text, rating, upvotes, timestamp }: ReviewItemProps) => {
+  const activeColor = getDifficultyColor(rating);
 
   return (
     <Card className="p-4 shadow-sm border-none rounded-xl bg-white">
@@ -41,7 +44,7 @@ export const ReviewItem = ({ id, name, text, rating, upvotes, timestamp }: Revie
             {[1, 2, 3, 4, 5].map((star) => (
               <div
                 key={star}
-                className={`w-3.5 h-3.5 rounded-full ${star <= rating ? 'bg-secondary' : 'bg-slate-200'}`}
+                className={`w-2.5 h-2.5 rounded-full ${star <= rating ? activeColor : 'bg-gray-300'}`}
               />
             ))}
           </div>

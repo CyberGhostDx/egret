@@ -3,6 +3,7 @@ import { LuMessageCirclePlus } from 'react-icons/lu'
 import { useState } from "react"
 import axiosInstance from "@/lib/axiosInstance"
 import { TbGhost, TbGhostOff } from "react-icons/tb"
+import { getDifficultyColor } from "@/lib/difficulty-utils"
 
 export const AddReviewForm = ({
   id,
@@ -15,6 +16,8 @@ export const AddReviewForm = ({
   const [difficulty, setDifficulty] = useState(0)
   const [isAnonymous, setIsAnonymous] = useState(false)
   const [isPending, setIsPending] = useState(false)
+
+  const activeColor = getDifficultyColor(difficulty);
 
   const handleReviewSubmit = async () => {
     if (!content.trim()) {
@@ -77,7 +80,7 @@ export const AddReviewForm = ({
               <button
                 key={star}
                 onClick={() => setDifficulty(star)}
-                className={`w-5 h-5 rounded-full transition-all duration-200 hover:scale-125 hover:shadow-sm ${star <= difficulty ? 'bg-secondary' : 'bg-slate-200 hover:bg-slate-300'}`}
+                className={`w-5 h-5 rounded-full transition-all duration-200 hover:scale-125 hover:shadow-sm ${star <= difficulty ? activeColor : 'bg-slate-200 hover:bg-slate-300'}`}
                 aria-label={`Select difficulty ${star}`}
               />
             ))}

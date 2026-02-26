@@ -50,6 +50,7 @@ export const coursesOfferingsResponseSchema = z.array(
     id: z.string(),
     titleTh: z.string(),
     titleEn: z.string().nullable(),
+    difficulty: z.number(),
     offerings: z.array(
       courseOfferingSchema.omit({ exams: true, course: true }),
     ),
