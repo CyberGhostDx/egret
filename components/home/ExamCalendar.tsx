@@ -3,13 +3,13 @@
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { useEffect, useState, useMemo } from "react";
-import { useUserStore } from "@/store/useUserStore";
+import { useUser } from "@/hooks/useUser";
 import { Tooltip } from "@heroui/react";
 import { useTimeStore } from "@/store/useTimeStore";
 
 export default function ExamCalendar() {
   const [mounted, setMounted] = useState(false);
-  const user = useUserStore((state) => state.user);
+  const { user } = useUser();
   const now = useTimeStore((state) => state.now);
 
   useEffect(() => {

@@ -6,26 +6,14 @@ import { useEffect, useState, useMemo } from 'react'
 import { ExamEssentials } from '@/components/courses/CourseDetail/ExamEssentials'
 import { AddReviewForm } from '@/components/courses/CourseDetail/AddReviewForm'
 import { ReviewItem } from '@/components/courses/CourseDetail/ReviewItem'
-import axiosInstance from '@/lib/axiosInstance'
 import { ReviewCourseResponse } from '@/schema/backend.schema'
+import useSWR from 'swr'
 
 export default function CoursePage() {
-  const [reviewCourse, setReviewCourse] = useState<ReviewCourseResponse>()
   const { id } = useParams()
+  const { data: reviewCourse, mutate } = useSWR<ReviewCourseResponse>(id ? `/api/reviews/${id}` : null)
   const router = useRouter()
   const [sortKey, setSortKey] = useState("difficulty")
-
-  useEffect(() => {
-    const fetchReview = async () => {
-      try {
-        const response = await axiosInstance.get(`/api/reviews/${id}`)
-        setReviewCourse(response.data.data)
-      } catch (error) {
-        console.error("Failed to fetch reviews:", error)
-      }
-    }
-    if (id) fetchReview()
-  }, [id])
 
   const sortedReviews = useMemo(() => {
     if (!reviewCourse?.reviews) return []
@@ -54,20 +42,8 @@ export default function CoursePage() {
     }).format(new Date(date))
   }
 
-  const handleAddReview = (newReview: any) => {
-    setReviewCourse((prev) => {
-      if (!prev) return prev;
-
-      const updatedReviews = [newReview, ...prev.reviews];
-      const totalDifficulty = updatedReviews.reduce((acc, r) => acc + r.difficulty, 0);
-      const newAverageDifficulty = totalDifficulty / updatedReviews.length;
-
-      return {
-        ...prev,
-        reviews: updatedReviews,
-        difficulty: newAverageDifficulty
-      };
-    });
+  const handleAddReview = async () => {
+    await mutate();
   };
 
   if (!reviewCourse) {

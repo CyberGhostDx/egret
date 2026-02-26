@@ -1,11 +1,10 @@
 "use client";
 
-import { useUserStore } from "@/store/useUserStore";
+import { useUser } from "@/hooks/useUser";
 import ExamCard, { Exam } from "./ExamCard";
 
 export default function ExamList() {
-  const user = useUserStore((state) => state.user);
-  const isLoading = useUserStore((state) => state.isLoading);
+  const { user, isLoading } = useUser();
 
   if (isLoading) {
     return <div className="text-center py-10">Loading exams...</div>;

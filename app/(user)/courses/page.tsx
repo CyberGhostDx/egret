@@ -1,19 +1,15 @@
 "use client";
 
-import { useEffect, useState, useMemo, useDeferredValue } from "react";
-import { useCoursesStore } from "@/store/useCoursesStore";
+import { useState, useMemo, useDeferredValue } from "react";
+import { useCourses } from "@/hooks/useCourses";
 import CourseCard from "@/components/courses/CourseCard";
 import { InputGroup } from "@heroui/react";
 import { LuSearch } from "react-icons/lu";
 
 export default function CoursesPage() {
-  const { courses, isLoading, fetchCourses } = useCoursesStore();
+  const { courses, isLoading } = useCourses();
   const [searchQuery, setSearchQuery] = useState("");
   const deferredSearchQuery = useDeferredValue(searchQuery);
-
-  useEffect(() => {
-    fetchCourses();
-  }, [fetchCourses]);
 
   const filterCourses = useMemo(() => {
     if (!courses) return [];

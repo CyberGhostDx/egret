@@ -2,7 +2,7 @@ import { memo, useState } from "react";
 import { Tooltip, Modal, Button, useOverlayState } from "@heroui/react";
 import { CoursesResponse } from "@/schema/backend.schema";
 import { LuPlus } from "react-icons/lu";
-import { useUserStore } from "@/store/useUserStore";
+import { useUser } from "@/hooks/useUser";
 import Link from "next/link";
 
 interface CourseCardProps {
@@ -19,8 +19,8 @@ const CourseCard = memo(({
   const activeColor = getDifficultyColor(difficulty);
   const modalState = useOverlayState();
   const [isLoading, setIsLoading] = useState(false);
-  const enrollCourse = useUserStore((state) => state.enrollCourse);
-  const userCourses = useUserStore((state) => state.user?.userCourses);
+  const { user, enrollCourse } = useUser();
+  const userCourses = user?.userCourses;
 
   const handleEnroll = async (offeringId: string) => {
     setIsLoading(true);

@@ -11,7 +11,7 @@ import {
   ListBox,
   useOverlayState,
 } from "@heroui/react";
-import { useUserStore } from "@/store/useUserStore";
+import { useUser } from "@/hooks/useUser";
 import { useTimeStore } from "@/store/useTimeStore";
 import { LuCalendarPlus } from "react-icons/lu";
 import { google, outlook, office365, yahoo, ics } from "calendar-link";
@@ -59,7 +59,7 @@ const formatCalendarTime = (date: Date, time: string) => {
 export default function ExamCard({ exam }: { exam: Exam }) {
   const [isPending, setIsPending] = useState(false);
   const modalState = useOverlayState();
-  const user = useUserStore((state) => state.user);
+  const { user, unenrollCourse } = useUser();
 
   const now = useTimeStore((state) => state.now);
 
@@ -141,8 +141,6 @@ export default function ExamCard({ exam }: { exam: Exam }) {
       document.body.removeChild(link);
     }
   };
-
-  const unenrollCourse = useUserStore((state) => state.unenrollCourse);
 
   const handleUnenroll = async (offeringId: string) => {
     setIsPending(true);
