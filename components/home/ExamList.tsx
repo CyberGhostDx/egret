@@ -2,12 +2,15 @@
 
 import { useUser } from "@/hooks/useUser";
 import ExamCard, { Exam } from "./ExamCard";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function ExamList() {
   const { user, isLoading } = useUser();
+  const locale = useLocale();
+  const t = useTranslations("ExamList");
 
   if (isLoading) {
-    return <div className="text-center py-10">Loading exams...</div>;
+    return <div className="text-center py-10">{t("LoadingExams")}</div>;
   }
 
   const exams: (Exam & { sectionType: string | null })[] =
@@ -17,7 +20,7 @@ export default function ExamList() {
         id: e.id,
         courseCode: uc.offering.courseId,
         offeringId: uc.offering.id,
-        courseNameEn: course.titleEn || course.titleTh,
+        courseNameEn: locale === "en" ? course.titleEn || course.titleTh : course.titleTh || course.titleEn,
         courseNameTh: course.titleTh,
         date: new Date(e.examDate),
         startTime: new Date(e.startTime).toLocaleTimeString("en-GB", {
@@ -50,7 +53,7 @@ export default function ExamList() {
   if (sortedExams.length === 0) {
     return (
       <div className="text-center py-10 text-slate-500">
-        No upcoming exams found.
+        {t("NoUpcomingExams")}
       </div>
     );
   }

@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Thai } from "next/font/google";
-import { NextIntlClientProvider } from "next-intl";
-import "./globals.css";
 import { SwrProvider } from "./providers";
+import "./globals.css";
 
 const ibmSans = IBM_Plex_Sans_Thai({
   variable: "--font-ibm",
@@ -21,11 +20,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${ibmSans.variable} ${ibmSans.className}  antialiased`}>
-        <NextIntlClientProvider>
-          <SwrProvider>{children}</SwrProvider>
-        </NextIntlClientProvider>
+    <html lang="th">
+      <body className={`${ibmSans.variable} ${ibmSans.className} antialiased`}>
+        <SwrProvider>
+          {children}
+        </SwrProvider>
       </body>
     </html>
   );

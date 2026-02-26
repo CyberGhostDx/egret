@@ -1,7 +1,10 @@
 {
   "Navbar": {
     "Home": "หน้าแรก",
-    "Courses": "รายวิชา"
+    "Courses": "รายวิชา",
+    "SignOut": "ออกจากระบบ",
+    "Language": "ภาษา",
+    "SignIn": "เข้าสู่ระบบ"
   },
   "Home": {
     "Time": {
@@ -28,13 +31,59 @@
   },
   "Courses": {
     "SearchCourse": "ค้นหารายวิชา",
-    "Difficulty": "ความยาก"
+    "Difficulty": "ความยาก",
+    "AddCourse": "เพิ่มรายวิชา",
+    "SelectOffering": "เลือกหมู่เรียน",
+    "Section": "หมู่เรียน",
+    "Credits": "หน่วยกิต",
+    "NoInstructor": "ไม่มีอาจารย์ผู้สอน",
+    "Enrolled": "ลงทะเบียนแล้ว",
+    "Select": "เลือก",
+    "Cancel": "ยกเลิก",
+    "LoadingDetails": "กำลังโหลดข้อมูลรายวิชา..."
   },
   "CourseReview": {
     "Subject": "รายวิชา",
     "ExamEssentials": "ข้อมูลสำหรับการสอบ",
     "ExamPrepTips": "เทคนิคเตรียมสอบ",
     "StudentReview": "รีวิวจากนิสิต",
-    "ShareExperience": "แบ่งปันประสบการณ์..."
+    "AddReview": "เพิ่มรีวิว",
+    "AddReviewPlaceholder": "เพิ่มรีวิวของคุณที่นี่",
+    "Anonymous": "ไม่ระบุตัวตน",
+    "Post": "โพสต์",
+    "DifficultyRate": "ระดับความยาก",
+    "BackToCourses": "กลับสู่หน้ารายวิชา",
+    "Review": "รีวิว",
+    "SortBy": "จัดเรียงตาม:",
+    "Recent": "ล่าสุด",
+    "NoReviewsYet": "ยังไม่มีรีวิว",
+    "BeTheFirst": "เป็นคนแรกที่แชร์ความคิดเห็นเกี่ยวกับวิชานี้!",
+    "LoadingDetails": "กำลังโหลดข้อมูลรายวิชา..."
+  },
+  "ExamCalendar": {
+    "UpcomingExams": "การสอบที่กำลังจะมาถึง",
+    "Time": "เวลา"
+  },
+  "ExamList": {
+    "LoadingExams": "กำลังโหลดข้อมูลการสอบ...",
+    "NoUpcomingExams": "ไม่พบการสอบที่กำลังจะมาถึง"
+  },
+  "ExamCard": {
+    "Days": "วัน",
+    "Hours": "ชั่วโมง",
+    "Minutes": "นาที",
+    "Credit": "หน่วยกิต",
+    "Section": "หมู่เรียน",
+    "Building": "อาคาร",
+    "Room": "ห้อง",
+    "Instructor": "อาจารย์ผู้สอน",
+    "Proctor": "ผู้คุมสอบ",
+    "Note": "หมายเหตุ",
+    "Unenroll": "ถอนรายวิชา",
+    "AddToCalendar": "เพิ่มปฏิทิน",
+    "CourseReview": "รีวิววิชา",
+    "SelectSectionRoom": "เลือกหมู่เรียนและห้องสอบ",
+    "NoNote": "ไม่มีหมายเหตุ",
+    "StartsIn": "เริ่มในอีก"
   }
 }

@@ -11,18 +11,34 @@ import {
 } from "@heroui/react";
 import { HiMenu, HiX } from "react-icons/hi";
 import { authClient } from "@/lib/auth-client";
-import { usePathname } from "next/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/routing";
 import NextLink from "next/link";
+import { LuLogOut } from "react-icons/lu";
+import { useLocale, useTranslations } from "next-intl";
+import { useState, useEffect } from "react";
 
 const Navbar = () => {
   const { data: session } = authClient.useSession();
   const user = session?.user;
   const pathname = usePathname();
+  const router = useRouter();
+  const locale = useLocale();
+  const t = useTranslations("Navbar");
+  const [selectedLocale, setSelectedLocale] = useState(locale);
+
+  useEffect(() => {
+    setSelectedLocale(locale);
+  }, [locale]);
+
+  const handleLocaleChange = (key: string) => {
+    setSelectedLocale(key);
+    router.replace(pathname, { locale: key });
+  };
 
 
   const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "Courses", href: "/courses" },
+    { name: t("Home"), href: "/" },
+    { name: t("Courses"), href: "/courses" },
   ];
 
 
@@ -32,29 +48,34 @@ const Navbar = () => {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-8">
-          <NextLink href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <span className="text-xl font-bold tracking-tight text-primary">
               EGRET
             </span>
-          </NextLink>
+          </Link>
 
           <nav className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
-              <NextLink
+              <Link
                 key={link.name}
                 href={link.href}
                 className={`transition-colors hover:text-primary ${pathname === link.href ? "text-primary font-bold" : "text-muted-foreground font-medium"
                   }`}
               >
                 {link.name}
-              </NextLink>
+              </Link>
             ))}
           </nav>
         </div>
 
         <div className="flex items-center gap-2 sm:gap-4">
           <div className="hidden sm:flex items-center">
-            <Tabs variant="primary" defaultSelectedKey="th" className="w-full max-w-md">
+            <Tabs
+              variant="primary"
+              selectedKey={selectedLocale}
+              onSelectionChange={(key) => handleLocaleChange(key as string)}
+              className="w-full max-w-md"
+            >
               <Tabs.ListContainer>
                 <Tabs.List aria-label="Language selection"
                   className="w-fit *:h-6 *:w-fit *:px-3 *:text-sm *:font-normal *:data-[selected=true]:text-accent-foreground"
@@ -98,7 +119,8 @@ const Navbar = () => {
                       id="logout"
                       className="text-danger"
                     >
-                      <Label>Sign Out</Label>
+                      <LuLogOut className="size-5" />
+                      <Label className="text-danger">{t("SignOut")}</Label>
                     </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown.Popover>
@@ -106,7 +128,7 @@ const Navbar = () => {
             ) : (
               <NextLink href="/login">
                 <Button size="sm" className="bg-primary hover:bg-[#1e4a57]">
-                  Sign In
+                  {t("SignIn")}
                 </Button>
               </NextLink>
             )}
@@ -129,18 +151,23 @@ const Navbar = () => {
                   <Disclosure.Content className="absolute top-full right-0 mt-2 w-48 bg-background border border-divider rounded-lg shadow-xl animate-in fade-in slide-in-from-top-2 duration-200 z-50">
                     <div className="px-4 py-6 flex flex-col gap-4">
                       {navLinks.map((link) => (
-                        <NextLink
+                        <Link
                           key={link.name}
                           href={link.href}
                           className={`text-lg font-medium py-2 transition-colors hover:text-primary ${pathname === link.href ? "text-primary font-bold" : "text-muted-foreground"
                             }`}
                         >
                           {link.name}
-                        </NextLink>
+                        </Link>
                       ))}
                       <div className="pt-4 border-t border-divider flex items-center justify-between gap-2">
-                        <span className="text-sm font-medium text-muted-foreground">Language</span>
-                        <Tabs variant="primary" defaultSelectedKey="th" className="w-full max-w-sm">
+                        <span className="text-sm font-medium text-muted-foreground">{t("Language")}</span>
+                        <Tabs
+                          variant="primary"
+                          selectedKey={selectedLocale}
+                          onSelectionChange={(key) => handleLocaleChange(key as string)}
+                          className="w-full max-w-sm"
+                        >
                           <Tabs.ListContainer>
                             <Tabs.List aria-label="Language selection"
                               className="w-fit *:h-6 *:w-fit *:px-3 *:text-sm *:font-normal *:data-[selected=true]:text-accent-foreground"

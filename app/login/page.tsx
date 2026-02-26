@@ -17,7 +17,6 @@ const LoginPage = () => {
     }
   }, [session, isPending, router]);
 
-
   const handleGoogleLogin = async () => {
     await authClient.signIn.social({
       provider: "google",

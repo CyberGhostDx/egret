@@ -1,8 +1,8 @@
 "use client";
 
-import Clock from "../../components/home/Clock";
-import ExamCalendar from "../../components/home/ExamCalendar";
-import ExamList from "../../components/home/ExamList";
+import Clock from "@/components/home/Clock";
+import ExamCalendar from "@/components/home/ExamCalendar";
+import ExamList from "@/components/home/ExamList";
 
 export default function Home() {
   return (

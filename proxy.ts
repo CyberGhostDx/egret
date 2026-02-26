@@ -1,10 +1,27 @@
 import { NextRequest } from "next/server";
 import authMiddleware from "./middleware/auth.middleware";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
 
-export async function proxy(request: NextRequest) {
-  return await authMiddleware(request);
+const intlMiddleware = createMiddleware(routing);
+
+export async function proxy(req: NextRequest) {
+  const authResponse = await authMiddleware(req);
+  if (
+    authResponse?.status === 307 ||
+    authResponse?.status === 308 ||
+    authResponse?.headers?.has("location")
+  ) {
+    return authResponse;
+  }
+
+  return intlMiddleware(req);
 }
 
 export const config = {
-  matcher: ["/((?!login|api|images|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    "/",
+    "/(th|en)/:path*",
+    "/((?!api|images|login|_next|_vercel|.*\\..*).*)",
+  ],
 };

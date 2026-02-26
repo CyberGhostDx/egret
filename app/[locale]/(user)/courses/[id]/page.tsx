@@ -1,19 +1,22 @@
 "use client"
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 import { Button, Select, ListBox } from "@heroui/react"
 import { IoIosArrowBack } from "react-icons/io"
-import { useEffect, useState, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { ExamEssentials } from '@/components/courses/CourseDetail/ExamEssentials'
 import { AddReviewForm } from '@/components/courses/CourseDetail/AddReviewForm'
 import { ReviewItem } from '@/components/courses/CourseDetail/ReviewItem'
 import { ReviewCourseResponse } from '@/schema/backend.schema'
 import useSWR from 'swr'
+import { useTranslations } from "next-intl";
 
 export default function CoursePage() {
   const { id } = useParams()
   const { data: reviewCourse, mutate } = useSWR<ReviewCourseResponse>(id ? `/api/reviews/${id}` : null)
   const router = useRouter()
-  const [sortKey, setSortKey] = useState("difficulty")
+  const [sortKey, setSortKey] = useState("recent")
+  const t = useTranslations("CourseReview");
 
   const sortedReviews = useMemo(() => {
     if (!reviewCourse?.reviews) return []
@@ -23,9 +26,6 @@ export default function CoursePage() {
     return reviewsCopy.sort((a, b) => {
       if (sortKey === "difficulty") {
         return b.difficulty - a.difficulty
-      }
-      if (sortKey === "upvotes") {
-        return b.vote - a.vote
       }
       if (sortKey === "recent") {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -51,7 +51,7 @@ export default function CoursePage() {
       <div className="w-full min-h-screen primary-bg flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-xl font-semibold text-primary">Loading course details...</p>
+          <p className="text-xl font-semibold text-primary">{t("LoadingDetails")}</p>
         </div>
       </div>
     )
@@ -66,10 +66,10 @@ export default function CoursePage() {
             onPress={() => router.push('/courses')}
           >
             <IoIosArrowBack />
-            Back to Courses
+            {t("BackToCourses")}
           </Button>
 
-          <h2 className="text-3xl font-bold text-primary mt-2">Exam Essentials</h2>
+          <h2 className="text-3xl font-bold text-primary mt-2">{t("ExamEssentials")}</h2>
 
           <ExamEssentials
             courseId={reviewCourse.id}
@@ -80,15 +80,15 @@ export default function CoursePage() {
         </div>
 
         <div className="flex flex-col gap-6">
-          <h2 className="text-3xl font-bold text-[#2e6d7d] lg:mt-18">Review</h2>
+          <h2 className="text-3xl font-bold text-[#2e6d7d] lg:mt-18">{t("Review")}</h2>
 
           <AddReviewForm id={reviewCourse.id} onSuccess={handleAddReview} />
 
           <div className="flex flex-col gap-4 mt-4">
             <div className="flex justify-between items-center mb-2">
-              <h3 className="text-2xl font-bold text-[#2e6d7d]">Student Review</h3>
+              <h3 className="text-2xl font-bold text-[#2e6d7d]">{t("StudentReview")}</h3>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-500 min-w-fit">sort by :</span>
+                <span className="text-sm text-gray-500 min-w-fit">{t("SortBy")}</span>
                 <Select
                   value={sortKey}
                   onChange={(key) => setSortKey(key as string)}
@@ -100,9 +100,8 @@ export default function CoursePage() {
                   </Select.Trigger>
                   <Select.Popover>
                     <ListBox>
-                      <ListBox.Item id="difficulty" textValue="Difficulty">Difficulty</ListBox.Item>
-                      <ListBox.Item id="recent" textValue="Recent">Recent</ListBox.Item>
-                      <ListBox.Item id="upvotes" textValue="Upvotes">Upvotes</ListBox.Item>
+                      <ListBox.Item id="difficulty" textValue="Difficulty">{t("DifficultyRate")}</ListBox.Item>
+                      <ListBox.Item id="recent" textValue="Recent">{t("Recent")}</ListBox.Item>
                     </ListBox>
                   </Select.Popover>
                 </Select>
@@ -123,8 +122,8 @@ export default function CoursePage() {
               ))
             ) : (
               <div className="bg-white/50 backdrop-blur-sm rounded-2xl p-10 text-center flex flex-col items-center gap-3 border border-white/20">
-                <p className="text-xl font-bold text-[#2e6d7d]">No reviews yet</p>
-                <p className="text-gray-500">Be the first to share your thoughts on this course!</p>
+                <p className="text-xl font-bold text-[#2e6d7d]">{t("NoReviewsYet")}</p>
+                <p className="text-gray-500">{t("BeTheFirst")}</p>
               </div>
             )}
           </div>

@@ -5,8 +5,10 @@ import { useCourses } from "@/hooks/useCourses";
 import CourseCard from "@/components/courses/CourseCard";
 import { InputGroup } from "@heroui/react";
 import { LuSearch } from "react-icons/lu";
+import { useTranslations } from "next-intl";
 
 export default function CoursesPage() {
+  const t = useTranslations("Courses");
   const { courses, isLoading } = useCourses();
   const [searchQuery, setSearchQuery] = useState("");
   const deferredSearchQuery = useDeferredValue(searchQuery);
@@ -50,7 +52,7 @@ export default function CoursesPage() {
               </InputGroup.Prefix>
               <InputGroup.Input
                 className="w-full"
-                placeholder="Search Course"
+                placeholder={t("SearchCourse")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -59,7 +61,7 @@ export default function CoursesPage() {
         </div>
 
         {isLoading && !courses?.length ? (
-          <div className="text-center py-10 text-primary">Loading courses...</div>
+          <div className="text-center py-10 text-primary">{t("LoadingDetails")}</div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
             {filterCourses.map((course) => (

@@ -4,6 +4,7 @@ import { useState } from "react"
 import axiosInstance from "@/lib/axiosInstance"
 import { TbGhost, TbGhostOff } from "react-icons/tb"
 import { getDifficultyColor } from "@/lib/difficulty-utils"
+import { useTranslations } from "next-intl"
 
 export const AddReviewForm = ({
   id,
@@ -16,6 +17,7 @@ export const AddReviewForm = ({
   const [difficulty, setDifficulty] = useState(0)
   const [isAnonymous, setIsAnonymous] = useState(false)
   const [isPending, setIsPending] = useState(false)
+  const t = useTranslations("CourseReview")
 
   const activeColor = getDifficultyColor(difficulty);
 
@@ -57,10 +59,10 @@ export const AddReviewForm = ({
 
   return (
     <Card className="p-8 shadow-sm border-none rounded-3xl flex flex-col gap-6 bg-white">
-      <h3 className="font-bold text-lg text-[#194b59]">Add a Review</h3>
+      <h3 className="font-bold text-lg text-[#194b59]">{t("AddReview")}</h3>
 
       <Input
-        placeholder="Add your review here"
+        placeholder={t("AddReviewPlaceholder")}
         className="border-[#b6d0d4] bg-white border rounded-full px-4 py-2 w-full shadow-none"
         value={content}
         onChange={(e) => setContent(e.target.value)}
@@ -74,7 +76,7 @@ export const AddReviewForm = ({
 
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-4">
-          <span className="font-bold text-[#2e6d7d]">Difficulty</span>
+          <span className="font-bold text-[#2e6d7d]">{t("DifficultyRate")}</span>
           <div className="flex gap-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
@@ -106,7 +108,7 @@ export const AddReviewForm = ({
                     </Switch.Thumb>
                   </Switch.Control>
                   <Switch.Content>
-                    <span className="text font-medium ml-1">Anonymous</span>
+                    <span className="text font-medium ml-1">{t("Anonymous")}</span>
                   </Switch.Content>
                 </>
               )
@@ -118,7 +120,7 @@ export const AddReviewForm = ({
             isPending={isPending}
           >
             <LuMessageCirclePlus className="size-5 mr-1" />
-            Post
+            {t("Post")}
           </Button>
         </div>
       </div>

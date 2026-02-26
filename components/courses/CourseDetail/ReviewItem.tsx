@@ -6,6 +6,7 @@ import axiosInstance from "@/lib/axiosInstance"
 import { authClient } from "@/lib/auth-client"
 
 import { getDifficultyColor } from "@/lib/difficulty-utils"
+import { useTranslations } from "next-intl"
 
 interface ReviewItemProps {
   id: string
@@ -18,6 +19,7 @@ interface ReviewItemProps {
 
 export const ReviewItem = ({ id, name, text, rating, upvotes, timestamp }: ReviewItemProps) => {
   const activeColor = getDifficultyColor(rating);
+  const t = useTranslations("CourseReview");
 
   return (
     <Card className="p-4 shadow-sm border-none rounded-xl bg-white">
@@ -39,7 +41,7 @@ export const ReviewItem = ({ id, name, text, rating, upvotes, timestamp }: Revie
       </div>
       <div className="flex justify-between items-center mt-auto">
         <div className="flex items-center">
-          <span className="text font-bold text-[#2e6d7d]">Difficulty Rate</span>
+          <span className="text font-bold text-[#2e6d7d]">{t("DifficultyRate")}</span>
           <div className="flex gap-1.5 ml-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <div

@@ -3,7 +3,8 @@ import { Tooltip, Modal, Button, useOverlayState } from "@heroui/react";
 import { CoursesResponse } from "@/schema/backend.schema";
 import { LuPlus } from "react-icons/lu";
 import { useUser } from "@/hooks/useUser";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useLocale, useTranslations } from "next-intl";
 
 interface CourseCardProps {
   course: CoursesResponse[0];
@@ -16,11 +17,13 @@ const CourseCard = memo(({
   course,
   difficulty,
 }: CourseCardProps) => {
+  const t = useTranslations("Courses");
   const activeColor = getDifficultyColor(difficulty);
   const modalState = useOverlayState();
   const [isLoading, setIsLoading] = useState(false);
   const { user, enrollCourse } = useUser();
   const userCourses = user?.userCourses;
+  const locale = useLocale();
 
   const handleEnroll = async (offeringId: string) => {
     setIsLoading(true);
@@ -39,12 +42,12 @@ const CourseCard = memo(({
             {course.id}
           </h3>
           <p className="text-lg font-semibold text-primary/80 line-clamp-2">
-            {course.titleEn || course.titleTh}
+            {locale === "en" ? course.titleEn || course.titleTh : course.titleTh || course.titleEn}
           </p>
         </div>
 
         <div className="mt-6 flex items-center gap-2">
-          <span className="text-xs font-bold text-primary">Difficulty:</span>
+          <span className="font-bold text-primary">{t("Difficulty")}:</span>
           <div className="flex gap-1.5 items-center">
             {[1, 2, 3, 4, 5].map((level) => (
               <div
@@ -70,7 +73,7 @@ const CourseCard = memo(({
             </button>
           </Tooltip.Trigger>
           <Tooltip.Content showArrow offset={10}>
-            <p>Add to my courses</p>
+            <p>{t("AddCourse")}</p>
           </Tooltip.Content>
         </Tooltip>
       </Link>
@@ -83,8 +86,8 @@ const CourseCard = memo(({
                 <>
                   <Modal.Header>
                     <div className="flex flex-col gap-1">
-                      <h3 className="text-xl font-bold text-primary">Select Offering</h3>
-                      <p className="text-sm font-medium text-gray-500">{course.id} - {course.titleEn || course.titleTh}</p>
+                      <h3 className="text-xl font-bold text-primary">{t("SelectOffering")}</h3>
+                      <p className="text-sm font-medium text-gray-500">{course.id} - {locale === "en" ? course.titleEn || course.titleTh : course.titleTh || course.titleEn}</p>
                     </div>
                   </Modal.Header>
                   <Modal.Body>
@@ -104,15 +107,15 @@ const CourseCard = memo(({
                           >
                             <div className="flex flex-col">
                               <span className="text-lg font-bold text-primary">
-                                Section {offering.section}
+                                {t("Section")} {offering.section}
                               </span>
                               <span className="text-sm text-gray-500">
-                                {offering.instructorEn ||
-                                  offering.instructorTh ||
-                                  "No instructor assigned"}
+                                {locale === "en"
+                                  ? offering.instructorEn || offering.instructorTh || t("NoInstructor")
+                                  : offering.instructorTh || offering.instructorEn || t("NoInstructor")}
                               </span>
                               <span className="text-xs text-primary/60 font-medium">
-                                {offering.credits} Credits •{" "}
+                                {offering.credits} {t("Credits")} •{" "}
                                 {offering.sectionType || "Standard"}
                               </span>
                             </div>
@@ -124,7 +127,7 @@ const CourseCard = memo(({
                               isDisabled={isEnrolled}
                               className="font-bold"
                             >
-                              {isEnrolled ? "Enrolled" : "Select"}
+                              {isEnrolled ? t("Enrolled") : t("Select")}
                             </Button>
                           </div>
                         );
@@ -133,7 +136,7 @@ const CourseCard = memo(({
                   </Modal.Body>
                   <Modal.Footer>
                     <Button variant="tertiary" onPress={close}>
-                      Cancel
+                      {t("Cancel")}
                     </Button>
                   </Modal.Footer>
                 </>

@@ -1,7 +1,10 @@
 {
   "Navbar": {
     "Home": "Home",
-    "Courses": "Courses"
+    "Courses": "Courses",
+    "SignOut": "Sign Out",
+    "Language": "Language",
+    "SignIn": "Sign In"
   },
   "Home": {
     "Time": {
@@ -28,13 +31,59 @@
   },
   "Courses": {
     "SearchCourse": "Search Course",
-    "Difficulty": "Difficulty"
+    "Difficulty": "Difficulty",
+    "AddCourse": "Add to my courses",
+    "SelectOffering": "Select Offering",
+    "Section": "Section",
+    "Credits": "Credits",
+    "NoInstructor": "No instructor assigned",
+    "Enrolled": "Enrolled",
+    "Select": "Select",
+    "Cancel": "Cancel",
+    "LoadingDetails": "Loading courses..."
   },
   "CourseReview": {
     "Subject": "Subject",
     "ExamEssentials": "Exam Essentials",
     "ExamPrepTips": "EXAM PREP TIPS",
     "StudentReview": "STUDENT REVIEWS",
-    "ShareExperience": "Share your experience..."
+    "AddReview": "Add a Review",
+    "AddReviewPlaceholder": "Add your review here",
+    "Anonymous": "Anonymous",
+    "Post": "Post",
+    "DifficultyRate": "Difficulty Rate",
+    "BackToCourses": "Back to Courses",
+    "Review": "Review",
+    "SortBy": "sort by :",
+    "Recent": "Recent",
+    "NoReviewsYet": "No reviews yet",
+    "BeTheFirst": "Be the first to share your thoughts on this course!",
+    "LoadingDetails": "Loading course details..."
+  },
+  "ExamCalendar": {
+    "UpcomingExams": "Upcoming Exams",
+    "Time": "Time"
+  },
+  "ExamList": {
+    "LoadingExams": "Loading exams...",
+    "NoUpcomingExams": "No upcoming exams found."
+  },
+  "ExamCard": {
+    "Days": "Days",
+    "Hours": "Hours",
+    "Minutes": "Minutes",
+    "Credit": "Credit",
+    "Section": "Section",
+    "Building": "Building",
+    "Room": "Room",
+    "Instructor": "Instructor",
+    "Proctor": "Proctor",
+    "Note": "Note",
+    "Unenroll": "Unenroll",
+    "AddToCalendar": "Add to Calendar",
+    "CourseReview": "Course Review",
+    "SelectSectionRoom": "Select Section and Room",
+    "NoNote": "No note",
+    "StartsIn": "Starts In"
   }
 }

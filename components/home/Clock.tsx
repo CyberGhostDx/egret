@@ -1,9 +1,11 @@
 "use client";
 
 import { useTimeStore } from "@/store/useTimeStore";
+import { useTranslations } from "next-intl";
 
 export default function Clock() {
   const time = useTimeStore((state) => state.now);
+  const t = useTranslations("Home.Time");
 
   if (!time) {
     return <div className="h-24"></div>;
@@ -36,7 +38,7 @@ export default function Clock() {
             {hours}
           </span>
           <span className="text-xs sm:text-sm font-medium opacity-70 mt-1">
-            Hours
+            {t("Hour")}
           </span>
         </div>
         <span className="text-4xl sm:text-6xl font-bold mb-4 sm:mb-6 opacity-80">
@@ -47,7 +49,7 @@ export default function Clock() {
             {minutes}
           </span>
           <span className="text-xs sm:text-sm font-medium opacity-70 mt-1">
-            Minutes
+            {t("Minute")}
           </span>
         </div>
         <span className="text-4xl sm:text-6xl font-bold mb-4 sm:mb-6 opacity-80">
@@ -58,7 +60,7 @@ export default function Clock() {
             {seconds}
           </span>
           <span className="text-xs sm:text-sm font-medium opacity-70 mt-1">
-            Seconds
+            {t("Second")}
           </span>
         </div>
       </div>

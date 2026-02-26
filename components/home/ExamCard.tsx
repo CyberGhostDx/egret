@@ -1,7 +1,8 @@
 "use client";
 
 import { z } from "zod";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { useLocale, useTranslations } from "next-intl";
 import { useState, useMemo } from "react";
 import {
   Modal,
@@ -17,7 +18,7 @@ import { LuCalendarPlus } from "react-icons/lu";
 import { SiGooglecalendar, SiApple } from "react-icons/si";
 import { PiMicrosoftOutlookLogoFill } from "react-icons/pi";
 import { FaYahoo } from "react-icons/fa";
-import { google, outlook, office365, yahoo, ics } from "calendar-link";
+import { google, outlook, yahoo, ics } from "calendar-link";
 
 export const examSchema = z.object({
   id: z.string(),
@@ -60,6 +61,8 @@ const formatCalendarTime = (date: Date, time: string) => {
 };
 
 export default function ExamCard({ exam }: { exam: Exam }) {
+  const locale = useLocale();
+  const t = useTranslations("ExamCard");
   const [isPending, setIsPending] = useState(false);
   const modalState = useOverlayState();
   const { user, unenrollCourse } = useUser();
@@ -71,7 +74,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
     [exam.date, exam.startTime, now],
   );
 
-  const formattedDate = exam.date.toLocaleDateString("en-GB", {
+  const formattedDate = exam.date.toLocaleDateString(locale === "en" ? "en-GB" : "th-TH", {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -104,8 +107,10 @@ export default function ExamCard({ exam }: { exam: Exam }) {
   );
 
   const handleAddToCalendar = (key: React.Key) => {
-    const title = `[Exam] ${exam.courseCode} ${exam.courseNameEn}`;
-    const calendarDescription = `Instructor: ${examDetails?.instructorEn}\nSection: ${examDetails?.section}\nProctor: ${examDetails?.proctor}\nNote: ${examDetails?.note || "ไม่มีหมายเหตุ"}`;
+    const courseTitle = locale === "en" ? exam.courseNameEn || exam.courseNameTh : exam.courseNameTh || exam.courseNameEn;
+    const title = `[Exam] ${exam.courseCode} ${courseTitle}`;
+    const instructorName = locale === "en" ? examDetails?.instructorEn || examDetails?.instructorTh : examDetails?.instructorTh || examDetails?.instructorEn;
+    const calendarDescription = `${t("Instructor")}: ${instructorName || "TBA"}\n${t("Section")}: ${examDetails?.section}\n${t("Proctor")}: ${examDetails?.proctor}\n${t("Note")}: ${examDetails?.note || t("NoNote")}`;
     const desc = calendarDescription;
     const location =
       `${examDetails?.building || ""} ${examDetails?.room || ""}`.trim() ||
@@ -157,16 +162,36 @@ export default function ExamCard({ exam }: { exam: Exam }) {
         onClick={modalState.open}
         className="w-full bg-linear-to-r from-[#447D8B] to-[#008B6D] text-white rounded-2xl p-5 sm:p-6 shadow-md flex flex-col sm:flex-row items-center gap-4 sm:gap-0 transition-colors cursor-pointer relative overflow-hidden h-auto text-left flex-nowrap border-none"
       >
-        <div className="flex flex-col items-center justify-center px-2 sm:px-4 w-full sm:w-2/5 border-b sm:border-b-0 sm:border-r border-white/20 pb-4 sm:pb-0">
-          <div className="text-xl sm:text-4xl font-bold tracking-wider tabular-nums">
-            {timeLeft.days.toString().padStart(2, "0")}:
-            {timeLeft.hours.toString().padStart(2, "0")}:
-            {timeLeft.minutes.toString().padStart(2, "0")}
-          </div>
-          <div className="flex gap-4 text-xs font-medium uppercase opacity-80 mt-1">
-            <span>Days</span>
-            <span>Hours</span>
-            <span>Minutes</span>
+        <div className="flex items-center justify-center px-2 sm:px-4 w-full sm:w-2/5 border-b sm:border-b-0 sm:border-r border-white/20 pb-4 sm:pb-0">
+          <div className="flex flex-col items-center gap-1 sm:gap-2">
+            <span className="text-sm font-bold opacity-60">
+              {t("StartsIn")}
+            </span>
+            <div className="grid grid-cols-[1fr_auto_1fr_auto_1fr] items-center text-center gap-x-1 sm:gap-x-1 w-full max-w-[200px] sm:max-w-[280px]">
+              <span className="text-xl sm:text-4xl font-bold tabular-nums">
+                {timeLeft.days.toString().padStart(2, "0")}
+              </span>
+              <span className="text-xl sm:text-4xl font-bold opacity-80 mb-1">:</span>
+              <span className="text-xl sm:text-4xl font-bold tabular-nums">
+                {timeLeft.hours.toString().padStart(2, "0")}
+              </span>
+              <span className="text-xl sm:text-4xl font-bold opacity-80 mb-1">:</span>
+              <span className="text-xl sm:text-4xl font-bold tabular-nums">
+                {timeLeft.minutes.toString().padStart(2, "0")}
+              </span>
+
+              <span className="text-xs font-medium opacity-80">
+                {t("Days")}
+              </span>
+              <div />
+              <span className="text-xs font-medium opacity-80">
+                {t("Hours")}
+              </span>
+              <div />
+              <span className="text-xs font-medium opacity-80">
+                {t("Minutes")}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -175,7 +200,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
             {exam.courseCode}
           </span>
           <h3 className="text-xl font-bold leading-tight mb-1 sm:mb-2 whitespace-normal">
-            {exam.courseNameEn}
+            {locale === "en" ? exam.courseNameEn || exam.courseNameTh : exam.courseNameTh || exam.courseNameEn}
           </h3>
           <div className="text-sm font-medium opacity-80 mt-1">
             <p className="flex items-center gap-2 justify-center sm:justify-start">
@@ -201,43 +226,43 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                   {exam.courseCode}
                 </h2>
                 <h2 className="text-2xl font-bold text-primary">
-                  {exam.courseNameEn}
+                  {locale === "en" ? exam.courseNameEn || exam.courseNameTh : exam.courseNameTh || exam.courseNameEn}
                 </h2>
               </Modal.Header>
 
               <Modal.Body className="text-primary text-lg">
                 <div className="flex flex-col gap-1.5 font-medium">
                   <p>
-                    <span className="font-bold">Credit :</span>{" "}
+                    <span className="font-bold">{t("Credit")} :</span>{" "}
                     {examDetails?.credits}
                   </p>
                   <p>
-                    <span className="font-bold">Section :</span>{" "}
+                    <span className="font-bold">{t("Section")} :</span>{" "}
                     {examDetails?.section}
                   </p>
                   <p>
-                    <span className="font-bold">Building :</span>{" "}
+                    <span className="font-bold">{t("Building")} :</span>{" "}
                     {examDetails?.building || "-"}
                   </p>
                   <p>
-                    <span className="font-bold">Room :</span>{" "}
+                    <span className="font-bold">{t("Room")} :</span>{" "}
                     {examDetails?.room || "-"}
                   </p>
                   <p>
-                    <span className="font-bold">Instructor :</span>{" "}
-                    {examDetails?.instructorEn}
+                    <span className="font-bold">{t("Instructor")} :</span>{" "}
+                    {locale === "en" ? examDetails?.instructorEn || examDetails?.instructorTh : examDetails?.instructorTh || examDetails?.instructorEn}
                   </p>
 
                   <p>
-                    <span className="font-bold">Proctor :</span>{" "}
+                    <span className="font-bold">{t("Proctor")} :</span>{" "}
                     {examDetails?.proctor?.split("\n").join(", ")}
                   </p>
 
                   <p>
                     <span className="font-bold text-red-500">*</span>
-                    <span className="font-bold">Note : </span>
+                    <span className="font-bold">{t("Note")} : </span>
                     <span className="text-slate-600 font-normal">
-                      {examDetails?.note || "ไม่มีหมายเหตุ"}
+                      {examDetails?.note || t("NoNote")}
                     </span>
                   </p>
                 </div>
@@ -261,9 +286,9 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                               const examItem = availableExams.find(
                                 (e) => e.id === item.id,
                               );
-                              return `Section ${examItem?.section} - ${examItem?.building} ${examItem?.room}`;
+                              return `${t("Section")} ${examItem?.section} - ${examItem?.building} ${examItem?.room}`;
                             }
-                            return "Select Section And Room";
+                            return t("SelectSectionRoom");
                           }}
                         </Select.Value>
                         <Select.Indicator />
@@ -274,11 +299,11 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                             <ListBox.Item
                               key={e.id}
                               id={e.id}
-                              textValue={`Section ${e.section}`}
+                              textValue={`${t("Section")} ${e.section}`}
                             >
                               <div className="flex flex-col">
                                 <span className="font-bold">
-                                  Section {e.section} ({e.sectionType})
+                                  {t("Section")} {e.section} ({e.sectionType})
                                 </span>
                                 <span className="text-sm opacity-80">
                                   {e.building} {e.room}
@@ -305,7 +330,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                   }
                   isPending={isPending}
                 >
-                  Unenroll
+                  {t("Unenroll")}
                 </Button>
 
                 <div className="flex gap-2 items-center">
@@ -315,7 +340,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                       className="bg-primary/10 text-primary border-none"
                     >
                       <LuCalendarPlus className="size-5" />
-                      Add to Calendar
+                      {t("AddToCalendar")}
                     </Button>
                     <Dropdown.Popover>
                       <Dropdown.Menu onAction={handleAddToCalendar}>
@@ -351,7 +376,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                     </Dropdown.Popover>
                   </Dropdown>
                   <Link href={`courses/${exam.courseCode}`}>
-                    <Button variant="primary">Course Review</Button>
+                    <Button variant="primary">{t("CourseReview")}</Button>
                   </Link>
                 </div>
               </Modal.Footer>
