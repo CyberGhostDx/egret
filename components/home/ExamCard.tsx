@@ -1,9 +1,16 @@
 "use client";
 
 import { z } from "zod";
-import { useState, useEffect, useMemo } from "react";
-import { Modal, Button, Dropdown, Select, ListBox, useOverlayState } from "@heroui/react";
-import axiosInstance from "@/lib/axiosInstance";
+import Link from "next/link";
+import { useState, useMemo } from "react";
+import {
+  Modal,
+  Button,
+  Dropdown,
+  Select,
+  ListBox,
+  useOverlayState,
+} from "@heroui/react";
 import { useUserStore } from "@/store/useUserStore";
 import { useTimeStore } from "@/store/useTimeStore";
 import { LuCalendarPlus } from "react-icons/lu";
@@ -45,20 +52,21 @@ const formatCalendarTime = (date: Date, time: string) => {
   const [h, m] = time.split(":").map(Number);
   const d = new Date(date);
   d.setHours(h, m, 0, 0);
-  const pad = (n: number) => n.toString().padStart(2, '0');
+  const pad = (n: number) => n.toString().padStart(2, "0");
   return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
 };
 
 export default function ExamCard({ exam }: { exam: Exam }) {
-  const [isPending, setIsPending] = useState(false)
+  const [isPending, setIsPending] = useState(false);
   const modalState = useOverlayState();
   const user = useUserStore((state) => state.user);
 
   const now = useTimeStore((state) => state.now);
 
-  const timeLeft = useMemo(() =>
-    calculateTimeLeft(exam.date, exam.startTime, now),
-    [exam.date, exam.startTime, now]);
+  const timeLeft = useMemo(
+    () => calculateTimeLeft(exam.date, exam.startTime, now),
+    [exam.date, exam.startTime, now],
+  );
 
   const formattedDate = exam.date.toLocaleDateString("en-GB", {
     day: "numeric",
@@ -71,27 +79,34 @@ export default function ExamCard({ exam }: { exam: Exam }) {
       ?.filter((uc) => uc.offering.courseId === exam.courseCode)
       .map((uc) => uc.offering) || [];
 
-  const availableExams = useMemo(() => courseOfferings.flatMap((co) =>
-    co.exams
-      .map((e) => ({
-        credits: co.credits,
-        offeringId: co.id,
-        instructorEn: co.instructorEn,
-        instructorTh: co.instructorTh,
-        ...e,
-        section: co.section,
-        sectionType: co.sectionType,
-      })),
-  ), [courseOfferings, user]);
+  const availableExams = useMemo(
+    () =>
+      courseOfferings.flatMap((co) =>
+        co.exams.map((e) => ({
+          credits: co.credits,
+          offeringId: co.id,
+          instructorEn: co.instructorEn,
+          instructorTh: co.instructorTh,
+          ...e,
+          section: co.section,
+          sectionType: co.sectionType,
+        })),
+      ),
+    [courseOfferings, user],
+  );
   const [selectedExamId, setSelectedExamId] = useState(exam.id);
-  const examDetails = useMemo(() => availableExams.find((e) => e.id === selectedExamId), [selectedExamId, availableExams]);
-
+  const examDetails = useMemo(
+    () => availableExams.find((e) => e.id === selectedExamId),
+    [selectedExamId, availableExams],
+  );
 
   const handleAddToCalendar = (key: React.Key) => {
     const title = `[Exam] ${exam.courseCode} ${exam.courseNameEn}`;
     const calendarDescription = `Instructor: ${examDetails?.instructorEn}\nSection: ${examDetails?.section}\nNote: ${examDetails?.note || "ไม่มีหมายเหตุ"}`;
     const desc = calendarDescription;
-    const location = `${examDetails?.building || ""} ${examDetails?.room || ""}`.trim() || "TBA";
+    const location =
+      `${examDetails?.building || ""} ${examDetails?.room || ""}`.trim() ||
+      "TBA";
     const start = formatCalendarTime(exam.date, exam.startTime);
     const end = formatCalendarTime(exam.date, exam.endTime);
 
@@ -105,19 +120,19 @@ export default function ExamCard({ exam }: { exam: Exam }) {
     };
 
     if (key === "google") {
-      const url = google(event)
+      const url = google(event);
       window.open(url, "_blank");
     } else if (key === "outlook") {
-      const url = outlook(event)
+      const url = outlook(event);
       window.open(url, "_blank");
     } else if (key === "office365") {
-      const url = office365(event)
+      const url = office365(event);
       window.open(url, "_blank");
     } else if (key === "yahoo") {
-      const url = yahoo(event)
+      const url = yahoo(event);
       window.open(url, "_blank");
     } else if (key === "apple") {
-      const url = ics(event)
+      const url = ics(event);
       const link = document.createElement("a");
       link.href = url;
       link.setAttribute("download", `${exam.courseCode}_exam.ics`);
@@ -125,11 +140,9 @@ export default function ExamCard({ exam }: { exam: Exam }) {
       link.click();
       document.body.removeChild(link);
     }
-
-  }
+  };
 
   const unenrollCourse = useUserStore((state) => state.unenrollCourse);
-
 
   const handleUnenroll = async (offeringId: string) => {
     setIsPending(true);
@@ -138,7 +151,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
       modalState.close();
     }
     setIsPending(false);
-  }
+  };
 
   return (
     <>
@@ -178,7 +191,10 @@ export default function ExamCard({ exam }: { exam: Exam }) {
       </div>
 
       <Modal>
-        <Modal.Backdrop isOpen={modalState.isOpen} onOpenChange={modalState.setOpen}>
+        <Modal.Backdrop
+          isOpen={modalState.isOpen}
+          onOpenChange={modalState.setOpen}
+        >
           <Modal.Container size="lg">
             <Modal.Dialog className="px-10 pt-8 relative bg-white outline-none">
               <Modal.CloseTrigger />
@@ -194,10 +210,12 @@ export default function ExamCard({ exam }: { exam: Exam }) {
               <Modal.Body className="text-primary text-lg">
                 <div className="flex flex-col gap-1.5 font-medium">
                   <p>
-                    <span className="font-bold">Credit :</span> {examDetails?.credits}
+                    <span className="font-bold">Credit :</span>{" "}
+                    {examDetails?.credits}
                   </p>
                   <p>
-                    <span className="font-bold">Section :</span> {examDetails?.section}
+                    <span className="font-bold">Section :</span>{" "}
+                    {examDetails?.section}
                   </p>
                   <p>
                     <span className="font-bold">Building :</span>{" "}
@@ -231,18 +249,20 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                       aria-label="Select Section and Room"
                       value={selectedExamId}
                       onChange={(key) => {
-                        if (key !== null)
-                          setSelectedExamId(key.toString());
+                        if (key !== null) setSelectedExamId(key.toString());
                       }}
                     >
                       <Select.Trigger className="border border-gray-200">
                         <Select.Value>
                           {({ state }) => {
                             const selectedItem = state.selectedItems?.[0];
-                            const item = availableExams.find((e) => e.id === selectedItem?.key);
+                            const item = availableExams.find(
+                              (e) => e.id === selectedItem?.key,
+                            );
                             if (item) {
-                              const examItem =
-                                availableExams.find((e) => e.id === item.id);
+                              const examItem = availableExams.find(
+                                (e) => e.id === item.id,
+                              );
                               return `Section ${examItem?.section} - ${examItem?.building} ${examItem?.room}`;
                             }
                             return "Select Section And Room";
@@ -277,21 +297,33 @@ export default function ExamCard({ exam }: { exam: Exam }) {
               </Modal.Body>
 
               <Modal.Footer className="flex justify-between mt-10">
-                <Button variant="danger" onPress={() => handleUnenroll(availableExams.find((e) => e.id === selectedExamId)?.offeringId || "")} isPending={isPending}>
+                <Button
+                  variant="danger"
+                  onPress={() =>
+                    handleUnenroll(
+                      availableExams.find((e) => e.id === selectedExamId)
+                        ?.offeringId || "",
+                    )
+                  }
+                  isPending={isPending}
+                >
                   Unenroll
                 </Button>
 
                 <div className="flex gap-2 items-center">
                   <Dropdown>
-                    <Button variant="secondary" className="bg-primary/10 text-primary border-none">
+                    <Button
+                      variant="secondary"
+                      className="bg-primary/10 text-primary border-none"
+                    >
                       <LuCalendarPlus className="w-5 h-5" />
                       Add to Calendar
                     </Button>
                     <Dropdown.Popover>
-                      <Dropdown.Menu
-                        onAction={handleAddToCalendar}
-                      >
-                        <Dropdown.Item id="google">Google Calendar</Dropdown.Item>
+                      <Dropdown.Menu onAction={handleAddToCalendar}>
+                        <Dropdown.Item id="google">
+                          Google Calendar
+                        </Dropdown.Item>
                         <Dropdown.Item id="outlook">Outlook</Dropdown.Item>
                         <Dropdown.Item id="apple">Apple / iCal</Dropdown.Item>
                         <Dropdown.Item id="office365">Office 365</Dropdown.Item>
@@ -299,7 +331,9 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                       </Dropdown.Menu>
                     </Dropdown.Popover>
                   </Dropdown>
-                  <Button variant="primary">Course Review</Button>
+                  <Link href={`courses/${exam.courseCode}`}>
+                    <Button variant="primary">Course Review</Button>
+                  </Link>
                 </div>
               </Modal.Footer>
             </Modal.Dialog>
