@@ -14,6 +14,9 @@ import {
 import { useUser } from "@/hooks/useUser";
 import { useTimeStore } from "@/store/useTimeStore";
 import { LuCalendarPlus } from "react-icons/lu";
+import { SiGooglecalendar, SiApple } from "react-icons/si";
+import { PiMicrosoftOutlookLogoFill } from "react-icons/pi";
+import { FaYahoo } from "react-icons/fa";
 import { google, outlook, office365, yahoo, ics } from "calendar-link";
 
 export const examSchema = z.object({
@@ -102,7 +105,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
 
   const handleAddToCalendar = (key: React.Key) => {
     const title = `[Exam] ${exam.courseCode} ${exam.courseNameEn}`;
-    const calendarDescription = `Instructor: ${examDetails?.instructorEn}\nSection: ${examDetails?.section}\nNote: ${examDetails?.note || "ไม่มีหมายเหตุ"}`;
+    const calendarDescription = `Instructor: ${examDetails?.instructorEn}\nSection: ${examDetails?.section}\nProctor: ${examDetails?.proctor}\nNote: ${examDetails?.note || "ไม่มีหมายเหตุ"}`;
     const desc = calendarDescription;
     const location =
       `${examDetails?.building || ""} ${examDetails?.room || ""}`.trim() ||
@@ -124,9 +127,6 @@ export default function ExamCard({ exam }: { exam: Exam }) {
       window.open(url, "_blank");
     } else if (key === "outlook") {
       const url = outlook(event);
-      window.open(url, "_blank");
-    } else if (key === "office365") {
-      const url = office365(event);
       window.open(url, "_blank");
     } else if (key === "yahoo") {
       const url = yahoo(event);
@@ -314,18 +314,39 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                       variant="secondary"
                       className="bg-primary/10 text-primary border-none"
                     >
-                      <LuCalendarPlus className="w-5 h-5" />
+                      <LuCalendarPlus className="size-5" />
                       Add to Calendar
                     </Button>
                     <Dropdown.Popover>
                       <Dropdown.Menu onAction={handleAddToCalendar}>
-                        <Dropdown.Item id="google">
+                        <Dropdown.Item
+                          id="google"
+                          className="flex items-center gap-2"
+                        >
+                          <SiGooglecalendar className="size-5" />
                           Google Calendar
                         </Dropdown.Item>
-                        <Dropdown.Item id="outlook">Outlook</Dropdown.Item>
-                        <Dropdown.Item id="apple">Apple / iCal</Dropdown.Item>
-                        <Dropdown.Item id="office365">Office 365</Dropdown.Item>
-                        <Dropdown.Item id="yahoo">Yahoo</Dropdown.Item>
+                        <Dropdown.Item
+                          id="outlook"
+                          className="flex items-center gap-2"
+                        >
+                          <PiMicrosoftOutlookLogoFill className="size-5" />
+                          Outlook
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          id="apple"
+                          className="flex items-center gap-2"
+                        >
+                          <SiApple className="size-5" />
+                          Apple / iCal
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          id="yahoo"
+                          className="flex items-center gap-2"
+                        >
+                          <FaYahoo className="size-5" />
+                          Yahoo
+                        </Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown.Popover>
                   </Dropdown>
