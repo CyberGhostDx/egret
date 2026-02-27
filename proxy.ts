@@ -15,6 +15,10 @@ export async function proxy(req: NextRequest) {
     return authResponse;
   }
 
+  if (req.nextUrl.pathname.startsWith("/admin")) {
+    return authResponse;
+  }
+
   return intlMiddleware(req);
 }
 
@@ -22,6 +26,7 @@ export const config = {
   matcher: [
     "/",
     "/(th|en)/:path*",
-    "/((?!api|images|login|admin|_next|_vercel|.*\\..*).*)",
+    "/admin/:path*",
+    "/((?!api|images|login|_next|_vercel|.*\\..*).*)",
   ],
 };

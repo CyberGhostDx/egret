@@ -15,7 +15,8 @@ import { getDifficultyColor } from "@/lib/difficulty-utils";
 
 const CourseCard = memo(({ course, difficulty }: CourseCardProps) => {
   const t = useTranslations("Courses");
-  const activeColor = getDifficultyColor(difficulty);
+  const roundedDifficulty = Math.round(difficulty);
+  const activeColor = getDifficultyColor(roundedDifficulty);
   const modalState = useOverlayState();
   const [isLoading, setIsLoading] = useState(false);
   const { user, enrollCourse } = useUser();
@@ -55,7 +56,7 @@ const CourseCard = memo(({ course, difficulty }: CourseCardProps) => {
               <div
                 key={level}
                 className={`h-2.5 w-2.5 rounded-full ${
-                  level <= difficulty ? activeColor : "bg-gray-300"
+                  level <= roundedDifficulty ? activeColor : "bg-gray-300"
                 }`}
               />
             ))}

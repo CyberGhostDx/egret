@@ -5,6 +5,11 @@ import { useMemo } from "react";
 export function useCourses() {
   const { data, error, isLoading, isValidating, mutate } = useSWR(
     "/api/courses/offerings",
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    },
   );
 
   const courses = useMemo(() => {

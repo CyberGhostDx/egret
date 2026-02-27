@@ -123,15 +123,17 @@ export default function ExamCalendar() {
         dayMaxEvents={true}
       />
 
-      <div className="absolute bottom-4 left-4 text-xs font-bold text-slate-800 sm:bottom-6 sm:left-6 sm:text-sm">
-        {t("Time")}
-      </div>
-      <div className="absolute right-4 bottom-3 rounded-full bg-slate-200/50 px-3 py-0.5 text-[10px] font-medium text-slate-700 sm:right-6 sm:bottom-4 sm:px-4 sm:py-1 sm:text-xs">
-        {now.toLocaleTimeString("en-GB", {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        })}
+      <div className="absolute right-6 bottom-4.5 left-6 flex items-center justify-between sm:bottom-6">
+        <div className="text-xs font-bold text-slate-800 sm:text-sm">
+          {t("Time")}
+        </div>
+        <div className="rounded-full bg-slate-200/50 px-3 py-0.5 text-[10px] font-medium text-slate-700 sm:px-4 sm:py-1 sm:text-xs">
+          {now.toLocaleTimeString("en-GB", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+          })}
+        </div>
       </div>
     </div>
   );
