@@ -5,5 +5,4 @@ const AddCoursePage = () => {
     </div>
   );
 };
-
 export default AddCoursePage;
