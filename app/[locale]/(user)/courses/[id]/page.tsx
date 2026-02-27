@@ -66,7 +66,7 @@ export default function CoursePage() {
   return (
     <div className="primary-bg flex min-h-screen w-full justify-center bg-fixed px-4 py-10 md:px-8">
       <div className="grid w-full max-w-[1200px] grid-cols-1 gap-12 lg:grid-cols-[1fr_1.2fr]">
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-6 lg:sticky lg:top-24 lg:h-fit">
           <Button
             className="text-primary border-primary/20 w-fit border bg-white/80 font-semibold shadow-sm backdrop-blur-md hover:bg-white"
             onPress={() => router.push("/courses")}

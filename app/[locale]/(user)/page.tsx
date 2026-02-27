@@ -6,9 +6,9 @@ import ExamList from "@/components/home/ExamList";
 
 export default function Home() {
   return (
-    <div className="primary-bg flex min-h-screen justify-center bg-gray-100">
+    <div className="primary-bg flex min-h-screen justify-center bg-fixed">
       <div className="grid w-full max-w-325 grid-cols-1 gap-8 p-4 sm:p-6 md:p-12 lg:grid-cols-[1fr_1.2fr] lg:gap-20">
-        <div className="flex w-full flex-col gap-6 sm:gap-8">
+        <div className="flex w-full flex-col gap-6 sm:gap-8 lg:sticky lg:top-24 lg:h-fit">
           <Clock />
           <ExamCalendar />
         </div>
