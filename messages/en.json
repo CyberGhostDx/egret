@@ -85,5 +85,17 @@
     "SelectSectionRoom": "Select Section and Room",
     "NoNote": "No note",
     "StartsIn": "Starts In"
+  },
+  "Toast": {
+    "CourseAdded": "Course added successfully.",
+    "AlreadyEnrolled": "You have already enrolled in this course.",
+    "CourseNotFound": "Course not found.",
+    "FailedToAdd": "Failed to add course.",
+    "Unenrolled": "Unenrolled successfully.",
+    "FailedToUnenroll": "Failed to unenroll.",
+    "EnterReviewDetail": "Please enter your review content.",
+    "SelectDifficulty": "Please select a difficulty level.",
+    "ReviewPosted": "Your review has been posted successfully!",
+    "FailedToPostReview": "Failed to post review. Please try again later."
   }
 }

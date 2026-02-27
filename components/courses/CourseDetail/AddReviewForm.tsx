@@ -18,17 +18,18 @@ export const AddReviewForm = ({
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const t = useTranslations("CourseReview");
+  const toastT = useTranslations("Toast");
 
   const activeColor = getDifficultyColor(difficulty);
 
   const handleReviewSubmit = async () => {
     if (!content.trim()) {
-      toast.danger("Please enter your review content.");
+      toast.danger(toastT("EnterReviewDetail"));
       return;
     }
 
     if (difficulty === 0) {
-      toast.danger("Please select a difficulty level.");
+      toast.danger(toastT("SelectDifficulty"));
       return;
     }
 
@@ -44,14 +45,14 @@ export const AddReviewForm = ({
         onSuccess(response.data.data);
       }
 
-      toast.success("Your review has been posted successfully!");
+      toast.success(toastT("ReviewPosted"));
 
       setContent("");
       setDifficulty(0);
       setIsAnonymous(false);
     } catch (error) {
       console.error("Failed to post review:", error);
-      toast.danger("Failed to post review. Please try again later.");
+      toast.danger(toastT("FailedToPostReview"));
     } finally {
       setIsPending(false);
     }
