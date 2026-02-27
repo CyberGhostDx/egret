@@ -51,7 +51,6 @@ const AdminLoginPage = () => {
         toast.danger(error.message || "Authentication failed");
         return;
       }
-
       toast.success("Login successful");
       router.replace("/admin/course");
     } catch (err: any) {
@@ -102,10 +101,10 @@ const AdminLoginPage = () => {
                 isRequired
                 name="password"
                 type={isVisible ? "text" : "password"}
-                minLength={6}
+                minLength={1}
                 validate={(value) => {
-                  if (value.length < 6) {
-                    return "Password must be at least 6 characters";
+                  if (value.length < 1) {
+                    return "Please enter a password";
                   }
                   return null;
                 }}
