@@ -2,12 +2,15 @@
 
 import { useUser } from "@/hooks/useUser";
 import ExamCard, { Exam } from "./ExamCard";
+import { useLocale, useTranslations } from "next-intl";
 
 export default function ExamList() {
   const { user, isLoading } = useUser();
+  const locale = useLocale();
+  const t = useTranslations("ExamList");
 
   if (isLoading) {
-    return <div className="text-center py-10">Loading exams...</div>;
+    return <div className="py-10 text-center">{t("LoadingExams")}</div>;
   }
 
   const exams: (Exam & { sectionType: string | null })[] =
@@ -17,7 +20,10 @@ export default function ExamList() {
         id: e.id,
         courseCode: uc.offering.courseId,
         offeringId: uc.offering.id,
-        courseNameEn: course.titleEn || course.titleTh,
+        courseNameEn:
+          locale === "en"
+            ? course.titleEn || course.titleTh
+            : course.titleTh || course.titleEn,
         courseNameTh: course.titleTh,
         date: new Date(e.examDate),
         startTime: new Date(e.startTime).toLocaleTimeString("en-GB", {
@@ -49,14 +55,14 @@ export default function ExamList() {
 
   if (sortedExams.length === 0) {
     return (
-      <div className="text-center py-10 text-slate-500">
-        No upcoming exams found.
+      <div className="py-10 text-center text-slate-500">
+        {t("NoUpcomingExams")}
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-4 w-full lg:max-w-xl mx-auto lg:mx-0">
+    <div className="mx-auto flex w-full flex-col gap-4 lg:mx-0 lg:max-w-xl">
       {sortedExams.map((exam) => (
         <ExamCard key={exam.id} exam={exam} />
       ))}

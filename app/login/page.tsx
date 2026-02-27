@@ -17,7 +17,6 @@ const LoginPage = () => {
     }
   }, [session, isPending, router]);
 
-
   const handleGoogleLogin = async () => {
     await authClient.signIn.social({
       provider: "google",
@@ -26,8 +25,8 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4 primary-bg">
-      <div className="flex w-full max-w-sm flex-col items-center space-y-6 z-20">
+    <div className="primary-bg flex min-h-screen flex-col items-center justify-center p-4">
+      <div className="z-20 flex w-full max-w-sm flex-col items-center space-y-6">
         <div className="relative h-32 w-32">
           <Image
             src="/images/egret_logo.png"
@@ -50,7 +49,7 @@ const LoginPage = () => {
         <Button
           variant="outline"
           size="lg"
-          className="w-full font-medium bg-white border border-primary text-black shadow-sm"
+          className="border-primary w-full border bg-white font-medium text-black shadow-sm"
           onPress={handleGoogleLogin}
         >
           <FcGoogle className="h-6 w-6" />

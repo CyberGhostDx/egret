@@ -1,43 +1,51 @@
-"use client"
+"use client";
 
-import { Card } from "@heroui/react"
-import { getDifficultyColor } from "@/lib/difficulty-utils"
+import { Card } from "@heroui/react";
+import { getDifficultyColor } from "@/lib/difficulty-utils";
+import { useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 
 interface ExamEssentialsProps {
-  courseId: string
-  titleTh: string
-  titleEn: string
-  difficulty: number
+  courseId: string;
+  titleTh: string;
+  titleEn: string;
+  difficulty: number;
 }
 
-export const ExamEssentials = ({ courseId, titleTh, titleEn, difficulty }: ExamEssentialsProps) => {
+export const ExamEssentials = ({
+  courseId,
+  titleTh,
+  titleEn,
+  difficulty,
+}: ExamEssentialsProps) => {
+  const t = useTranslations("Courses");
   const activeColor = getDifficultyColor(Math.round(difficulty));
+  const locale = useLocale();
 
   return (
-    <Card className="p-8 shadow-sm border-none rounded-3xl mt-4 bg-white">
+    <Card className="mt-4 rounded-3xl border-none bg-white p-8 shadow-sm">
       <div className="flex flex-col gap-2">
         <h1 className="text-4xl font-extrabold text-[#194b59]">{courseId}</h1>
-        <h2 className="text-xl font-bold text-[#2e6d7d] uppercase leading-tight">
-          {titleEn}
+        <h2 className="text-xl leading-tight font-bold text-[#2e6d7d] uppercase">
+          {locale === "en" ? titleEn || titleTh : titleTh || titleEn}
         </h2>
-        <h2 className="text-xl font-bold text-[#2e6d7d] uppercase leading-tight">
-          {titleTh}
-        </h2>
-        <div className="flex flex-col gap-2 mt-4">
+        <div className="mt-4 flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-[#2e6d7d]">DIFFICULTY</span>
-            <span className="font-bold text-[#2e6d7d]">{Math.round(difficulty)}/5</span>
+            <span className="font-bold text-[#2e6d7d]">{t("Difficulty")}</span>
+            <span className="font-bold text-[#2e6d7d]">
+              {Math.round(difficulty)}/5
+            </span>
           </div>
           <div className="flex gap-1.5">
             {[1, 2, 3, 4, 5].map((level) => (
               <div
                 key={level}
-                className={`size-5 rounded-full transition-colors duration-200 ${level <= Math.round(difficulty) ? activeColor : 'bg-gray-200'}`}
+                className={`size-5 rounded-full transition-colors duration-200 ${level <= Math.round(difficulty) ? activeColor : "bg-gray-200"}`}
               />
             ))}
           </div>
         </div>
       </div>
     </Card>
-  )
-}
+  );
+};
