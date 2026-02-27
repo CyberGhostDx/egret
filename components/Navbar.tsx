@@ -103,7 +103,11 @@ const Navbar = () => {
                     </span>
                     <Avatar className="h-8 w-8">
                       {user.image && (
-                        <Avatar.Image src={user.image} alt={user.name} />
+                        <Avatar.Image
+                          src={user.image}
+                          alt={user.name}
+                          referrerPolicy="no-referrer"
+                        />
                       )}
                       <Avatar.Fallback color="accent">
                         {user.name?.charAt(0).toUpperCase() || "U"}
