@@ -32,7 +32,7 @@ const Navbar = () => {
 
   const handleLocaleChange = (key: string) => {
     setSelectedLocale(key);
-    router.replace(pathname, { locale: key });
+    router.replace(pathname, { locale: key, scroll: false });
   };
 
   const navLinks = [
