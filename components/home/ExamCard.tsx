@@ -36,8 +36,21 @@ export type Exam = z.infer<typeof examSchema>;
 
 const calculateTimeLeft = (examDate: Date, startTimeStr: string, now: Date) => {
   const [hoursStr, minutesStr] = startTimeStr.split(":");
-  const targetTime = new Date(examDate);
-  targetTime.setHours(parseInt(hoursStr, 10), parseInt(minutesStr, 10), 0, 0);
+
+  const formatter = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Bangkok",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const parts = formatter.formatToParts(examDate);
+  const year = parts.find((p) => p.type === "year")?.value;
+  const month = parts.find((p) => p.type === "month")?.value;
+  const day = parts.find((p) => p.type === "day")?.value;
+
+  const targetTime = new Date(
+    `${year}-${month}-${day}T${hoursStr.padStart(2, "0")}:${minutesStr.padStart(2, "0")}:00+07:00`,
+  );
 
   const difference = targetTime.getTime() - now.getTime();
 
@@ -54,10 +67,19 @@ const calculateTimeLeft = (examDate: Date, startTimeStr: string, now: Date) => {
 
 const formatCalendarTime = (date: Date, time: string) => {
   const [h, m] = time.split(":").map(Number);
-  const d = new Date(date);
-  d.setHours(h, m, 0, 0);
-  const pad = (n: number) => n.toString().padStart(2, "0");
-  return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+  const formatter = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Bangkok",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const parts = formatter.formatToParts(date);
+  const year = parts.find((p) => p.type === "year")?.value;
+  const month = parts.find((p) => p.type === "month")?.value;
+  const day = parts.find((p) => p.type === "day")?.value;
+
+  const pad = (n: string | number) => n.toString().padStart(2, "0");
+  return `${year}${month}${day}T${pad(h)}${pad(m)}00`;
 };
 
 export default function ExamCard({ exam }: { exam: Exam }) {
@@ -80,6 +102,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
       day: "numeric",
       month: "long",
       year: "numeric",
+      timeZone: "Asia/Bangkok",
     },
   );
 

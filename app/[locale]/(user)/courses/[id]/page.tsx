@@ -43,6 +43,7 @@ export default function CoursePage() {
       day: "numeric",
       month: "short",
       year: "numeric",
+      timeZone: "Asia/Bangkok",
     }).format(new Date(date));
   };
 

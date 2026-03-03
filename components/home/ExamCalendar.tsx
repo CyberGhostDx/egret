@@ -48,7 +48,7 @@ export default function ExamCalendar() {
             time: new Date(e.startTime).toLocaleTimeString("en-GB", {
               hour: "2-digit",
               minute: "2-digit",
-              timeZone: "Asia/Bangkok",
+              timeZone: "UTC",
             }),
           });
         }
@@ -132,6 +132,7 @@ export default function ExamCalendar() {
             hour: "2-digit",
             minute: "2-digit",
             hour12: false,
+            timeZone: "Asia/Bangkok",
           })}
         </div>
       </div>
