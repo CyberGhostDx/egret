@@ -52,7 +52,7 @@ const AdminLoginPage = () => {
         return;
       }
       toast.success("Login successful");
-      router.replace("/admin/course");
+      router.replace("/admin/exams");
     } catch (err: any) {
       toast.danger(err.message || "An unexpected error occurred");
     } finally {
