@@ -5,8 +5,10 @@ import { useCourses } from "@/hooks/useCourses";
 import CourseCard from "@/components/courses/CourseCard";
 import { InputGroup } from "@heroui/react";
 import { LuSearch } from "react-icons/lu";
+import { useTranslations } from "next-intl";
 
 export default function CoursesPage() {
+  const t = useTranslations("Courses");
   const { courses, isLoading } = useCourses();
   const [searchQuery, setSearchQuery] = useState("");
   const deferredSearchQuery = useDeferredValue(searchQuery);
@@ -32,25 +34,25 @@ export default function CoursesPage() {
   }, [courses, deferredSearchQuery]);
 
   return (
-    <div className="w-full min-h-screen primary-bg bg-fixed">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+    <div className="primary-bg min-h-screen w-full bg-fixed">
+      <div className="mx-auto w-full max-w-[1200px] px-4 py-10 sm:px-6 lg:px-8">
+        <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div>
-            <h1 className="text-[3.5rem] leading-none font-bold text-primary tracking-tight mb-2">
+            <h1 className="text-primary mb-2 text-[3.5rem] leading-none font-bold tracking-tight">
               EGRET
             </h1>
-            <p className="text-xl text-primary/70 font-medium">
+            <p className="text-primary/70 text-xl font-medium">
               Engineering Generated Rapid Exam Table
             </p>
           </div>
           <div className="w-full md:w-fit">
             <InputGroup className="w-full md:w-100">
               <InputGroup.Prefix>
-                <LuSearch className="text-primary/70 w-4 h-4 mr-2" />
+                <LuSearch className="text-primary/70 mr-2 h-4 w-4" />
               </InputGroup.Prefix>
               <InputGroup.Input
                 className="w-full"
-                placeholder="Search Course"
+                placeholder={t("SearchCourse")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -59,9 +61,11 @@ export default function CoursesPage() {
         </div>
 
         {isLoading && !courses?.length ? (
-          <div className="text-center py-10 text-primary">Loading courses...</div>
+          <div className="text-primary py-10 text-center">
+            {t("LoadingDetails")}
+          </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
             {filterCourses.map((course) => (
               <CourseCard
                 key={course.id}

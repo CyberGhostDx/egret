@@ -19,9 +19,11 @@
     "calendar-link": "^2.11.0",
     "framer-motion": "^12.34.2",
     "next": "16.1.6",
+    "next-intl": "^4.8.3",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-icons": "^5.5.0",
+    "recharts": "^3.7.0",
     "swr": "^2.4.0",
     "zustand": "^5.0.11"
   },
@@ -32,6 +34,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "prettier": "^3.8.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   },

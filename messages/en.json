@@ -1,0 +1,101 @@
+{
+  "Navbar": {
+    "Home": "Home",
+    "Courses": "Courses",
+    "SignOut": "Sign Out",
+    "Language": "Language",
+    "SignIn": "Sign In"
+  },
+  "Home": {
+    "Time": {
+      "Hour": "Hours",
+      "Minute": "Minutes",
+      "Second": "Seconds"
+    },
+    "CourseCard": {
+      "Subject": "Subject Title"
+    },
+    "CourseModal": {
+      "Subject": "Subject Title",
+      "Credit": "Credit",
+      "Section": "Section",
+      "Section_Type": "Section Type",
+      "Building": "Building",
+      "Room": "Room",
+      "Instructor": "Instructor",
+      "Note": "Note",
+      "Delete": "Delete",
+      "AddToCalendar": "Add to Calendar",
+      "CourseReview": "Course Review"
+    }
+  },
+  "Courses": {
+    "SearchCourse": "Search Course",
+    "Difficulty": "Difficulty",
+    "AddCourse": "Add to my courses",
+    "SelectOffering": "Select Offering",
+    "Section": "Section",
+    "Credits": "Credits",
+    "NoInstructor": "No instructor assigned",
+    "Enrolled": "Enrolled",
+    "Select": "Select",
+    "Cancel": "Cancel",
+    "LoadingDetails": "Loading courses..."
+  },
+  "CourseReview": {
+    "Subject": "Subject",
+    "ExamEssentials": "Exam Essentials",
+    "ExamPrepTips": "EXAM PREP TIPS",
+    "StudentReview": "STUDENT REVIEWS",
+    "AddReview": "Add a Review",
+    "AddReviewPlaceholder": "Add your review here",
+    "Anonymous": "Anonymous",
+    "Post": "Post",
+    "DifficultyRate": "Difficulty Rate",
+    "BackToCourses": "Back to Courses",
+    "Review": "Review",
+    "SortBy": "sort by :",
+    "Recent": "Recent",
+    "NoReviewsYet": "No reviews yet",
+    "BeTheFirst": "Be the first to share your thoughts on this course!",
+    "LoadingDetails": "Loading course details..."
+  },
+  "ExamCalendar": {
+    "UpcomingExams": "Upcoming Exams",
+    "Time": "Time"
+  },
+  "ExamList": {
+    "LoadingExams": "Loading exams...",
+    "NoUpcomingExams": "No upcoming exams found."
+  },
+  "ExamCard": {
+    "Days": "Days",
+    "Hours": "Hours",
+    "Minutes": "Minutes",
+    "Credit": "Credit",
+    "Section": "Section",
+    "Building": "Building",
+    "Room": "Room",
+    "Instructor": "Instructor",
+    "Proctor": "Proctor",
+    "Note": "Note",
+    "Unenroll": "Unenroll",
+    "AddToCalendar": "Add to Calendar",
+    "CourseReview": "Course Review",
+    "SelectSectionRoom": "Select Section and Room",
+    "NoNote": "No note",
+    "StartsIn": "Starts In"
+  },
+  "Toast": {
+    "CourseAdded": "Course added successfully.",
+    "AlreadyEnrolled": "You have already enrolled in this course.",
+    "CourseNotFound": "Course not found.",
+    "FailedToAdd": "Failed to add course.",
+    "Unenrolled": "Unenrolled successfully.",
+    "FailedToUnenroll": "Failed to unenroll.",
+    "EnterReviewDetail": "Please enter your review content.",
+    "SelectDifficulty": "Please select a difficulty level.",
+    "ReviewPosted": "Your review has been posted successfully!",
+    "FailedToPostReview": "Failed to post review. Please try again later."
+  }
+}

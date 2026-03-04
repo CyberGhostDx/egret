@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Thai } from "next/font/google";
-import "./globals.css";
 import { SwrProvider } from "./providers";
+import "./globals.css";
+import { Toast } from "@heroui/react";
 
 const ibmSans = IBM_Plex_Sans_Thai({
   variable: "--font-ibm",
@@ -20,9 +21,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${ibmSans.variable} ${ibmSans.className}  antialiased`}>
+    <html lang="th">
+      <body className={`${ibmSans.variable} ${ibmSans.className} antialiased`}>
         <SwrProvider>
+          <Toast.Provider />
           {children}
         </SwrProvider>
       </body>

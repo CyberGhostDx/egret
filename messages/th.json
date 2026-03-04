@@ -1,0 +1,101 @@
+{
+  "Navbar": {
+    "Home": "หน้าแรก",
+    "Courses": "รายวิชา",
+    "SignOut": "ออกจากระบบ",
+    "Language": "ภาษา",
+    "SignIn": "เข้าสู่ระบบ"
+  },
+  "Home": {
+    "Time": {
+      "Hour": "ชั่วโมง",
+      "Minute": "นาที",
+      "Second": "วินาที"
+    },
+    "CourseCard": {
+      "Subject": "ชื่อรายวิชา"
+    },
+    "CourseModal": {
+      "Subject": "ชื่อรายวิชา",
+      "Credit": "หน่วยกิต",
+      "Section": "หมู่เรียน",
+      "Section_Type": "ประเภทหมู่เรียน",
+      "Building": "อาคาร",
+      "Room": "ห้อง",
+      "Instructor": "อาจารย์ผู้สอน",
+      "Note": "หมายเหตุ",
+      "Delete": "ลบรายวิชา",
+      "AddToCalendar": "เพิ่มในปฏิทิน",
+      "CourseReview": "รีวิวรายวิชา"
+    }
+  },
+  "Courses": {
+    "SearchCourse": "ค้นหารายวิชา",
+    "Difficulty": "ความยาก",
+    "AddCourse": "เพิ่มรายวิชา",
+    "SelectOffering": "เลือกหมู่เรียน",
+    "Section": "หมู่เรียน",
+    "Credits": "หน่วยกิต",
+    "NoInstructor": "ไม่มีอาจารย์ผู้สอน",
+    "Enrolled": "ลงทะเบียนแล้ว",
+    "Select": "เลือก",
+    "Cancel": "ยกเลิก",
+    "LoadingDetails": "กำลังโหลดข้อมูลรายวิชา..."
+  },
+  "CourseReview": {
+    "Subject": "รายวิชา",
+    "ExamEssentials": "ข้อมูลสำหรับการสอบ",
+    "ExamPrepTips": "เทคนิคเตรียมสอบ",
+    "StudentReview": "รีวิวจากนิสิต",
+    "AddReview": "เพิ่มรีวิว",
+    "AddReviewPlaceholder": "เพิ่มรีวิวของคุณที่นี่",
+    "Anonymous": "ไม่ระบุตัวตน",
+    "Post": "โพสต์",
+    "DifficultyRate": "ระดับความยาก",
+    "BackToCourses": "กลับสู่หน้ารายวิชา",
+    "Review": "รีวิว",
+    "SortBy": "จัดเรียงตาม:",
+    "Recent": "ล่าสุด",
+    "NoReviewsYet": "ยังไม่มีรีวิว",
+    "BeTheFirst": "เป็นคนแรกที่แชร์ความคิดเห็นเกี่ยวกับวิชานี้!",
+    "LoadingDetails": "กำลังโหลดข้อมูลรายวิชา..."
+  },
+  "ExamCalendar": {
+    "UpcomingExams": "การสอบที่กำลังจะมาถึง",
+    "Time": "เวลา"
+  },
+  "ExamList": {
+    "LoadingExams": "กำลังโหลดข้อมูลการสอบ...",
+    "NoUpcomingExams": "ไม่พบการสอบที่กำลังจะมาถึง"
+  },
+  "ExamCard": {
+    "Days": "วัน",
+    "Hours": "ชั่วโมง",
+    "Minutes": "นาที",
+    "Credit": "หน่วยกิต",
+    "Section": "หมู่เรียน",
+    "Building": "อาคาร",
+    "Room": "ห้อง",
+    "Instructor": "อาจารย์ผู้สอน",
+    "Proctor": "ผู้คุมสอบ",
+    "Note": "หมายเหตุ",
+    "Unenroll": "ถอนรายวิชา",
+    "AddToCalendar": "เพิ่มปฏิทิน",
+    "CourseReview": "รีวิววิชา",
+    "SelectSectionRoom": "เลือกหมู่เรียนและห้องสอบ",
+    "NoNote": "ไม่มีหมายเหตุ",
+    "StartsIn": "เริ่มในอีก"
+  },
+  "Toast": {
+    "CourseAdded": "เพิ่มรายวิชาเรียบร้อยแล้ว",
+    "AlreadyEnrolled": "คุณได้ลงทะเบียนวิชานี้ไปแล้ว",
+    "CourseNotFound": "ไม่พบข้อมูลรายวิชา",
+    "FailedToAdd": "เพิ่มรายวิชาไม่สำเร็จ",
+    "Unenrolled": "ถอนรายวิชาเรียบร้อยแล้ว",
+    "FailedToUnenroll": "ถอนรายวิชาไม่สำเร็จ",
+    "EnterReviewDetail": "กรุณาใส่เนื้อหารีวิวของคุณ",
+    "SelectDifficulty": "กรุณาเลือกระดับความยาก",
+    "ReviewPosted": "โพสต์รีวิวของคุณเรียบร้อยแล้ว!",
+    "FailedToPostReview": "โพสต์รีวิวไม่สำเร็จ กรุณาลองใหม่อีกครั้งในภายหลัง"
+  }
+}

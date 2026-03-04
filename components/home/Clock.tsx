@@ -1,9 +1,11 @@
 "use client";
 
 import { useTimeStore } from "@/store/useTimeStore";
+import { useTranslations } from "next-intl";
 
 export default function Clock() {
   const time = useTimeStore((state) => state.now);
+  const t = useTranslations("Home.Time");
 
   if (!time) {
     return <div className="h-24"></div>;
@@ -29,36 +31,36 @@ export default function Clock() {
     .padStart(2, "0");
 
   return (
-    <div className="flex flex-col items-center justify-center text-[#2c5f66] py-6 sm:py-10">
-      <div className="flex items-center gap-1 sm:gap-2 text-center">
-        <div className="flex flex-col min-w-15 sm:min-w-20">
-          <span className="text-5xl sm:text-7xl font-bold tracking-tight">
+    <div className="flex flex-col items-center justify-center py-6 text-[#2c5f66] sm:py-10">
+      <div className="flex items-center gap-1 text-center sm:gap-2">
+        <div className="flex min-w-15 flex-col sm:min-w-20">
+          <span className="text-5xl font-bold tracking-tight sm:text-7xl">
             {hours}
           </span>
-          <span className="text-xs sm:text-sm font-medium opacity-70 mt-1">
-            Hours
+          <span className="mt-1 text-xs font-medium opacity-70 sm:text-sm">
+            {t("Hour")}
           </span>
         </div>
-        <span className="text-4xl sm:text-6xl font-bold mb-4 sm:mb-6 opacity-80">
+        <span className="mb-4 text-4xl font-bold opacity-80 sm:mb-6 sm:text-6xl">
           :
         </span>
-        <div className="flex flex-col min-w-15 sm:min-w-20">
-          <span className="text-5xl sm:text-7xl font-bold tracking-tight">
+        <div className="flex min-w-15 flex-col sm:min-w-20">
+          <span className="text-5xl font-bold tracking-tight sm:text-7xl">
             {minutes}
           </span>
-          <span className="text-xs sm:text-sm font-medium opacity-70 mt-1">
-            Minutes
+          <span className="mt-1 text-xs font-medium opacity-70 sm:text-sm">
+            {t("Minute")}
           </span>
         </div>
-        <span className="text-4xl sm:text-6xl font-bold mb-4 sm:mb-6 opacity-80">
+        <span className="mb-4 text-4xl font-bold opacity-80 sm:mb-6 sm:text-6xl">
           :
         </span>
-        <div className="flex flex-col min-w-15 sm:min-w-20">
-          <span className="text-5xl sm:text-7xl font-bold tracking-tight">
+        <div className="flex min-w-15 flex-col sm:min-w-20">
+          <span className="text-5xl font-bold tracking-tight sm:text-7xl">
             {seconds}
           </span>
-          <span className="text-xs sm:text-sm font-medium opacity-70 mt-1">
-            Seconds
+          <span className="mt-1 text-xs font-medium opacity-70 sm:text-sm">
+            {t("Second")}
           </span>
         </div>
       </div>

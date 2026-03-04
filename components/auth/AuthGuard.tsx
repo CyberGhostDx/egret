@@ -17,7 +17,7 @@ const AuthGuard = ({ children }: { children: React.ReactNode }) => {
 
   if (isPending || !session) {
     return (
-      <div className="w-full h-screen">
+      <div className="h-screen w-full">
         <Loading />
       </div>
     );

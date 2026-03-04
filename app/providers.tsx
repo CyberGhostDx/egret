@@ -11,7 +11,8 @@ export function SwrProvider({ children }: SwrProviderProps) {
   return (
     <SWRConfig
       value={{
-        fetcher: (url: string) => axiosInstance.get(url).then((res) => res.data.data),
+        fetcher: (url: string) =>
+          axiosInstance.get(url).then((res) => res.data.data),
         revalidateOnFocus: false,
         shouldRetryOnError: false,
       }}
