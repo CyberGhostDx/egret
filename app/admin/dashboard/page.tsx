@@ -105,14 +105,10 @@ export default function AdminDashboardPage(): React.ReactElement {
           className="mb-12"
         >
           <div className="flex items-center gap-3">
-            <div className="bg-primary h-10 w-2 rounded-full" />
             <div>
               <h1 className="text-4xl font-black tracking-tight text-slate-900">
-                Admin Dashboard
+                Dashboard
               </h1>
-              <p className="mt-1.5 text-base font-medium text-slate-500">
-                จัดการและติดตามภาพรวมของระบบจัดการสอบ
-              </p>
             </div>
           </div>
         </motion.div>
