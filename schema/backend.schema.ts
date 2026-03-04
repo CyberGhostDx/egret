@@ -77,3 +77,11 @@ export const reviewCourseSchema = z.object({
 export type ReviewCourseResponse = z.infer<typeof reviewCourseSchema>;
 
 export type CoursesResponse = z.infer<typeof coursesOfferingsResponseSchema>;
+
+export const adminDashboardSchema = z.object({
+  totalCourseOfferings: z.number(),
+  totalExams: z.number(),
+  totalReviews: z.number(),
+});
+
+export type AdminDashboardResponse = z.infer<typeof adminDashboardSchema>;
