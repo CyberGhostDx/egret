@@ -26,7 +26,7 @@ const AdminLoginPage = () => {
   useEffect(() => {
     if (!isPending && session?.user) {
       if ((session.user as any).role === "admin") {
-        router.replace("/admin/course");
+        router.replace("/admin/dashboard");
       } else {
         router.replace("/");
       }
@@ -52,7 +52,7 @@ const AdminLoginPage = () => {
         return;
       }
       toast.success("Login successful");
-      router.replace("/admin/exams");
+      router.replace("/admin/dashboard");
     } catch (err: any) {
       toast.danger(err.message || "An unexpected error occurred");
     } finally {
