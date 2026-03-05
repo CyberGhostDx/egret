@@ -54,7 +54,7 @@ export const AdminSidebar = () => {
                 damping: 30,
                 mass: 1
             }}
-            className="relative z-50 flex h-screen flex-col border-r border-slate-200 bg-white/80 shadow-xl backdrop-blur-xl"
+            className="sticky top-0 z-50 flex h-screen flex-col border-r border-slate-200 bg-white/80 shadow-xl backdrop-blur-xl"
         >
             {/* Header / Logo */}
             <div className="flex h-20 items-center justify-between px-6">
