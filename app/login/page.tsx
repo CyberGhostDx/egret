@@ -31,6 +31,7 @@ const LoginPage = () => {
           <Image
             src="/images/egret_logo.png"
             alt="EGRET Logo"
+            sizes="128px"
             fill
             className="object-contain"
             priority
@@ -46,15 +47,20 @@ const LoginPage = () => {
           </p>
         </div>
 
-        <Button
-          variant="outline"
-          size="lg"
-          className="border-primary w-full border bg-white font-medium text-black shadow-sm"
-          onPress={handleGoogleLogin}
-        >
-          <FcGoogle className="h-6 w-6" />
-          Sign in with Google
-        </Button>
+        <div className="flex w-full flex-col items-center space-y-2">
+          <Button
+            variant="outline"
+            size="lg"
+            className="border-primary w-full border bg-white font-medium text-black shadow-sm"
+            onPress={handleGoogleLogin}
+          >
+            <FcGoogle className="h-6 w-6" />
+            Sign in with Google
+          </Button>
+          <p className="text-secondary/80 text-sm font-medium">
+            Please use @ku.th only
+          </p>
+        </div>
       </div>
     </div>
   );
