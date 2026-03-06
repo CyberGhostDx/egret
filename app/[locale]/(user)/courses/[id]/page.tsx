@@ -65,7 +65,7 @@ export default function CoursePage() {
   }
 
   return (
-    <div className="primary-bg flex min-h-screen w-full justify-center bg-fixed px-4 py-10 md:px-8">
+    <div className="primary-bg flex min-h-screen w-full justify-center bg-fixed px-6 py-10 md:px-8">
       <div className="grid w-full max-w-[1200px] grid-cols-1 gap-12 lg:grid-cols-[1fr_1.2fr]">
         <div className="flex flex-col gap-6 lg:sticky lg:top-24 lg:h-fit">
           <Button
@@ -76,7 +76,7 @@ export default function CoursePage() {
             {t("BackToCourses")}
           </Button>
 
-          <h2 className="text-primary mt-2 text-3xl font-bold">
+          <h2 className="text-primary mt-2 text-2xl font-bold sm:text-3xl">
             {t("ExamEssentials")}
           </h2>
 
@@ -89,15 +89,15 @@ export default function CoursePage() {
         </div>
 
         <div className="flex flex-col gap-6">
-          <h2 className="text-3xl font-bold text-[#2e6d7d] lg:mt-18">
+          <h2 className="text-2xl font-bold text-[#2e6d7d] sm:text-3xl lg:mt-18">
             {t("Review")}
           </h2>
 
           <AddReviewForm id={reviewCourse.id} onSuccess={handleAddReview} />
 
           <div className="mt-4 flex flex-col gap-4">
-            <div className="mb-2 flex items-center justify-between">
-              <h3 className="text-2xl font-bold text-[#2e6d7d]">
+            <div className="mb-2 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+              <h3 className="text-xl font-bold text-[#2e6d7d] sm:text-2xl">
                 {t("StudentReview")}
               </h3>
               <div className="flex items-center gap-2">
