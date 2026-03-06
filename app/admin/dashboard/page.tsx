@@ -17,7 +17,6 @@ import {
   ResponsiveContainer,
   Rectangle,
 } from "recharts";
-import { motion } from "framer-motion";
 
 interface StatCardProps {
   title: string;
@@ -35,11 +34,7 @@ function StatCard({
   isLoading,
 }: StatCardProps): React.ReactElement {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
+    <div>
       <Card className="overflow-hidden border-none bg-white/80 shadow-lg backdrop-blur-md transition-all duration-500 hover:shadow-xl hover:ring-1 hover:ring-blue-100/50">
         <Card.Content className="p-0">
           <div className="flex items-center gap-5 p-6">
@@ -63,7 +58,7 @@ function StatCard({
           </div>
         </Card.Content>
       </Card>
-    </motion.div>
+    </div>
   );
 }
 
@@ -99,9 +94,7 @@ export default function AdminDashboardPage(): React.ReactElement {
       <div className="pointer-events-none absolute bottom-[-10%] left-[-5%] h-[400px] w-[400px] rounded-full bg-teal-50/30 blur-[100px]" />
 
       <div className="relative z-10">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
+        <div
           className="mb-12"
         >
           <div className="flex items-center gap-3">
@@ -111,20 +104,9 @@ export default function AdminDashboardPage(): React.ReactElement {
               </h1>
             </div>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          variants={{
-            hidden: { opacity: 0 },
-            show: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.1,
-              },
-            },
-          }}
-          initial="hidden"
-          animate="show"
+        <div
           className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
         >
           <StatCard
@@ -152,13 +134,9 @@ export default function AdminDashboardPage(): React.ReactElement {
             iconBg="bg-linear-to-br from-amber-400 to-orange-500"
             isLoading={isLoading}
           />
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-        >
+        <div>
           <Card className="mt-12 overflow-hidden border-none bg-white/80 shadow-2xl backdrop-blur-md">
             <Card.Header className="border-b border-slate-100/50 bg-slate-50/30 px-8 py-6">
               <div className="flex items-center justify-between">
@@ -239,7 +217,7 @@ export default function AdminDashboardPage(): React.ReactElement {
               )}
             </Card.Content>
           </Card>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

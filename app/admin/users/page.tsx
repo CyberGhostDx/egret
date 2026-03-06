@@ -5,7 +5,6 @@ import { AdminUsersTable } from "@/components/admin/users/AdminUsersTable";
 import { Input } from "@heroui/react";
 import { LuSearch, LuUsers } from "react-icons/lu";
 import { useAdminUsers } from "@/hooks/useAdminUsers";
-import { motion } from "framer-motion";
 
 const AdminUsersPage = () => {
   const { users, isLoading, banUser, unbanUser } = useAdminUsers();
@@ -30,11 +29,7 @@ const AdminUsersPage = () => {
       <div className="relative z-10 mx-auto max-w-[1400px]">
         {/* Header Section */}
         <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+          <div>
             <div className="flex items-center gap-4 mb-2">
               <div className="bg-primary/10 p-3 rounded-2xl">
                 <LuUsers className="text-primary text-3xl" />
@@ -46,12 +41,9 @@ const AdminUsersPage = () => {
             <p className="text-slate-400 text-lg font-medium ml-1">
               Manage system users and accessibility status
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+          <div
             className="flex w-full flex-col gap-4 sm:flex-row md:w-auto"
           >
             <div className="relative w-full sm:w-80">
@@ -63,22 +55,18 @@ const AdminUsersPage = () => {
               />
               <LuSearch className="text-slate-400 absolute top-1/2 left-4 -translate-y-1/2" />
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Table Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
+        <div>
           <AdminUsersTable
             users={filteredUsers}
             isLoading={isLoading}
             onBan={banUser}
             onUnban={unbanUser}
           />
-        </motion.div>
+        </div>
       </div>
     </div>
   );

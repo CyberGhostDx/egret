@@ -5,7 +5,7 @@ import { z } from "zod";
 import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "@heroui/react";
 import { useMemo } from "react";
-import { reviewCourseSchema } from "@/schema/backend.schema";
+import { coursesOfferingsResponseSchema, reviewCourseSchema } from "@/schema/backend.schema";
 
 export type AdminReviewCourse = z.infer<typeof reviewCourseSchema>;
 export type AdminReview = AdminReviewCourse["reviews"][0];
@@ -13,30 +13,53 @@ export type AdminReview = AdminReviewCourse["reviews"][0];
 const adminReviewsResponseSchema = z.array(reviewCourseSchema);
 
 export function useAdminReviews() {
-    const { data, error, isLoading, isValidating, mutate } = useSWR(
-        "/api/admin/reviews",
-        {
-            revalidateOnFocus: false,
-        }
+    // 1. Fetch all courses (reliable base list)
+    const { data: coursesData, isLoading: isCoursesLoading } = useSWR(
+        "/api/courses/offerings",
+        { revalidateOnFocus: false }
     );
 
+    // 2. Fetch specific review metrics from admin endpoint
+    const { data: adminReviewsData, error, isLoading, isValidating, mutate } = useSWR(
+        "/api/admin/reviews",
+        { revalidateOnFocus: false }
+    );
+
+    // 3. Merge data to ensure we show all courses even if they have 0 reviews
     const coursesWithReviews = useMemo(() => {
-        if (!data) return [];
+        // Parse all courses
+        let baseCourses: any[] = [];
         try {
-            console.log("Admin Reviews Data:", data);
-            return adminReviewsResponseSchema.parse(data);
+            baseCourses = coursesData ? coursesOfferingsResponseSchema.parse(coursesData) : [];
         } catch (err) {
-            console.error("Zod Parsing Error in useAdminReviews:", err);
-            // If it's an array but parsing failed, try to return it raw to see something
-            return Array.isArray(data) ? data : [];
+            baseCourses = Array.isArray(coursesData) ? coursesData : [];
         }
-    }, [data]);
+
+        // Parse review data
+        let reviewData: AdminReviewCourse[] = [];
+        try {
+            reviewData = adminReviewsData ? adminReviewsResponseSchema.parse(adminReviewsData) : [];
+        } catch (err) {
+            reviewData = Array.isArray(adminReviewsData) ? adminReviewsData : [];
+        }
+
+        // Merge: Map through base courses and add review details if found
+        return baseCourses.map(course => {
+            const reviewsForCourse = reviewData.find(r => r.id === course.id);
+            return {
+                ...course,
+                reviews: reviewsForCourse?.reviews || [],
+                // Ensure difficulty is synced or used from base
+                difficulty: reviewsForCourse?.difficulty ?? course.difficulty ?? 0,
+            };
+        }) as AdminReviewCourse[];
+    }, [coursesData, adminReviewsData]);
 
     const deleteReview = async (courseId: string, reviewId: string) => {
         try {
             await axiosInstance.delete(`/api/admin/reviews/${reviewId}`);
             toast.success("Review deleted successfully");
-            await mutate(); // Refresh the list
+            await mutate(); // Refresh the reviews list
             return true;
         } catch (err) {
             toast.danger("Failed to delete review");
@@ -46,7 +69,7 @@ export function useAdminReviews() {
 
     return {
         coursesWithReviews,
-        isLoading: isLoading || (!data && !error && isValidating),
+        isLoading: isCoursesLoading || isLoading || (!adminReviewsData && !error && isValidating),
         isError: error,
         deleteReview,
         mutate,

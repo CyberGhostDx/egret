@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 import {
     HiOutlineViewGrid,
     HiOutlineClipboardList,
@@ -55,18 +54,9 @@ export const AdminSidebar = () => {
     };
 
     return (
-        <motion.div
-            initial={false}
-            animate={{
-                width: isCollapsed ? 80 : 280,
-            }}
-            transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 30,
-                mass: 1
-            }}
-            className="sticky top-0 z-50 flex h-screen flex-col border-r border-slate-200 bg-white/80 shadow-xl backdrop-blur-xl"
+        <div
+            style={{ width: isCollapsed ? 80 : 280 }}
+            className="sticky top-0 z-50 flex h-screen flex-col border-r border-slate-200 bg-white/80 shadow-xl backdrop-blur-xl transition-[width] duration-200"
         >
             {/* Header / Logo */}
             <div className="flex h-20 items-center justify-between px-6">
@@ -75,24 +65,16 @@ export const AdminSidebar = () => {
                         <span className="text-xl font-black">E</span>
                     </div>
 
-                    <AnimatePresence>
-                        {!isCollapsed && (
-                            <motion.div
-                                initial={{ opacity: 0, width: 0, marginLeft: 0 }}
-                                animate={{ opacity: 1, width: "auto", marginLeft: 8 }}
-                                exit={{ opacity: 0, width: 0, marginLeft: 0 }}
-                                transition={{ duration: 0.2 }}
-                                className="flex flex-col whitespace-nowrap overflow-hidden"
-                            >
-                                <span className="text-xl font-black tracking-tight text-slate-800 leading-none">
-                                    EGRET
-                                </span>
-                                <span className="text-primary text-[10px] font-bold uppercase tracking-widest opacity-50">
-                                    Admin Panel
-                                </span>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
+                    {!isCollapsed && (
+                        <div className="flex flex-col whitespace-nowrap overflow-hidden ml-2 transition-opacity duration-200">
+                            <span className="text-xl font-black tracking-tight text-slate-800 leading-none">
+                                EGRET
+                            </span>
+                            <span className="text-primary text-[10px] font-bold uppercase tracking-widest opacity-50">
+                                Admin Panel
+                            </span>
+                        </div>
+                    )}
                 </div>
 
                 <Button
@@ -125,25 +107,14 @@ export const AdminSidebar = () => {
                                 >
                                     <item.icon className={`h-6 w-6 shrink-0 ${isActive ? "text-white" : "group-hover:text-primary transition-colors"}`} />
 
-                                    <AnimatePresence mode="wait">
-                                        {!isCollapsed && (
-                                            <motion.span
-                                                initial={{ opacity: 0, x: -10 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                exit={{ opacity: 0, x: -10 }}
-                                                transition={{ duration: 0.2 }}
-                                                className="ml-4 font-bold tracking-tight whitespace-nowrap overflow-hidden"
-                                            >
-                                                {item.name}
-                                            </motion.span>
-                                        )}
-                                    </AnimatePresence>
+                                    {!isCollapsed && (
+                                        <span className="ml-4 font-bold tracking-tight whitespace-nowrap overflow-hidden transition-opacity duration-200">
+                                            {item.name}
+                                        </span>
+                                    )}
 
                                     {isActive && !isCollapsed && (
-                                        <motion.div
-                                            layoutId="active-pill"
-                                            className="absolute right-3 h-2 w-2 rounded-full bg-white/50"
-                                        />
+                                        <div className="absolute right-3 h-2 w-2 rounded-full bg-white/50" />
                                     )}
                                 </Link>
                             </Tooltip.Trigger>
@@ -179,6 +150,6 @@ export const AdminSidebar = () => {
                     )}
                 </button>
             </div>
-        </motion.div>
+        </div>
     );
 };

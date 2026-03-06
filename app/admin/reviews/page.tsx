@@ -6,7 +6,6 @@ import { AdminReviewModal } from "@/components/admin/reviews/AdminReviewModal";
 import { Input, useOverlayState } from "@heroui/react";
 import { LuSearch, LuMessageSquare } from "react-icons/lu";
 import { useAdminReviews, AdminReviewCourse } from "@/hooks/useAdminReviews";
-import { motion } from "framer-motion";
 
 const AdminReviewsPage = () => {
   const { coursesWithReviews, isLoading, deleteReview } = useAdminReviews();
@@ -35,9 +34,7 @@ const AdminReviewsPage = () => {
 
     const success = await deleteReview(selectedCourse.id, reviewId);
     if (success) {
-      // Update local state to reflect deletion without full reload if possible, 
-      // though mutate() in hook already handles it.
-      // But we need to update selectedCourse to sync modal content
+      // Update selectedCourse to sync modal content
       setSelectedCourse(prev => prev ? {
         ...prev,
         reviews: prev.reviews.filter(r => r._id !== reviewId)
@@ -54,11 +51,7 @@ const AdminReviewsPage = () => {
       <div className="relative z-10 mx-auto max-w-[1400px]">
         {/* Header Section */}
         <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+          <div>
             <div className="flex items-center gap-4 mb-2">
               <div className="bg-primary/10 p-3 rounded-2xl">
                 <LuMessageSquare className="text-primary text-3xl" />
@@ -70,12 +63,9 @@ const AdminReviewsPage = () => {
             <p className="text-slate-400 text-lg font-medium ml-1">
               Monitor and moderate course reviews and feedback
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+          <div
             className="flex w-full flex-col gap-4 sm:flex-row md:w-auto"
           >
             <div className="relative w-full sm:w-80">
@@ -87,29 +77,17 @@ const AdminReviewsPage = () => {
               />
               <LuSearch className="text-slate-400 absolute top-1/2 left-4 -translate-y-1/2" />
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Table Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
+        <div>
           <AdminReviewsTable
             courses={filteredCourses}
             isLoading={isLoading}
             onViewReviews={handleViewReviews}
           />
-          {!isLoading && coursesWithReviews.length === 0 && (
-            <div className="mt-8 p-4 bg-amber-50 rounded-xl border border-amber-200 text-amber-700 text-xs font-mono overflow-auto">
-              <p className="font-bold mb-2">Debug Info:</p>
-              <p>Courses length: {coursesWithReviews.length}</p>
-              <p>Search Query: "{searchQuery}"</p>
-              <p>Raw data available (check console or this space if I could dump it)</p>
-            </div>
-          )}
-        </motion.div>
+        </div>
       </div>
 
       {/* View Reviews Modal */}

@@ -1,8 +1,15 @@
 "use client";
 
 import React from "react";
-import { Button, Card, Chip, Avatar } from "@heroui/react";
-import { LuShieldAlert, LuShieldCheck, LuUserX, LuUserCheck } from "react-icons/lu";
+import {
+    Table,
+    Button,
+    Chip,
+    Avatar,
+    Skeleton,
+    cn
+} from "@heroui/react";
+import { LuShieldCheck, LuUserX, LuUserCheck, LuCopy } from "react-icons/lu";
 import { AdminUser } from "@/hooks/useAdminUsers";
 
 interface AdminUsersTableProps {
@@ -19,104 +26,119 @@ export const AdminUsersTable: React.FC<AdminUsersTableProps> = ({
     onUnban,
 }) => {
     return (
-        <Card className="overflow-hidden border-none bg-white/80 shadow-2xl backdrop-blur-md">
-            <div className="w-full overflow-x-auto">
-                <table className="w-full border-collapse text-left">
-                    <thead className="bg-primary/5 border-b border-primary/10">
-                        <tr>
-                            <th className="px-6 py-4 text-[10px] font-black tracking-wider text-slate-400 uppercase">User</th>
-                            <th className="px-6 py-4 text-[10px] font-black tracking-wider text-slate-400 uppercase">Email</th>
-                            <th className="px-6 py-4 text-[10px] font-black tracking-wider text-slate-400 uppercase">Role</th>
-                            <th className="px-6 py-4 text-[10px] font-black tracking-wider text-slate-400 uppercase">Status</th>
-                            <th className="px-6 py-4 text-[10px] font-black tracking-wider text-slate-400 uppercase text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        <Table className="shadow-2xl rounded-3xl overflow-hidden border-none bg-white/80 backdrop-blur-md p-0">
+            <Table.ScrollContainer>
+                <Table.Content aria-label="Admin Users Table" className="min-w-[800px]">
+                    <Table.Header>
+                        <Table.Column isRowHeader className="bg-slate-50/50 text-slate-400 font-bold text-[11px] uppercase tracking-wider h-14 px-6 border-b border-slate-100">USER ID</Table.Column>
+                        <Table.Column className="bg-slate-50/50 text-slate-400 font-bold text-[11px] uppercase tracking-wider h-14 px-6 border-b border-slate-100">MEMBER</Table.Column>
+                        <Table.Column className="bg-slate-50/50 text-slate-400 font-bold text-[11px] uppercase tracking-wider h-14 px-6 border-b border-slate-100">ROLE</Table.Column>
+                        <Table.Column className="bg-slate-50/50 text-slate-400 font-bold text-[11px] uppercase tracking-wider h-14 px-6 border-b border-slate-100">STATUS</Table.Column>
+                        <Table.Column className="bg-slate-50/50 text-slate-400 font-bold text-[11px] uppercase tracking-wider h-14 px-6 border-b border-slate-100 text-end">ACTIONS</Table.Column>
+                    </Table.Header>
+                    <Table.Body>
                         {isLoading ? (
-                            Array.from({ length: 5 }).map((_, i) => (
-                                <tr key={i} className="border-b border-primary/5 animate-pulse">
-                                    <td className="p-6"><div className="flex items-center gap-3"><div className="bg-primary/5 h-10 w-10 rounded-full" /><div className="bg-primary/5 h-4 w-32 rounded" /></div></td>
-                                    <td className="p-6"><div className="bg-primary/5 h-4 w-40 rounded" /></td>
-                                    <td className="p-6"><div className="bg-primary/5 h-6 w-20 rounded-full" /></td>
-                                    <td className="p-6"><div className="bg-primary/5 h-6 w-20 rounded-full" /></td>
-                                    <td className="p-6 text-center"><div className="bg-primary/5 h-9 w-24 mx-auto rounded-xl" /></td>
-                                </tr>
+                            [...Array(5)].map((_, i) => (
+                                <Table.Row key={`loading-${i}`} className="border-b border-slate-50">
+                                    <Table.Cell className="px-6 py-4">
+                                        <div className="flex items-center gap-2">
+                                            <Skeleton className="h-4 w-16 rounded-lg" />
+                                            <Skeleton className="h-8 w-8 rounded-xl" />
+                                        </div>
+                                    </Table.Cell>
+                                    <Table.Cell className="px-6 py-4">
+                                        <div className="flex items-center gap-3">
+                                            <Skeleton className="h-10 w-10 rounded-full" />
+                                            <div className="flex flex-col gap-2">
+                                                <Skeleton className="h-4 w-40 rounded-lg" />
+                                                <Skeleton className="h-3 w-24 rounded-lg" />
+                                            </div>
+                                        </div>
+                                    </Table.Cell>
+                                    <Table.Cell className="px-6 py-4">
+                                        <Skeleton className="h-6 w-20 rounded-full" />
+                                    </Table.Cell>
+                                    <Table.Cell className="px-6 py-4">
+                                        <Skeleton className="h-6 w-20 rounded-full" />
+                                    </Table.Cell>
+                                    <Table.Cell className="px-6 py-4 text-end">
+                                        <Skeleton className="h-9 w-10 ml-auto rounded-xl" />
+                                    </Table.Cell>
+                                </Table.Row>
                             ))
                         ) : (
-                            users.map((user) => (
-                                <tr
-                                    key={user.id}
-                                    className="hover:bg-primary/[0.02] border-b border-primary/5 transition-colors"
-                                >
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-3">
-                                            <Avatar
-                                                className="h-10 w-10 text-primary bg-primary/10 font-black text-xs"
-                                            >
-                                                {(user.name || user.email)[0].toUpperCase()}
-                                            </Avatar>
-                                            <span className="text-sm font-black text-slate-800">
-                                                {user.name || "N/A"}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <span className="text-sm font-semibold text-slate-500">
-                                            {user.email}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <Chip
-                                            variant="soft"
-                                            className={`${user.role === "admin"
-                                                ? "bg-amber-100 text-amber-700"
-                                                : "bg-blue-100 text-blue-700"
-                                                } border-none font-bold text-[10px] uppercase h-6`}
-                                        >
-                                            <div className="flex items-center gap-1">
-                                                {user.role === "admin" && <LuShieldCheck />}
-                                                {user.role || "user"}
+                            users.length > 0 ? (
+                                users.map((user) => (
+                                    <Table.Row key={user.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+                                        <Table.Cell className="px-6 py-4">
+                                            <div className="flex items-center gap-2 group">
+                                                <span className="text-sm font-bold text-primary max-w-24 truncate">#{user.id.slice(0, 8)}</span>
+                                                <Button isIconOnly size="sm" variant="ghost" className="opacity-0 group-hover:opacity-100 transition-opacity min-w-8 h-8 rounded-lg text-slate-400">
+                                                    <LuCopy className="size-3.5" />
+                                                </Button>
                                             </div>
-                                        </Chip>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <Chip
-                                            variant="soft"
-                                            className={`${user.banned
-                                                ? "bg-red-100 text-red-600"
-                                                : "bg-emerald-100 text-emerald-600"
-                                                } border-none font-bold text-[10px] uppercase h-6`}
-                                        >
-                                            {user.banned ? "Banned" : "Active"}
-                                        </Chip>
-                                    </td>
-                                    <td className="px-6 py-4 text-center">
-                                        {user.role !== "admin" && (
-                                            <Button
-                                                onPress={() => user.banned ? onUnban(user.id) : onBan(user.id)}
-                                                className={`${user.banned
-                                                    ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-600"
-                                                    : "bg-red-50 text-red-600 hover:bg-red-600"
-                                                    } hover:text-white h-9 px-4 rounded-xl transition-all font-bold active:scale-95 shadow-sm border-none flex items-center gap-2`}
+                                        </Table.Cell>
+                                        <Table.Cell className="px-6 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <Avatar size="sm" className="bg-primary/10 text-primary font-black text-xs">
+                                                    <Avatar.Fallback>{user.name?.[0] || user.email?.[0]}</Avatar.Fallback>
+                                                </Avatar>
+                                                <div className="flex flex-col">
+                                                    <span className="text-xs font-bold text-slate-800">{user.name || "Unknown User"}</span>
+                                                    <span className="text-xs text-slate-400 font-bold">{user.email}</span>
+                                                </div>
+                                            </div>
+                                        </Table.Cell>
+                                        <Table.Cell className="px-6 py-4 min-w-40">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-xs font-bold text-slate-600 capitalize">{user.role || "User"}</span>
+                                                {user.role === "admin" && <LuShieldCheck className="text-amber-500 size-3.5" />}
+                                            </div>
+                                        </Table.Cell>
+                                        <Table.Cell className="px-6 py-4">
+                                            <Chip
+                                                size="sm"
+                                                variant="soft"
+                                                className={cn(
+                                                    "font-bold text-[10px] uppercase border-none",
+                                                    user.banned ? "bg-red-100 text-red-600" : "bg-emerald-100 text-emerald-600"
+                                                )}
                                             >
-                                                {user.banned ? <LuUserCheck /> : <LuUserX />}
-                                                {user.banned ? "Unban" : "Ban User"}
-                                            </Button>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))
+                                                {user.banned ? "Banned" : "Active"}
+                                            </Chip>
+                                        </Table.Cell>
+                                        <Table.Cell className="px-6 py-4">
+                                            <div className="flex items-center justify-end gap-1">
+                                                {user.role !== "admin" && (
+                                                    <Button
+                                                        isIconOnly
+                                                        onPress={() => user.banned ? onUnban(user.id) : onBan(user.id)}
+                                                        variant="ghost"
+                                                        className={cn(
+                                                            "h-9 w-9 min-w-9 rounded-xl transition-all shadow-sm border-none active:scale-95",
+                                                            user.banned ? "bg-emerald-50 text-emerald-600 hover:bg-emerald-600" : "bg-red-50 text-red-500 hover:bg-red-600"
+                                                        )}
+                                                    >
+                                                        {user.banned ? <LuUserCheck className="text-lg" /> : <LuUserX className="text-lg" />}
+                                                    </Button>
+                                                )}
+                                            </div>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                ))
+                            ) : (
+                                <Table.Row>
+                                    <Table.Cell><span className="py-20 text-center text-slate-400 block w-full">No users found.</span></Table.Cell>
+                                    <Table.Cell className="hidden" />
+                                    <Table.Cell className="hidden" />
+                                    <Table.Cell className="hidden" />
+                                    <Table.Cell className="hidden" />
+                                </Table.Row>
+                            )
                         )}
-                        {!isLoading && users.length === 0 && (
-                            <tr>
-                                <td colSpan={5} className="py-20 text-center text-slate-400">
-                                    No users found.
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
-            </div>
-        </Card>
+                    </Table.Body>
+                </Table.Content>
+            </Table.ScrollContainer>
+        </Table>
     );
 };

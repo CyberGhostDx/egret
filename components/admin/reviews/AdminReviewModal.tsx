@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Modal, Button, Avatar, Card } from "@heroui/react";
-import { LuTrash2, LuCalendar, LuUser } from "react-icons/lu";
+import { LuTrash2, LuCalendar } from "react-icons/lu";
 import { AdminReviewCourse, AdminReview } from "@/hooks/useAdminReviews";
 import { getDifficultyColor } from "@/lib/difficulty-utils";
 
@@ -24,8 +24,8 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
     return (
         <Modal>
             <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
-                <Modal.Container size="lg">
-                    <Modal.Dialog className="relative bg-[#f8f9fa] p-0 outline-none overflow-visible rounded-3xl border-none shadow-2xl max-w-2xl sm:max-w-3xl">
+                <Modal.Container size="lg" className="max-w-2xl sm:max-w-3xl">
+                    <Modal.Dialog className="relative bg-[#f8f9fa] p-0 outline-none overflow-visible rounded-3xl border-none shadow-2xl">
                         <Modal.Header className="flex flex-col border-b border-white bg-white/50 px-8 py-6 backdrop-blur-md">
                             <h2 className="text-primary text-2xl font-black tracking-tight">
                                 Course Reviews
@@ -39,7 +39,7 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
                         <Modal.Body className="p-6">
                             <div className="max-h-[60vh] overflow-y-auto space-y-4 px-1">
                                 {course.reviews.length === 0 ? (
-                                    <div className="py-12 text-center text-slate-400 font-medium">
+                                    <div className="py-12 text-center text-slate-400 font-medium whitespace-pre-wrap">
                                         No reviews for this course yet.
                                     </div>
                                 ) : (
@@ -50,7 +50,7 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
                                                 <div className="flex justify-between items-start gap-4">
                                                     <div className="flex items-center gap-3">
                                                         <Avatar className="h-10 w-10 text-primary bg-primary/5 font-black text-xs">
-                                                            {review.username[0].toUpperCase()}
+                                                            {(review.username || "U")[0].toUpperCase()}
                                                         </Avatar>
                                                         <div>
                                                             <div className="flex items-center gap-2">
