@@ -14,6 +14,7 @@ import {
     HiOutlineHome,
     HiOutlineUsers
 } from "react-icons/hi";
+import { HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
 import { authClient } from "@/lib/auth-client";
 import { Button, Tooltip } from "@heroui/react";
 
@@ -37,6 +38,11 @@ const navItems = [
         name: "Users Management",
         href: "/admin/users",
         icon: HiOutlineUsers,
+    },
+    {
+        name: "Reviews Management",
+        href: "/admin/reviews",
+        icon: HiOutlineChatBubbleLeftRight,
     },
 ];
 
