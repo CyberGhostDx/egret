@@ -11,7 +11,8 @@ import {
     HiOutlineLogout,
     HiOutlineChevronLeft,
     HiOutlineChevronRight,
-    HiOutlineHome
+    HiOutlineHome,
+    HiOutlineUsers
 } from "react-icons/hi";
 import { authClient } from "@/lib/auth-client";
 import { Button, Tooltip } from "@heroui/react";
@@ -31,6 +32,11 @@ const navItems = [
         name: "Add Exams",
         href: "/admin/exams/add",
         icon: HiOutlinePlusCircle,
+    },
+    {
+        name: "Users Management",
+        href: "/admin/users",
+        icon: HiOutlineUsers,
     },
 ];
 
