@@ -64,7 +64,7 @@ export default function CoursesPage() {
           <div className="text-primary py-10 text-center">
             {t("LoadingDetails")}
           </div>
-        ) : (
+        ) : filterCourses.length > 0 ? (
           <div className="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2 lg:grid-cols-3">
             {filterCourses.map((course) => (
               <CourseCard
@@ -73,6 +73,13 @@ export default function CoursesPage() {
                 difficulty={course.difficulty}
               />
             ))}
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <h2 className="text-primary mb-2 text-2xl font-bold">
+              {t("NoCoursesFound")}
+            </h2>
+            <p className="text-primary/60 text-lg">{t("NoCourseNote")}</p>
           </div>
         )}
       </div>

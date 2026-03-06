@@ -12,7 +12,6 @@ import {
 import { HiMenu, HiX } from "react-icons/hi";
 import { authClient } from "@/lib/auth-client";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
-import NextLink from "next/link";
 import { LuLogOut } from "react-icons/lu";
 import { useLocale, useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
