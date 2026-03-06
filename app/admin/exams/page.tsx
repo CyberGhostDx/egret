@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { useCourseStore } from "@/store/useCourseStore";
-import { CourseFormCard } from "@/components/admin/exams/CourseFormCard";
+import { AdminEditExamModalForm } from "@/components/admin/exams/AdminEditExamModalForm";
 import { AdminExamsTable } from "@/components/admin/exams/AdminExamsTable";
 import { Input, Button, Modal, useOverlayState } from "@heroui/react";
 import { LuSearch, LuX } from "react-icons/lu";
@@ -123,49 +123,39 @@ const AdminExamsPage = () => {
           isOpen={editModalState.isOpen}
           onOpenChange={editModalState.setOpen}
         >
-          <Modal.Container size="5xl">
-            <Modal.Dialog className="relative bg-white p-0 outline-none overflow-visible rounded-3xl border-none shadow-2xl">
-              <Modal.Header className="flex items-center justify-between border-b border-primary/5 p-6">
-                <div>
-                  <h2 className="text-primary text-2xl font-black tracking-tight">
+          <Modal.Container size="lg">
+            <Modal.Dialog className="relative bg-white p-0 outline-none overflow-visible rounded-3xl border-none shadow-2xl max-w-2xl sm:max-w-3xl">
+              <Modal.Header className="flex items-center justify-between border-b border-primary/5 px-6 py-4">
+                <div className="text-center w-full">
+                  <h2 className="text-primary text-xl font-black tracking-tight">
                     Edit Exam Details
                   </h2>
-                  <p className="text-primary/40 text-[11px] font-bold uppercase tracking-wider">
+                  <p className="text-primary/40 text-[10px] font-bold uppercase tracking-wider">
                     Course: {storeCourses[0]?.courseId || "—"}
                   </p>
                 </div>
-                <Button
-                  onPress={handleCloseModal}
-                  variant="ghost"
-                  className="h-10 w-10 min-w-10 rounded-full p-0 transition-all border-none hover:bg-primary/5 active:scale-95"
-                >
-                  <LuX className="text-xl opacity-40" />
-                </Button>
               </Modal.Header>
 
               <Modal.Body className="p-6">
-                <div className="max-h-[70vh] overflow-y-auto px-1 py-2">
-                  {storeCourses.map((course, index) => (
-                    <CourseFormCard
-                      key={course.id}
-                      course={course}
-                      index={index}
-                      onRemove={() => { }} // Disable remove in single edit mode
+                <div className="max-h-[55vh] overflow-y-auto px-1">
+                  {storeCourses[0] && (
+                    <AdminEditExamModalForm
+                      course={storeCourses[0]}
                       onUpdate={updateCourse}
                     />
-                  ))}
+                  )}
                 </div>
               </Modal.Body>
 
-              <Modal.Footer className="flex justify-end gap-3 border-t border-primary/5 p-6">
+              <Modal.Footer className="flex justify-end gap-3 border-t border-primary/5 px-6 py-4">
                 <Button
                   onPress={handleCloseModal}
-                  className="bg-red-400 hover:bg-red-500 h-12 rounded-xl px-8 font-bold text-white transition-all shadow-md active:scale-95"
+                  className="bg-red-400 hover:bg-red-500 h-10 rounded-xl px-6 font-bold text-white transition-all shadow-md active:scale-95 text-sm"
                 >
                   CANCEL
                 </Button>
                 <Button
-                  className="bg-primary hover:shadow-primary/20 h-12 rounded-xl px-10 font-bold text-white shadow-lg transition-all active:scale-95"
+                  className="bg-primary hover:shadow-primary/20 h-10 rounded-xl px-8 font-bold text-white shadow-lg transition-all active:scale-95 text-sm"
                 >
                   SAVE CHANGES
                 </Button>
