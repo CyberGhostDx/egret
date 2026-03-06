@@ -97,5 +97,61 @@
     "SelectDifficulty": "Please select a difficulty level.",
     "ReviewPosted": "Your review has been posted successfully!",
     "FailedToPostReview": "Failed to post review. Please try again later."
+  },
+  "Terms": {
+    "Title": "EGRET Terms and Conditions of Use",
+    "PublishedDate": "Published on: March 5, 2026",
+    "Intro": "Welcome to EGRET. To ensure a smooth and safe experience for everyone, please read the following terms and conditions:",
+    "BackToLogin": "Back to Login",
+    "Sections": {
+      "Eligibility": {
+        "Title": "1. Eligibility",
+        "Item1": "Individual Access: This website restricts usage to Kasetsart University students or personnel with a university email account (@ku.th) only.",
+        "Item2": "Authentication: Access requires the university's Google Login system. You agree to maintain the security of your Google account and accept responsibility for any actions occurring under your account."
+      },
+      "Services": {
+        "Title": "2. Services and Notifications",
+        "Item1": "Service Nature: This website is designed to facilitate exam schedule viewing and course notification settings at no charge (Free of Charge).",
+        "Item2": "Data Accuracy: While we strive for accuracy, users are responsible for verifying schedules with official university announcements. We are not liable for damages (e.g., missed exams) resulting from system errors or notification delays."
+      },
+      "Content": {
+        "Title": "3. User-Generated Content",
+        "Item1": "For the 'Course Review' section, users agree to:",
+        "Item2": "Politeness: Refrain from posting derogatory, abusive, or offensive comments toward others (professors or students).",
+        "Item3": "Authenticity: Reviews must be helpful, truthful, and not intended to harass or provide false information.",
+        "Item4": "Moderation Rights: Admins reserve the right to delete, edit, or suspend any comments deemed inappropriate or reported, without prior notice."
+      },
+      "Privacy": {
+        "Title": "4. Privacy & Data",
+        "Item1": "The system collects basic Google Account information (name, email, profile picture) solely for identification and notification services.",
+        "Item2": "We do not share or sell @ku.th email information to third parties."
+      },
+      "Suspension": {
+        "Title": "5. Access Suspension",
+        "Item1": "We reserve the right to suspend access if any of the following behaviors are detected:",
+        "Item2": "Attempts to hack or disrupt the website.",
+        "Item3": "Using the system for non-educational purposes.",
+        "Item4": "Repeated violations of comment policies."
+      }
+    },
+    "Disclaimer": {
+      "Title": "Copyright and Data Disclaimer",
+      "SourceLabel": "Data Source:",
+      "SourceText": "Exam schedules, courses, and educational details are gathered from the Office of Educational Administration and the Faculty of Engineering, Kasetsart University, for student convenience only.",
+      "CopyrightLabel": "Copyright Ownership:",
+      "CopyrightText": "All copyrights for exam schedules and curricula belong to Kasetsart University. EGRET (<link>https://egret-ku.vercel.app/</link>) does not claim ownership and is not officially affiliated with the university.",
+      "AccuracyLabel": "Data Accuracy:",
+      "AccuracyText": "Displayed information may vary from the original due to technical constraints or update delays. Users must rely on the university's official registrar website and verify accuracy before actual exams.",
+      "LiabilityLabel": "Limitation of Liability:",
+      "LiabilityText": "EGRET and its developers are not responsible for any damages or consequences arising from missed exams or incorrect scheduling based on information from this site."
+    }
+  },
+  "Login": {
+    "Title": "EGRET",
+    "Description": "Engineering Generated Rapid Exam Table",
+    "SignInWithGoogle": "Sign in with Google",
+    "PleaseUseKUOnly": "Please use @ku.th only",
+    "AgreeToTerms": "By signing in, you agree to our",
+    "TermsAndConditions": "Terms and Conditions"
   }
 }

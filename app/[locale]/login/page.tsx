@@ -3,12 +3,14 @@
 import { authClient } from "@/lib/auth-client";
 import { useEffect } from "react";
 import { Button } from "@heroui/react";
+import { Link, useRouter } from "@/i18n/routing";
 import Image from "next/image";
 import { FcGoogle } from "react-icons/fc";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const LoginPage = () => {
   const router = useRouter();
+  const t = useTranslations("Login");
   const { data: session, isPending } = authClient.useSession();
 
   useEffect(() => {
@@ -40,10 +42,10 @@ const LoginPage = () => {
 
         <div className="text-center">
           <h1 className="text-primary text-4xl font-bold tracking-tight">
-            EGRET
+            {t("Title")}
           </h1>
           <p className="text-secondary mt-2 text-xl font-medium drop-shadow-xl">
-            Engineering Generated Rapid Exam Table
+            {t("Description")}
           </p>
         </div>
 
@@ -55,11 +57,19 @@ const LoginPage = () => {
             onPress={handleGoogleLogin}
           >
             <FcGoogle className="h-6 w-6" />
-            Sign in with Google
+            {t("SignInWithGoogle")}
           </Button>
-          <p className="text-secondary/80 text-sm font-medium">
-            Please use @ku.th only
-          </p>
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-secondary/80 text-xs font-medium">
+              {t("PleaseUseKUOnly")}
+            </p>
+            <p className="text-secondary text-xs">
+              {t("AgreeToTerms")}{" "}
+              <Link href="/terms" className="text-primary text-xs underline">
+                {t("TermsAndConditions")}
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
