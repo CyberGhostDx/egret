@@ -3,6 +3,9 @@
 import { useUser } from "@/hooks/useUser";
 import ExamCard, { Exam } from "./ExamCard";
 import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
+import { Button } from "@heroui/react";
+import { LuCalendarSearch } from "react-icons/lu";
 
 export default function ExamList() {
   const { user, isLoading } = useUser();
@@ -55,8 +58,26 @@ export default function ExamList() {
 
   if (sortedExams.length === 0) {
     return (
-      <div className="py-10 text-center text-slate-500">
-        {t("NoUpcomingExams")}
+      <div className="relative flex min-h-44 w-full flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-slate-200 bg-white p-6 text-center shadow-sm lg:mx-0 lg:max-w-xl">
+        <div className="relative z-10 flex flex-col items-center gap-4">
+          <div className="flex flex-col gap-1">
+            <h3 className="text-xl font-bold text-slate-800">
+              {t("NoRegisteredCourses")}
+            </h3>
+            <p className="max-w-xs text-sm text-slate-500">
+              {t("RegisterInvitation")}
+            </p>
+          </div>
+          <Link href="/courses">
+            <Button
+              variant="primary"
+              className="h-10 rounded-xl bg-[#008B6D] px-8 text-sm font-bold text-white shadow-lg shadow-teal-500/10 transition-all hover:scale-105 active:scale-95"
+            >
+              <LuCalendarSearch className="mr-2 size-4" />
+              {t("RegisterButton")}
+            </Button>
+          </Link>
+        </div>
       </div>
     );
   }

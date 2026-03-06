@@ -40,7 +40,9 @@
     "Enrolled": "ลงทะเบียนแล้ว",
     "Select": "เลือก",
     "Cancel": "ยกเลิก",
-    "LoadingDetails": "กำลังโหลดข้อมูลรายวิชา..."
+    "LoadingDetails": "กำลังโหลดข้อมูลรายวิชา...",
+    "NoCoursesFound": "ไม่พบรายวิชา",
+    "NoCourseNote": "อาจไม่มีรายวิชานี้อยู่ในตารางสอบ"
   },
   "CourseReview": {
     "Subject": "รายวิชา",
@@ -66,7 +68,9 @@
   },
   "ExamList": {
     "LoadingExams": "กำลังโหลดข้อมูลการสอบ...",
-    "NoUpcomingExams": "ไม่พบการสอบที่กำลังจะมาถึง"
+    "NoRegisteredCourses": "ไม่พบรายวิชาที่ลงทะเบียน",
+    "RegisterInvitation": "เพิ่มรายวิชาเพื่อเริ่มติดตามตารางสอบของคุณ",
+    "RegisterButton": "เพิ่มรายวิชา"
   },
   "ExamCard": {
     "Days": "วัน",
@@ -153,5 +157,9 @@
     "PleaseUseKUOnly": "กรุณาใช้บัญชี @ku.th เท่านั้น",
     "AgreeToTerms": "การเข้าสู่ระบบแสดงว่าคุณยอมรับ",
     "TermsAndConditions": "ข้อกำหนดและเงื่อนไข"
+  },
+  "Footer": {
+    "Copyright": "© 2026 EGRET. พัฒนาขึ้นเพื่อนิสิตคณะวิศวกรรมศาสตร์ มหาวิทยาลัยเกษตรศาสตร์ (บางเขน)",
+    "Terms": "ข้อกำหนดและเงื่อนไข"
   }
 }
