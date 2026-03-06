@@ -128,11 +128,11 @@ const Navbar = () => {
                 </Dropdown.Popover>
               </Dropdown>
             ) : (
-              <NextLink href="/login">
+              <Link href="/login">
                 <Button size="sm" className="bg-primary hover:bg-[#1e4a57]">
                   {t("SignIn")}
                 </Button>
-              </NextLink>
+              </Link>
             )}
 
             <Disclosure className="relative md:hidden">
