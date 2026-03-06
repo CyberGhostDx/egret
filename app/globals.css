@@ -100,17 +100,20 @@
 .fc-custom-theme td.has-exam .fc-daygrid-day-number::after {
   content: "";
   position: absolute;
-  bottom: 6px;
+  bottom: 5px;
   left: 50%;
   transform: translateX(-50%);
-  width: 5px;
-  height: 5px;
-  background-color: #296374;
+  width: 7.5px;
+  height: 7.5px;
+  background-color: #ff1c42;
   border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 28, 66, 0.4);
+  transition: all 0.2s ease;
 }
 
 .fc-custom-theme td.fc-day-today.has-exam .fc-daygrid-day-number::after {
   background-color: white;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
 }
 
 .fc-custom-theme .fc-header-toolbar.fc-toolbar {
