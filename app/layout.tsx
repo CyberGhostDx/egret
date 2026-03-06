@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Thai } from "next/font/google";
 import { SwrProvider } from "./providers";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { Toast } from "@heroui/react";
 
@@ -27,6 +28,7 @@ export default function RootLayout({
           <Toast.Provider />
           {children}
         </SwrProvider>
+        <Analytics />
       </body>
     </html>
   );
