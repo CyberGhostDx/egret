@@ -200,31 +200,31 @@ export default function ExamCard({ exam }: { exam: Exam }) {
               {t("StartsIn")}
             </span>
             <div className="grid w-full max-w-[200px] grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-x-1 text-center sm:max-w-[280px] sm:gap-x-1">
-              <span className="text-xl font-bold tabular-nums sm:text-4xl">
+              <span className="text-2xl font-bold tabular-nums sm:text-4xl">
                 {timeLeft.days.toString().padStart(2, "0")}
               </span>
-              <span className="mb-1 text-xl font-bold opacity-80 sm:text-4xl">
+              <span className="mb-1 text-2xl font-bold opacity-80 sm:text-4xl">
                 :
               </span>
-              <span className="text-xl font-bold tabular-nums sm:text-4xl">
+              <span className="text-2xl font-bold tabular-nums sm:text-4xl">
                 {timeLeft.hours.toString().padStart(2, "0")}
               </span>
-              <span className="mb-1 text-xl font-bold opacity-80 sm:text-4xl">
+              <span className="mb-1 text-2xl font-bold opacity-80 sm:text-4xl">
                 :
               </span>
-              <span className="text-xl font-bold tabular-nums sm:text-4xl">
+              <span className="text-2xl font-bold tabular-nums sm:text-4xl">
                 {timeLeft.minutes.toString().padStart(2, "0")}
               </span>
 
-              <span className="text-xs font-medium opacity-80">
+              <span className="text-sm font-medium opacity-80">
                 {t("Days")}
               </span>
               <div />
-              <span className="text-xs font-medium opacity-80">
+              <span className="text-sm font-medium opacity-80">
                 {t("Hours")}
               </span>
               <div />
-              <span className="text-xs font-medium opacity-80">
+              <span className="text-sm font-medium opacity-80">
                 {t("Minutes")}
               </span>
             </div>
