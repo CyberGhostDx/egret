@@ -5,7 +5,18 @@ import { authClient } from "@/lib/auth-client";
 export default async function authMiddleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  if (pathname === "/login" || pathname === "/admin/login") {
+  const isLoginPage =
+    pathname === "/login" ||
+    pathname === "/en/login" ||
+    pathname === "/th/login" ||
+    pathname === "/admin/login";
+
+  const isTermsPage =
+    pathname === "/terms" ||
+    pathname === "/en/terms" ||
+    pathname === "/th/terms";
+
+  if (isLoginPage || isTermsPage) {
     return NextResponse.next();
   }
 

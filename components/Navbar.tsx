@@ -12,7 +12,6 @@ import {
 import { HiMenu, HiX } from "react-icons/hi";
 import { authClient } from "@/lib/auth-client";
 import { Link, usePathname, useRouter } from "@/i18n/routing";
-import NextLink from "next/link";
 import { LuLogOut } from "react-icons/lu";
 import { useLocale, useTranslations } from "next-intl";
 import { useState, useEffect } from "react";
@@ -128,11 +127,11 @@ const Navbar = () => {
                 </Dropdown.Popover>
               </Dropdown>
             ) : (
-              <NextLink href="/login">
+              <Link href="/login">
                 <Button size="sm" className="bg-primary hover:bg-[#1e4a57]">
                   {t("SignIn")}
                 </Button>
-              </NextLink>
+              </Link>
             )}
 
             <Disclosure className="relative md:hidden">

@@ -27,6 +27,6 @@ export const config = {
     "/",
     "/(th|en)/:path*",
     "/admin/:path*",
-    "/((?!api|images|login|_next|_vercel|.*\\..*).*)",
+    "/((?!api|images|_next|_vercel|.*\\..*).*)",
   ],
 };

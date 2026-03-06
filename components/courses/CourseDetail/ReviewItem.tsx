@@ -31,20 +31,22 @@ export const ReviewItem = ({
   return (
     <Card className="rounded-xl border-none bg-white p-4 shadow-sm">
       <Card.Header>
-        <div className="flex justify-between">
-          <div className="flex items-center gap-2">
-            <Avatar color="accent" size="md">
-              <Avatar.Fallback>
-                {name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")
-                  .toUpperCase()}
-              </Avatar.Fallback>
-            </Avatar>
+        <div className="flex items-center gap-3">
+          <Avatar color="accent" size="md">
+            <Avatar.Fallback>
+              {name
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .toUpperCase()}
+            </Avatar.Fallback>
+          </Avatar>
+          <div className="flex flex-col leading-tight">
             <span className="font-bold text-[#194b59]">{name}</span>
+            <span className="text-sm font-medium text-gray-400">
+              {timestamp}
+            </span>
           </div>
-          <span className="font-medium text-gray-400">{timestamp}</span>
         </div>
       </Card.Header>
       <div className="flex w-full justify-between gap-3">
