@@ -157,5 +157,9 @@
     "PleaseUseKUOnly": "Please use @ku.th only",
     "AgreeToTerms": "By signing in, you agree to our",
     "TermsAndConditions": "Terms and Conditions"
+  },
+  "Footer": {
+    "Copyright": "© 2026 EGRET. Built for Kasetsart University Engineering Students (Bangkhen).",
+    "Terms": "Terms and Conditions"
   }
 }
