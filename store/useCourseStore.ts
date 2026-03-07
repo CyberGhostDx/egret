@@ -12,6 +12,7 @@ interface CourseState {
 
 const createEmptyCourse = (): CourseFormValues & { id: string } => ({
   id: Math.random().toString(36).substring(2, 9),
+  examId: "",
   courseId: "",
   subjectEn: "",
   subjectTh: "",

@@ -18,8 +18,9 @@ import {
   LuCheck,
 } from "react-icons/lu";
 import { AdminUser } from "@/hooks/useAdminUsers";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { BanUserModal } from "./BanUserModal";
+import { Pagination } from "@heroui/react";
 
 interface AdminUsersTableProps {
   users: AdminUser[];
@@ -29,6 +30,8 @@ interface AdminUsersTableProps {
   showNames?: boolean;
 }
 
+const ROWS_PER_PAGE = 5;
+
 export const AdminUsersTable: React.FC<AdminUsersTableProps> = ({
   users,
   isLoading,
@@ -36,9 +39,31 @@ export const AdminUsersTable: React.FC<AdminUsersTableProps> = ({
   onUnban,
   showNames = false,
 }): React.ReactElement => {
+  const [page, setPage] = useState(1);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [banModalOpen, setBanModalOpen] = useState(false);
   const [targetUser, setTargetUser] = useState<AdminUser | null>(null);
+
+  const totalPages = Math.ceil((users?.length || 0) / ROWS_PER_PAGE);
+
+  const paginatedItems = useMemo(() => {
+    const start = (page - 1) * ROWS_PER_PAGE;
+    return users.slice(start, start + ROWS_PER_PAGE);
+  }, [users, page]);
+
+  const visiblePages = useMemo(() => {
+    const pages: number[] = [];
+    const startPage = Math.max(1, page - 2);
+    const endPage = Math.min(totalPages, page + 2);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }, [page, totalPages]);
+
+  const start = (page - 1) * ROWS_PER_PAGE + 1;
+  const end = Math.min(page * ROWS_PER_PAGE, users?.length || 0);
 
   const handleCopy = (id: string) => {
     navigator.clipboard.writeText(id);
@@ -63,20 +88,20 @@ export const AdminUsersTable: React.FC<AdminUsersTableProps> = ({
             <Table.Header>
               <Table.Column
                 isRowHeader
-                className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase"
+                className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase"
               >
                 USER ID
               </Table.Column>
-              <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+              <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase">
                 MEMBER
               </Table.Column>
-              <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+              <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase">
                 ROLE
               </Table.Column>
-              <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+              <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase">
                 STATUS
               </Table.Column>
-              <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-end text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+              <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-end text-xs font-bold tracking-wider text-slate-400 uppercase">
                 ACTIONS
               </Table.Column>
             </Table.Header>
@@ -113,8 +138,8 @@ export const AdminUsersTable: React.FC<AdminUsersTableProps> = ({
                     </Table.Cell>
                   </Table.Row>
                 ))
-              ) : users.length > 0 ? (
-                users.map((user) => (
+              ) : paginatedItems.length > 0 ? (
+                paginatedItems.map((user) => (
                   <Table.Row
                     key={user.id}
                     className="border-b border-slate-50 transition-colors hover:bg-slate-50/50"
@@ -241,6 +266,45 @@ export const AdminUsersTable: React.FC<AdminUsersTableProps> = ({
             </Table.Body>
           </Table.Content>
         </Table.ScrollContainer>
+        {totalPages > 1 && (
+          <Table.Footer>
+            <Pagination size="sm">
+              <Pagination.Summary>
+                {start} to {end} of {users?.length || 0} results
+              </Pagination.Summary>
+              <Pagination.Content>
+                <Pagination.Item>
+                  <Pagination.Previous
+                    isDisabled={page === 1}
+                    onPress={() => setPage((p) => Math.max(1, p - 1))}
+                  >
+                    <Pagination.PreviousIcon />
+                    Prev
+                  </Pagination.Previous>
+                </Pagination.Item>
+                {visiblePages.map((p) => (
+                  <Pagination.Item key={p}>
+                    <Pagination.Link
+                      isActive={p === page}
+                      onPress={() => setPage(p)}
+                    >
+                      {p}
+                    </Pagination.Link>
+                  </Pagination.Item>
+                ))}
+                <Pagination.Item>
+                  <Pagination.Next
+                    isDisabled={page === totalPages}
+                    onPress={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  >
+                    Next
+                    <Pagination.NextIcon />
+                  </Pagination.Next>
+                </Pagination.Item>
+              </Pagination.Content>
+            </Pagination>
+          </Table.Footer>
+        )}
       </Table>
 
       <BanUserModal

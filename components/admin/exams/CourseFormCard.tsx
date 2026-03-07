@@ -231,6 +231,7 @@ export const CourseFormCard: React.FC<CourseFormCardProps> = ({
           <div className="col-span-1 lg:col-span-1">
             <TimeField
               isRequired
+              hourCycle={24}
               isInvalid={!course.startTime}
               className="w-full"
               value={course.startTime ? parseTime(course.startTime) : null}
@@ -255,6 +256,7 @@ export const CourseFormCard: React.FC<CourseFormCardProps> = ({
           <div className="">
             <TimeField
               isRequired
+              hourCycle={24}
               isInvalid={!course.endTime}
               className="w-full"
               value={course.endTime ? parseTime(course.endTime) : null}

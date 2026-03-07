@@ -12,6 +12,7 @@ import {
   Avatar,
   Chip,
   cn,
+  Pagination,
 } from "@heroui/react";
 import {
   LuSearch,
@@ -24,6 +25,7 @@ import {
   LuInfo,
   LuFilter,
   LuArrowDownAZ,
+  LuRotateCcw,
 } from "react-icons/lu";
 import {
   useAdminReviews,
@@ -33,14 +35,18 @@ import {
 import type { Key } from "react";
 import { Select, ListBox } from "@heroui/react";
 
+const FEED_ROWS_PER_PAGE = 9;
+
 const AdminReviewsPage = (): React.ReactElement => {
-  const { coursesWithReviews, isLoading, deleteReview } = useAdminReviews();
+  const { coursesWithReviews, isLoading, deleteReview, restoreReview } =
+    useAdminReviews();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedCourse, setSelectedCourse] =
     useState<AdminReviewCourse | null>(null);
   const [activeTab, setActiveTab] = useState<string>("by-course");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("newest");
+  const [feedPage, setFeedPage] = useState(1);
   const reviewModalState = useOverlayState();
 
   const { stats, allReviews } = useMemo(() => {
@@ -55,13 +61,13 @@ const AdminReviewsPage = (): React.ReactElement => {
 
     coursesWithReviews.forEach((course) => {
       course.reviews.forEach((review) => {
-        totalReviews++;
         if (review.status === "published") {
           totalDifficulty += review.difficulty;
           activeReviewsCounted++;
         }
 
         if (statusFilter === "all" || review.status === statusFilter) {
+          totalReviews++;
           flattened.push({
             ...review,
             courseId: course.id,
@@ -100,6 +106,17 @@ const AdminReviewsPage = (): React.ReactElement => {
     };
   }, [coursesWithReviews, statusFilter, sortBy]);
 
+  React.useEffect(() => {
+    setFeedPage(1);
+  }, [statusFilter, sortBy, searchQuery]);
+
+  const paginatedFeedReviews = useMemo(() => {
+    const start = (feedPage - 1) * FEED_ROWS_PER_PAGE;
+    return allReviews.slice(start, start + FEED_ROWS_PER_PAGE);
+  }, [allReviews, feedPage]);
+
+  const totalFeedPages = Math.ceil(allReviews.length / FEED_ROWS_PER_PAGE);
+
   const filteredCourses = useMemo((): AdminReviewCourse[] => {
     const query = searchQuery.toLowerCase().trim();
     let result = [...coursesWithReviews];
@@ -112,13 +129,6 @@ const AdminReviewsPage = (): React.ReactElement => {
           course.titleEn.toLowerCase().includes(query),
       );
     }
-
-    result.sort((a, b) => {
-      if (sortBy === "id") return a.id.localeCompare(b.id);
-      if (sortBy === "reviews") return b.reviews.length - a.reviews.length;
-      if (sortBy === "difficulty") return b.difficulty - a.difficulty;
-      return 0;
-    });
 
     return result;
   }, [coursesWithReviews, searchQuery, sortBy]);
@@ -135,7 +145,25 @@ const AdminReviewsPage = (): React.ReactElement => {
         prev
           ? {
               ...prev,
-              reviews: prev.reviews.filter((r) => r._id !== reviewId),
+              reviews: prev.reviews.map((r) =>
+                r._id === reviewId ? { ...r, status: "deleted" } : r,
+              ),
+            }
+          : null,
+      );
+    }
+  };
+
+  const handleRestoreReview = async (reviewId: string): Promise<void> => {
+    const success = await restoreReview(reviewId);
+    if (success) {
+      setSelectedCourse((prev) =>
+        prev
+          ? {
+              ...prev,
+              reviews: prev.reviews.map((r) =>
+                r._id === reviewId ? { ...r, status: "published" } : r,
+              ),
             }
           : null,
       );
@@ -207,45 +235,39 @@ const AdminReviewsPage = (): React.ReactElement => {
               </Select.Popover>
             </Select>
 
-            <Select
-              className="w-40"
-              value={sortBy}
-              onChange={(key: Key | null) =>
-                setSortBy(key?.toString() || "newest")
-              }
-            >
-              <Select.Trigger className="h-11 rounded-2xl border border-slate-200 bg-white/80 px-3 text-[10px] font-bold shadow-sm transition-all">
-                <div className="flex items-center gap-2">
-                  <LuArrowDownAZ className="text-slate-400" />
-                  <Select.Value />
-                </div>
-                <Select.Indicator />
-              </Select.Trigger>
-              <Select.Popover>
-                <ListBox className="p-1">
-                  {(activeTab === "by-course"
-                    ? [
-                        { id: "id", name: "Course ID" },
-                        { id: "reviews", name: "Most Reviews" },
-                        { id: "difficulty", name: "Higher Difficulty" },
-                      ]
-                    : [
-                        { id: "newest", name: "Newest First" },
-                        { id: "oldest", name: "Oldest First" },
-                        { id: "difficulty", name: "Difficulty" },
-                      ]
-                  ).map((item) => (
-                    <ListBox.Item
-                      key={item.id}
-                      id={item.id}
-                      className="rounded-xl text-[10px] font-bold uppercase transition-colors"
-                    >
-                      {item.name}
-                    </ListBox.Item>
-                  ))}
-                </ListBox>
-              </Select.Popover>
-            </Select>
+            {activeTab !== "by-course" && (
+              <Select
+                className="w-40"
+                value={sortBy}
+                onChange={(key: Key | null) =>
+                  setSortBy(key?.toString() || "newest")
+                }
+              >
+                <Select.Trigger className="h-11 rounded-2xl border border-slate-200 bg-white/80 px-3 text-[10px] font-bold shadow-sm transition-all">
+                  <div className="flex items-center gap-2">
+                    <LuArrowDownAZ className="text-slate-400" />
+                    <Select.Value />
+                  </div>
+                  <Select.Indicator />
+                </Select.Trigger>
+                <Select.Popover>
+                  <ListBox className="p-1">
+                    {[
+                      { id: "newest", name: "Newest First" },
+                      { id: "oldest", name: "Oldest First" },
+                    ].map((item) => (
+                      <ListBox.Item
+                        key={item.id}
+                        id={item.id}
+                        className="rounded-xl text-[10px] font-bold uppercase transition-colors"
+                      >
+                        {item.name}
+                      </ListBox.Item>
+                    ))}
+                  </ListBox>
+                </Select.Popover>
+              </Select>
+            )}
           </div>
         </div>
 
@@ -371,7 +393,7 @@ const AdminReviewsPage = (): React.ReactElement => {
             <Tabs.Panel id="all-reviews">
               <div className="mt-8">
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {allReviews.map((review) => {
+                  {paginatedFeedReviews.map((review) => {
                     const isDeleted = review.status === "deleted";
                     return (
                       <Card
@@ -414,12 +436,9 @@ const AdminReviewsPage = (): React.ReactElement => {
                                     </div>
                                   </Chip>
                                 </div>
-                                <p className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
-                                  {review.courseId}
-                                </p>
                               </div>
                             </div>
-                            {!isDeleted && (
+                            {!isDeleted ? (
                               <Button
                                 isIconOnly
                                 size="sm"
@@ -429,16 +448,26 @@ const AdminReviewsPage = (): React.ReactElement => {
                               >
                                 <LuTrash2 className="text-sm" />
                               </Button>
+                            ) : (
+                              <Button
+                                isIconOnly
+                                size="sm"
+                                variant="ghost"
+                                className="border-none bg-transparent text-green-500 hover:text-green-600"
+                                onPress={() => handleRestoreReview(review._id)}
+                              >
+                                <LuRotateCcw className="text-sm" />
+                              </Button>
                             )}
                           </div>
 
                           <div className="mb-4">
-                            <p className="mb-1 line-clamp-1 text-xs font-bold tracking-tight text-slate-400 uppercase">
-                              {review.courseName}
+                            <p className="text-primary mb-1 line-clamp-1 text-xs font-bold tracking-tight uppercase">
+                              {review.courseId} {review.courseName}
                             </p>
                             <p
                               className={cn(
-                                "line-clamp-4 text-sm leading-relaxed",
+                                "line-clamp-4 leading-relaxed",
                                 isDeleted
                                   ? "text-slate-400 line-through"
                                   : "text-slate-600",
@@ -476,6 +505,80 @@ const AdminReviewsPage = (): React.ReactElement => {
                     </div>
                   )}
                 </div>
+
+                {totalFeedPages > 1 && (
+                  <div className="mt-12 flex w-full flex-col items-center justify-between gap-6 border-t border-slate-100 pt-8 sm:flex-row">
+                    <p className="text-xs font-bold whitespace-nowrap text-slate-400">
+                      Showing {(feedPage - 1) * FEED_ROWS_PER_PAGE + 1} to{" "}
+                      {Math.min(
+                        feedPage * FEED_ROWS_PER_PAGE,
+                        allReviews.length,
+                      )}{" "}
+                      of {allReviews.length} reviews
+                    </p>
+                    <div className="flex sm:ml-auto">
+                      <Pagination size="sm">
+                        <Pagination.Content>
+                          <Pagination.Item>
+                            <Pagination.Previous
+                              isDisabled={feedPage === 1}
+                              onPress={() =>
+                                setFeedPage((p) => Math.max(1, p - 1))
+                              }
+                            >
+                              <Pagination.PreviousIcon />
+                              Prev
+                            </Pagination.Previous>
+                          </Pagination.Item>
+                          {Array.from(
+                            { length: totalFeedPages },
+                            (_, i) => i + 1,
+                          )
+                            .filter(
+                              (p) =>
+                                p === 1 ||
+                                p === totalFeedPages ||
+                                (p >= feedPage - 1 && p <= feedPage + 1),
+                            )
+                            .map((p, i, arr) => {
+                              const elements = [];
+                              if (i > 0 && p !== arr[i - 1] + 1) {
+                                elements.push(
+                                  <Pagination.Item key={`ellipsis-${p}`}>
+                                    <Pagination.Ellipsis />
+                                  </Pagination.Item>,
+                                );
+                              }
+                              elements.push(
+                                <Pagination.Item key={p}>
+                                  <Pagination.Link
+                                    isActive={p === feedPage}
+                                    onPress={() => setFeedPage(p)}
+                                  >
+                                    {p}
+                                  </Pagination.Link>
+                                </Pagination.Item>,
+                              );
+                              return elements;
+                            })}
+                          <Pagination.Item>
+                            <Pagination.Next
+                              isDisabled={feedPage === totalFeedPages}
+                              onPress={() =>
+                                setFeedPage((p) =>
+                                  Math.min(totalFeedPages, p + 1),
+                                )
+                              }
+                            >
+                              Next
+                              <Pagination.NextIcon />
+                            </Pagination.Next>
+                          </Pagination.Item>
+                        </Pagination.Content>
+                      </Pagination>
+                    </div>
+                  </div>
+                )}
               </div>
             </Tabs.Panel>
           </Tabs>
@@ -487,6 +590,7 @@ const AdminReviewsPage = (): React.ReactElement => {
         onOpenChange={reviewModalState.setOpen}
         course={selectedCourse}
         onDeleteReview={handleDeleteReview}
+        onRestoreReview={handleRestoreReview}
       />
     </div>
   );
