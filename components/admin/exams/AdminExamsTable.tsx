@@ -115,7 +115,7 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
           <Table.Header>
             <Table.Column
               isRowHeader
-              className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase"
+              className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase"
             >
               <button
                 onClick={() => {
@@ -138,7 +138,7 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                 )}
               </button>
             </Table.Column>
-            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase">
               <button
                 onClick={() => {
                   setSortDescriptor({
@@ -185,10 +185,10 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                 )}
               </button>
             </Table.Column>
-            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase">
               SCHEDULE
             </Table.Column>
-            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-end text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-end text-xs font-bold tracking-wider text-slate-400 uppercase">
               ACTIONS
             </Table.Column>
           </Table.Header>
@@ -239,7 +239,7 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                 >
                   <Table.Cell className="px-6 py-4">
                     <div className="group flex items-center gap-2">
-                      <span className="text-primary text-sm font-bold">
+                      <span className="text-primary text-base font-bold">
                         {row.offering.courseId}
                       </span>
                       <Button
@@ -254,10 +254,10 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                   </Table.Cell>
                   <Table.Cell className="px-6 py-4">
                     <div className="flex flex-col">
-                      <span className="text-xs font-bold text-slate-800">
+                      <span className="text-sm font-bold text-slate-800">
                         {row.offering.courseId}
                       </span>
-                      <span className="text-[10px] font-bold tracking-tight text-slate-400 uppercase">
+                      <span className="text-xs font-bold tracking-tight text-slate-400 uppercase">
                         {row.offering.course.titleTh}
                       </span>
                     </div>
@@ -267,11 +267,11 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                       <Chip
                         size="sm"
                         variant="soft"
-                        className="bg-primary/5 text-primary h-5 px-1 text-[10px] font-bold"
+                        className="bg-primary/5 text-primary h-5 px-1 text-xs font-bold"
                       >
                         SEC {row.offering.section}
                       </Chip>
-                      <span className="text-[10px] font-bold text-slate-400 uppercase">
+                      <span className="text-xs font-bold text-slate-400 uppercase">
                         {formatValue(row.offering.sectionType)}
                       </span>
                     </div>
@@ -286,7 +286,7 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                           <LuUser />
                         </Avatar.Fallback>
                       </Avatar>
-                      <span className="text-xs font-bold text-slate-600">
+                      <span className="text-sm font-bold text-slate-600">
                         {formatValue(row.offering.instructorTh || row.offering.instructorEn)}
                       </span>
                     </div>
@@ -296,12 +296,12 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                       {row.exam ? (
                         <div className="flex flex-col gap-1.5 px-1 py-1">
                           <div className="flex flex-col gap-0.5 rounded-xl border border-slate-100/50 bg-slate-50 p-2">
-                            <span className="text-[10px] font-black text-slate-700">
+                            <span className="text-xs font-black text-slate-700">
                               {new Date(
                                 row.exam.examDate,
                               ).toLocaleDateString("th-TH")}
                             </span>
-                            <span className="text-primary text-[10px] font-bold">
+                            <span className="text-primary text-xs font-bold">
                               {new Date(
                                 row.exam.startTime,
                               ).toLocaleTimeString("th-TH", {
@@ -318,7 +318,7 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                             </span>
                           </div>
                           {(row.exam.building || row.exam.room) && (
-                            <div className="flex items-center gap-1.5 px-1.5 text-[10px] font-bold text-slate-500">
+                            <div className="flex items-center gap-1.5 px-1.5 text-xs font-bold text-slate-500">
                               <LuUser className="size-3 text-slate-300" />
                               <span className="truncate">
                                 {row.exam.building || ""}{" "}
