@@ -255,10 +255,10 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                   <Table.Cell className="px-6 py-4">
                     <div className="flex flex-col">
                       <span className="text-sm font-bold text-slate-800">
-                        {row.offering.courseId}
+                        {row.offering.course.titleTh}
                       </span>
                       <span className="text-xs font-bold tracking-tight text-slate-400 uppercase">
-                        {row.offering.course.titleTh}
+                        {row.offering.course.titleEn}
                       </span>
                     </div>
                   </Table.Cell>
