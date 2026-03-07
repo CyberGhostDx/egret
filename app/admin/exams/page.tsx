@@ -43,8 +43,8 @@ const AdminExamsPage = (): React.ReactElement => {
     );
   }, [exams, searchQuery]);
 
-  const handleEdit = (exam: CourseOffering): void => {
-    const firstExam = exam.exams[0];
+  const handleEdit = (exam: CourseOffering, slotIndex: number): void => {
+    const selectedSlot = exam.exams[slotIndex];
     setCourses([
       {
         id: exam.id,
@@ -53,28 +53,28 @@ const AdminExamsPage = (): React.ReactElement => {
         subjectTh: exam.course.titleTh,
         section: exam.section,
         sectionType: exam.sectionType || "Lecture",
-        date: firstExam
-          ? new Date(firstExam.examDate).toLocaleDateString("en-CA")
+        date: selectedSlot
+          ? new Date(selectedSlot.examDate).toLocaleDateString("en-CA")
           : "", // en-CA gives YYYY-MM-DD
         credits: exam.credits,
-        startTime: firstExam
-          ? new Date(firstExam.startTime).toLocaleTimeString("en-GB", {
+        startTime: selectedSlot
+          ? new Date(selectedSlot.startTime).toLocaleTimeString("en-GB", {
               hour: "2-digit",
               minute: "2-digit",
             })
           : "",
-        endTime: firstExam
-          ? new Date(firstExam.endTime).toLocaleTimeString("en-GB", {
+        endTime: selectedSlot
+          ? new Date(selectedSlot.endTime).toLocaleTimeString("en-GB", {
               hour: "2-digit",
               minute: "2-digit",
             })
           : "",
-        building: firstExam?.building || "",
-        room: firstExam?.room || "",
+        building: selectedSlot?.building || "",
+        room: selectedSlot?.room || "",
         instructorTh: exam.instructorTh || "",
         instructorEn: exam.instructorEn || "",
-        proctor: firstExam?.proctor || "",
-        note: firstExam?.note || "",
+        proctor: selectedSlot?.proctor || "",
+        note: selectedSlot?.note || "",
       },
     ]);
     editModalState.open();

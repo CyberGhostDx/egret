@@ -6,10 +6,16 @@ import { LuPencil, LuTrash, LuCopy, LuUser } from "react-icons/lu";
 import { type CourseOffering } from "@/schema/backend.schema";
 import { SortDescriptor } from "@heroui/react";
 
+interface ExamRow {
+  offering: CourseOffering;
+  exam: CourseOffering["exams"][0] | null;
+  slotIndex: number;
+}
+
 interface AdminExamsTableProps {
   exams: CourseOffering[] | null;
   isLoading: boolean;
-  onEdit: (exam: CourseOffering) => void;
+  onEdit: (offering: CourseOffering, slotIndex: number) => void;
   onDelete?: (id: string) => void;
 }
 
@@ -26,41 +32,54 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
     direction: "ascending",
   });
 
-  const sortedExams = useMemo(() => {
+  const allRows = useMemo((): ExamRow[] => {
     if (!exams) return [];
-    return [...exams].sort((a, b) => {
+    return exams.flatMap((offering): ExamRow[] => {
+      if (!offering.exams || offering.exams.length === 0) {
+        return [{ offering, exam: null, slotIndex: 0 }];
+      }
+      return offering.exams.map((exam, index): ExamRow => ({
+        offering,
+        exam,
+        slotIndex: index,
+      }));
+    });
+  }, [exams]);
+
+  const sortedRows = useMemo(() => {
+    return [...allRows].sort((a, b) => {
       let first: any;
       let second: any;
 
       switch (sortDescriptor.column) {
         case "courseId":
-          first = a.courseId;
-          second = b.courseId;
+          first = a.offering.courseId;
+          second = b.offering.courseId;
           break;
         case "courseName":
-          first = a.course.titleTh;
-          second = b.course.titleTh;
+          first = a.offering.course.titleTh;
+          second = b.offering.course.titleTh;
           break;
         case "instructor":
-          first = a.instructorTh || a.instructorEn || "";
-          second = b.instructorTh || b.instructorEn || "";
+          first = a.offering.instructorTh || a.offering.instructorEn || "";
+          second = b.offering.instructorTh || b.offering.instructorEn || "";
           break;
         default:
-          first = (a as any)[sortDescriptor.column!];
-          second = (b as any)[sortDescriptor.column!];
+          first = (a.offering as any)[sortDescriptor.column!];
+          second = (b.offering as any)[sortDescriptor.column!];
       }
 
       const cmp = (first || "").toString().localeCompare((second || "").toString());
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
-  }, [exams, sortDescriptor]);
+  }, [allRows, sortDescriptor]);
 
-  const totalPages = Math.ceil((sortedExams?.length || 0) / ROWS_PER_PAGE);
+  const totalPages = Math.ceil((sortedRows?.length || 0) / ROWS_PER_PAGE);
 
   const paginatedItems = useMemo(() => {
     const start = (page - 1) * ROWS_PER_PAGE;
-    return sortedExams.slice(start, start + ROWS_PER_PAGE);
-  }, [sortedExams, page]);
+    return sortedRows.slice(start, start + ROWS_PER_PAGE);
+  }, [sortedRows, page]);
 
   const visiblePages = useMemo(() => {
     const pages: number[] = [];
@@ -74,7 +93,7 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
   }, [page, totalPages]);
 
   const start = (page - 1) * ROWS_PER_PAGE + 1;
-  const end = Math.min(page * ROWS_PER_PAGE, sortedExams?.length || 0);
+  const end = Math.min(page * ROWS_PER_PAGE, sortedRows?.length || 0);
 
   const formatValue = (
     value: string | number | undefined | null,
@@ -213,15 +232,15 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                 </Table.Row>
               ))
             ) : paginatedItems && paginatedItems.length > 0 ? (
-              paginatedItems.map((exam) => (
+              paginatedItems.map((row, index) => (
                 <Table.Row
-                  key={exam.id}
+                  key={`${row.offering.id}-${row.slotIndex}-${index}`}
                   className="border-b border-slate-50 transition-colors hover:bg-slate-50/50"
                 >
                   <Table.Cell className="px-6 py-4">
                     <div className="group flex items-center gap-2">
                       <span className="text-primary text-sm font-bold">
-                        #{exam.courseId}
+                        {row.offering.courseId}
                       </span>
                       <Button
                         isIconOnly
@@ -236,10 +255,10 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                   <Table.Cell className="px-6 py-4">
                     <div className="flex flex-col">
                       <span className="text-xs font-bold text-slate-800">
-                        {exam.courseId}
+                        {row.offering.courseId}
                       </span>
                       <span className="text-[10px] font-bold tracking-tight text-slate-400 uppercase">
-                        {exam.course.titleTh}
+                        {row.offering.course.titleTh}
                       </span>
                     </div>
                   </Table.Cell>
@@ -250,10 +269,10 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                         variant="soft"
                         className="bg-primary/5 text-primary h-5 px-1 text-[10px] font-bold"
                       >
-                        SEC {exam.section}
+                        SEC {row.offering.section}
                       </Chip>
                       <span className="text-[10px] font-bold text-slate-400 uppercase">
-                        {formatValue(exam.sectionType)}
+                        {formatValue(row.offering.sectionType)}
                       </span>
                     </div>
                   </Table.Cell>
@@ -268,42 +287,42 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                         </Avatar.Fallback>
                       </Avatar>
                       <span className="text-xs font-bold text-slate-600">
-                        {formatValue(exam.instructorTh || exam.instructorEn)}
+                        {formatValue(row.offering.instructorTh || row.offering.instructorEn)}
                       </span>
                     </div>
                   </Table.Cell>
                   <Table.Cell className="min-w-[200px] px-6 py-4">
                     <div className="flex flex-col">
-                      {exam.exams && exam.exams.length > 0 ? (
+                      {row.exam ? (
                         <div className="flex flex-col gap-1.5 px-1 py-1">
                           <div className="flex flex-col gap-0.5 rounded-xl border border-slate-100/50 bg-slate-50 p-2">
                             <span className="text-[10px] font-black text-slate-700">
                               {new Date(
-                                exam.exams[0].examDate,
+                                row.exam.examDate,
                               ).toLocaleDateString("th-TH")}
                             </span>
                             <span className="text-primary text-[10px] font-bold">
                               {new Date(
-                                exam.exams[0].startTime,
+                                row.exam.startTime,
                               ).toLocaleTimeString("th-TH", {
                                 hour: "2-digit",
                                 minute: "2-digit",
                               })}{" "}
                               -{" "}
                               {new Date(
-                                exam.exams[0].endTime,
+                                row.exam.endTime,
                               ).toLocaleTimeString("th-TH", {
                                 hour: "2-digit",
                                 minute: "2-digit",
                               })}
                             </span>
                           </div>
-                          {(exam.exams[0].building || exam.exams[0].room) && (
+                          {(row.exam.building || row.exam.room) && (
                             <div className="flex items-center gap-1.5 px-1.5 text-[10px] font-bold text-slate-500">
                               <LuUser className="size-3 text-slate-300" />
                               <span className="truncate">
-                                {exam.exams[0].building || ""}{" "}
-                                {exam.exams[0].room || ""}
+                                {row.exam.building || ""}{" "}
+                                {row.exam.room || ""}
                               </span>
                             </div>
                           )}
@@ -319,7 +338,7 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                     <div className="flex items-center justify-end gap-1.5">
                       <Button
                         isIconOnly
-                        onPress={() => onEdit(exam)}
+                        onPress={() => onEdit(row.offering, row.slotIndex)}
                         variant="ghost"
                         className="bg-primary/5 text-primary hover:bg-primary h-9 w-9 min-w-9 rounded-xl shadow-sm transition-all hover:text-white active:scale-95"
                       >
@@ -357,7 +376,7 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
         <Table.Footer>
           <Pagination size="sm">
             <Pagination.Summary>
-              {start} to {end} of {sortedExams?.length || 0} results
+              {start} to {end} of {sortedRows?.length || 0} results
             </Pagination.Summary>
             <Pagination.Content>
               <Pagination.Item>
