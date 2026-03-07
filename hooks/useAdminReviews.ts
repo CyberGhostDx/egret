@@ -68,11 +68,24 @@ export function useAdminReviews() {
     }
   };
 
+  const restoreReview = async (reviewId: string): Promise<boolean> => {
+    try {
+      await axiosInstance.patch(`/api/admin/reviews/${reviewId}/restore`);
+      toast.success("Review restored successfully");
+      await mutate();
+      return true;
+    } catch (err) {
+      toast.danger("Failed to restore review");
+      return false;
+    }
+  };
+
   return {
     coursesWithReviews,
     isLoading: isLoading || (!adminReviewsData && !error && isValidating),
     isError: error,
     deleteReview,
+    restoreReview,
     mutate,
   };
 }

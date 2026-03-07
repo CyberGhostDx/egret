@@ -1,6 +1,24 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { Modal, Button, Avatar, Card, Chip, cn, TextField, Input, Pagination } from "@heroui/react";
-import { LuTrash2, LuCalendar, LuCheck, LuInfo, LuSearch, LuX, LuRotateCcw } from "react-icons/lu";
+import {
+  Modal,
+  Button,
+  Avatar,
+  Card,
+  Chip,
+  cn,
+  TextField,
+  Input,
+  Pagination,
+} from "@heroui/react";
+import {
+  LuTrash2,
+  LuCalendar,
+  LuCheck,
+  LuInfo,
+  LuSearch,
+  LuX,
+  LuRotateCcw,
+} from "react-icons/lu";
 import { AdminReviewCourse, AdminReview } from "@/hooks/useAdminReviews";
 import { getDifficultyColor } from "@/lib/difficulty-utils";
 
@@ -9,6 +27,7 @@ interface AdminReviewModalProps {
   onOpenChange: (open: boolean) => void;
   course: AdminReviewCourse | null;
   onDeleteReview: (reviewId: string) => void;
+  onRestoreReview: (reviewId: string) => void;
 }
 
 const ROWS_PER_PAGE = 6;
@@ -18,11 +37,11 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
   onOpenChange,
   course,
   onDeleteReview,
+  onRestoreReview,
 }): React.ReactElement | null => {
   const [searchQuery, setSearchQuery] = useState("");
   const [page, setPage] = useState(1);
 
-  // Reset page when search changes or modal opens for a new course
   useEffect(() => {
     setPage(1);
   }, [searchQuery, course?.id]);
@@ -30,12 +49,12 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
   const filteredReviews = useMemo(() => {
     if (!course) return [];
     if (!searchQuery.trim()) return course.reviews;
-    
+
     const query = searchQuery.toLowerCase();
     return course.reviews.filter(
-      (r) => 
-        r.content.toLowerCase().includes(query) || 
-        r.username.toLowerCase().includes(query)
+      (r) =>
+        r.content.toLowerCase().includes(query) ||
+        r.username.toLowerCase().includes(query),
     );
   }, [course, searchQuery]);
 
@@ -63,38 +82,35 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
     <Modal>
       <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
         <Modal.Container className="w-full">
-          <Modal.Dialog className="max-w-7xl w-full relative overflow-hidden rounded-3xl border-none bg-[#f8f9fa] p-0 shadow-2xl outline-none">
+          <Modal.Dialog className="relative w-full max-w-7xl overflow-hidden rounded-3xl border-none bg-[#f8f9fa] p-0 shadow-2xl outline-none">
             <Modal.Header className="flex flex-col rounded-t-3xl border-b border-white bg-white/50 px-8 py-5 backdrop-blur-md">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                 <div>
                   <h2 className="text-primary text-xl font-black tracking-tight">
                     Course Reviews
                   </h2>
-                  <div className="mt-0.5 flex items-center gap-2">
-                    <span className="text-primary bg-primary/10 rounded-lg px-2 py-0.5 text-[10px] font-bold">
+                  <div className="mt-0.5 flex items-center gap-2 text-lg">
+                    <span className="text-primary bg-primary/10 rounded-lg px-2 py-0.5 font-bold">
                       {course.id}
                     </span>
-                    <span className="text-xs font-bold text-slate-500">
+                    <span className="font-bold text-slate-500">
                       {course.titleTh}
                     </span>
                   </div>
                 </div>
 
-                <div className="relative group w-full sm:w-80">
-                  <TextField 
-                    value={searchQuery}
-                    onChange={setSearchQuery}
-                  >
+                <div className="group relative w-full sm:w-80">
+                  <TextField value={searchQuery} onChange={setSearchQuery}>
                     <div className="relative flex items-center">
-                      <LuSearch className="absolute left-3 size-4 text-slate-400 group-focus-within:text-primary transition-colors" />
-                      <Input 
-                        placeholder="ค้นหาในรีวิวหรือชื่อผู้ใช้..." 
-                        className="h-10 w-full rounded-xl border-none bg-primary/5 pl-10 pr-8 text-sm font-bold transition-all focus:bg-primary/10 focus:ring-2 focus:ring-primary/20"
+                      <LuSearch className="group-focus-within:text-primary absolute left-3 size-4 text-slate-400 transition-colors" />
+                      <Input
+                        placeholder="ค้นหาในรีวิวหรือชื่อผู้ใช้..."
+                        className="bg-primary/5 focus:bg-primary/10 focus:ring-primary/20 h-10 w-full rounded-xl border-none pr-8 pl-10 text-sm font-bold transition-all focus:ring-2"
                       />
                       {searchQuery && (
-                        <button 
+                        <button
                           onClick={() => setSearchQuery("")}
-                          className="absolute right-3 text-slate-400 hover:text-red-500 transition-colors"
+                          className="absolute right-3 text-slate-400 transition-colors hover:text-red-500"
                         >
                           <LuX className="size-4" />
                         </button>
@@ -106,15 +122,17 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
             </Modal.Header>
 
             <Modal.Body className="p-6">
-              <div className="min-h-[400px] flex flex-col">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 px-1">
+              <div className="flex min-h-[400px] flex-col">
+                <div className="grid grid-cols-1 gap-4 px-1 lg:grid-cols-2">
                   {filteredReviews.length === 0 ? (
-                    <div className="col-span-1 lg:col-span-2 flex flex-col items-center justify-center py-24 text-center">
-                      <div className="bg-slate-100 p-4 rounded-full mb-4">
+                    <div className="col-span-1 flex flex-col items-center justify-center py-24 text-center lg:col-span-2">
+                      <div className="mb-4 rounded-full bg-slate-100 p-4">
                         <LuSearch className="size-8 text-slate-300" />
                       </div>
                       <p className="font-bold text-slate-400">
-                        {searchQuery ? `ไม่พบรีวิวที่ตรงกับ "${searchQuery}"` : "วิชานี้ยังไม่มีรีวิว"}
+                        {searchQuery
+                          ? `ไม่พบรีวิวที่ตรงกับ "${searchQuery}"`
+                          : "วิชานี้ยังไม่มีรีวิว"}
                       </p>
                     </div>
                   ) : (
@@ -126,13 +144,13 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
                         <Card
                           key={review._id}
                           className={cn(
-                            "overflow-hidden border-none p-3.5 shadow-sm transition-all hover:shadow-md h-fit",
+                            "h-fit overflow-hidden border-none p-3.5 shadow-sm transition-all hover:shadow-md",
                             isDeleted ? "bg-slate-50 opacity-60" : "bg-white",
                           )}
                         >
                           <div className="flex items-start justify-between gap-3">
                             <div className="flex items-center gap-2.5">
-                              <Avatar className="bg-primary/5 size-9 font-black text-blue-500 text-sm shadow-sm">
+                              <Avatar className="bg-primary/5 size-9 text-sm font-black text-blue-500 shadow-sm">
                                 {(review.username || "U")[0].toUpperCase()}
                               </Avatar>
                               <div>
@@ -162,14 +180,13 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
                                 </div>
                                 <div className="flex items-center gap-1.5 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
                                   <LuCalendar className="size-2.5" />
-                                  {new Date(review.createdAt).toLocaleDateString(
-                                    "th-TH",
-                                    {
-                                      year: "numeric",
-                                      month: "short",
-                                      day: "numeric",
-                                    },
-                                  )}
+                                  {new Date(
+                                    review.createdAt,
+                                  ).toLocaleDateString("th-TH", {
+                                    year: "numeric",
+                                    month: "short",
+                                    day: "numeric",
+                                  })}
                                 </div>
                               </div>
                             </div>
@@ -177,15 +194,15 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
                               <Button
                                 isIconOnly
                                 onPress={() => onDeleteReview(review._id)}
-                                className="h-8 w-8 min-w-8 rounded-lg border-none bg-red-50 text-red-500 transition-all hover:bg-red-500 hover:text-white active:scale-95 shadow-sm"
+                                className="h-8 w-8 min-w-8 rounded-lg border-none bg-red-50 text-red-500 shadow-sm transition-all hover:bg-red-500 hover:text-white active:scale-95"
                               >
                                 <LuTrash2 className="text-base" />
                               </Button>
                             ) : (
                               <Button
                                 isIconOnly
-                                className="h-8 w-8 min-w-8 rounded-lg border-none bg-green-50 text-green-600 transition-all hover:bg-green-600 hover:text-white active:scale-95 shadow-sm"
-                                onPress={() => console.log("Restore clicked:", review._id)}
+                                className="h-8 w-8 min-w-8 rounded-lg border-none bg-green-50 text-green-600 shadow-sm transition-all hover:bg-green-600 hover:text-white active:scale-95"
+                                onPress={() => onRestoreReview(review._id)}
                               >
                                 <LuRotateCcw className="text-base" />
                               </Button>
@@ -197,7 +214,7 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
                               "mt-2.5 rounded-xl border border-slate-100/50 p-3 text-sm leading-relaxed",
                               isDeleted
                                 ? "bg-slate-100 text-slate-400 line-through"
-                                : "bg-slate-50/50 text-slate-700 font-medium",
+                                : "bg-slate-50/50 font-medium text-slate-700",
                             )}
                           >
                             "{review.content}"
@@ -215,7 +232,7 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
                                 Difficulty {review.difficulty}
                               </span>
                             </div>
-                            <div className="text-primary/40 text-[9px] font-black tracking-widest uppercase bg-primary/5 px-1.5 py-0.5 rounded-md">
+                            <div className="text-primary/40 bg-primary/5 rounded-md px-1.5 py-0.5 text-[9px] font-black tracking-widest uppercase">
                               Votes: {review.vote}
                             </div>
                           </div>
@@ -227,11 +244,11 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
               </div>
             </Modal.Body>
 
-            <Modal.Footer className="flex justify-between items-center rounded-b-3xl border-t border-white bg-white/50 px-8 py-4 backdrop-blur-md">
+            <Modal.Footer className="flex items-center justify-between rounded-b-3xl border-t border-white bg-white/50 px-8 py-4 backdrop-blur-md">
               <span className="text-xs font-bold text-slate-400">
                 {filteredReviews.length} รีวิวในคอร์สนี้
               </span>
-              
+
               <div className="flex items-center gap-6">
                 {totalPages > 1 && (
                   <Pagination size="sm">
@@ -258,7 +275,9 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
                       <Pagination.Item>
                         <Pagination.Next
                           isDisabled={page === totalPages}
-                          onPress={() => setPage((p) => Math.min(totalPages, p + 1))}
+                          onPress={() =>
+                            setPage((p) => Math.min(totalPages, p + 1))
+                          }
                         >
                           Next
                           <Pagination.NextIcon />
@@ -268,9 +287,9 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
                   </Pagination>
                 )}
 
-                <Button 
-                  onPress={() => onOpenChange(false)} 
-                  className="bg-primary/10 text-primary hover:bg-primary hover:text-white h-10 px-8 rounded-xl font-black text-xs transition-all active:scale-95"
+                <Button
+                  onPress={() => onOpenChange(false)}
+                  className="bg-primary/10 text-primary hover:bg-primary h-10 rounded-xl px-8 text-xs font-black transition-all hover:text-white active:scale-95"
                 >
                   CLOSE
                 </Button>

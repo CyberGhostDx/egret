@@ -38,7 +38,8 @@ import { Select, ListBox } from "@heroui/react";
 const FEED_ROWS_PER_PAGE = 9;
 
 const AdminReviewsPage = (): React.ReactElement => {
-  const { coursesWithReviews, isLoading, deleteReview } = useAdminReviews();
+  const { coursesWithReviews, isLoading, deleteReview, restoreReview } =
+    useAdminReviews();
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedCourse, setSelectedCourse] =
     useState<AdminReviewCourse | null>(null);
@@ -60,13 +61,13 @@ const AdminReviewsPage = (): React.ReactElement => {
 
     coursesWithReviews.forEach((course) => {
       course.reviews.forEach((review) => {
-        totalReviews++;
         if (review.status === "published") {
           totalDifficulty += review.difficulty;
           activeReviewsCounted++;
         }
 
         if (statusFilter === "all" || review.status === statusFilter) {
+          totalReviews++;
           flattened.push({
             ...review,
             courseId: course.id,
@@ -105,7 +106,6 @@ const AdminReviewsPage = (): React.ReactElement => {
     };
   }, [coursesWithReviews, statusFilter, sortBy]);
 
-  // Reset feed page when filters change
   React.useEffect(() => {
     setFeedPage(1);
   }, [statusFilter, sortBy, searchQuery]);
@@ -152,7 +152,25 @@ const AdminReviewsPage = (): React.ReactElement => {
         prev
           ? {
               ...prev,
-              reviews: prev.reviews.filter((r) => r._id !== reviewId),
+              reviews: prev.reviews.map((r) =>
+                r._id === reviewId ? { ...r, status: "deleted" } : r,
+              ),
+            }
+          : null,
+      );
+    }
+  };
+
+  const handleRestoreReview = async (reviewId: string): Promise<void> => {
+    const success = await restoreReview(reviewId);
+    if (success) {
+      setSelectedCourse((prev) =>
+        prev
+          ? {
+              ...prev,
+              reviews: prev.reviews.map((r) =>
+                r._id === reviewId ? { ...r, status: "published" } : r,
+              ),
             }
           : null,
       );
@@ -431,9 +449,6 @@ const AdminReviewsPage = (): React.ReactElement => {
                                     </div>
                                   </Chip>
                                 </div>
-                                <p className="text-[10px] font-bold tracking-wider text-slate-400 uppercase">
-                                  {review.courseId}
-                                </p>
                               </div>
                             </div>
                             {!isDeleted ? (
@@ -452,7 +467,7 @@ const AdminReviewsPage = (): React.ReactElement => {
                                 size="sm"
                                 variant="ghost"
                                 className="border-none bg-transparent text-green-500 hover:text-green-600"
-                                onPress={() => console.log("Restore clicked from Feed:", review.courseId, review._id)}
+                                onPress={() => handleRestoreReview(review._id)}
                               >
                                 <LuRotateCcw className="text-sm" />
                               </Button>
@@ -460,12 +475,12 @@ const AdminReviewsPage = (): React.ReactElement => {
                           </div>
 
                           <div className="mb-4">
-                            <p className="mb-1 line-clamp-1 text-xs font-bold tracking-tight text-slate-400 uppercase">
-                              {review.courseName}
+                            <p className="text-primary mb-1 line-clamp-1 text-xs font-bold tracking-tight uppercase">
+                              {review.courseId} {review.courseName}
                             </p>
                             <p
                               className={cn(
-                                "line-clamp-4 text-sm leading-relaxed",
+                                "line-clamp-4 leading-relaxed",
                                 isDeleted
                                   ? "text-slate-400 line-through"
                                   : "text-slate-600",
@@ -506,9 +521,12 @@ const AdminReviewsPage = (): React.ReactElement => {
 
                 {totalFeedPages > 1 && (
                   <div className="mt-12 flex w-full flex-col items-center justify-between gap-6 border-t border-slate-100 pt-8 sm:flex-row">
-                    <p className="whitespace-nowrap text-xs font-bold text-slate-400">
+                    <p className="text-xs font-bold whitespace-nowrap text-slate-400">
                       Showing {(feedPage - 1) * FEED_ROWS_PER_PAGE + 1} to{" "}
-                      {Math.min(feedPage * FEED_ROWS_PER_PAGE, allReviews.length)}{" "}
+                      {Math.min(
+                        feedPage * FEED_ROWS_PER_PAGE,
+                        allReviews.length,
+                      )}{" "}
                       of {allReviews.length} reviews
                     </p>
                     <div className="flex sm:ml-auto">
@@ -517,13 +535,18 @@ const AdminReviewsPage = (): React.ReactElement => {
                           <Pagination.Item>
                             <Pagination.Previous
                               isDisabled={feedPage === 1}
-                              onPress={() => setFeedPage((p) => Math.max(1, p - 1))}
+                              onPress={() =>
+                                setFeedPage((p) => Math.max(1, p - 1))
+                              }
                             >
                               <Pagination.PreviousIcon />
                               Prev
                             </Pagination.Previous>
                           </Pagination.Item>
-                          {Array.from({ length: totalFeedPages }, (_, i) => i + 1)
+                          {Array.from(
+                            { length: totalFeedPages },
+                            (_, i) => i + 1,
+                          )
                             .filter(
                               (p) =>
                                 p === 1 ||
@@ -555,7 +578,9 @@ const AdminReviewsPage = (): React.ReactElement => {
                             <Pagination.Next
                               isDisabled={feedPage === totalFeedPages}
                               onPress={() =>
-                                setFeedPage((p) => Math.min(totalFeedPages, p + 1))
+                                setFeedPage((p) =>
+                                  Math.min(totalFeedPages, p + 1),
+                                )
                               }
                             >
                               Next
@@ -578,6 +603,7 @@ const AdminReviewsPage = (): React.ReactElement => {
         onOpenChange={reviewModalState.setOpen}
         course={selectedCourse}
         onDeleteReview={handleDeleteReview}
+        onRestoreReview={handleRestoreReview}
       />
     </div>
   );
