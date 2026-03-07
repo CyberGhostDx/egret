@@ -16,7 +16,7 @@ import { SortDescriptor } from "@heroui/react";
 
 interface ExamRow {
   offering: CourseOffering;
-  exam: CourseOffering["exams"][0] | null;
+  exam: NonNullable<CourseOffering["exams"]>[0] | null;
   slotIndex: number;
 }
 
@@ -76,8 +76,14 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
           second = b.offering.course.titleTh;
           break;
         case "instructor":
-          first = a.offering.instructorTh || a.offering.instructorEn || "";
-          second = b.offering.instructorTh || b.offering.instructorEn || "";
+          first =
+            a.offering.instructors
+              ?.map((i: any) => i.instructor.nameTh || i.instructor.nameEn)
+              .join(", ") || "";
+          second =
+            b.offering.instructors
+              ?.map((i: any) => i.instructor.nameTh || i.instructor.nameEn)
+              .join(", ") || "";
           break;
         default:
           first = (a.offering as any)[sortDescriptor.column!];
@@ -304,8 +310,12 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                       </Avatar>
                       <span className="text-sm font-bold text-slate-600">
                         {formatValue(
-                          row.offering.instructorTh ||
-                            row.offering.instructorEn,
+                          row.offering.instructors
+                            ?.map(
+                              (i: any) =>
+                                i.instructor.nameTh || i.instructor.nameEn,
+                            )
+                            .join(", "),
                         )}
                       </span>
                     </div>

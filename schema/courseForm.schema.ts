@@ -15,7 +15,6 @@ export const courseFormSchema = z.object({
   room: z.string().optional(),
   instructorTh: z.string().optional(),
   instructorEn: z.string().optional(),
-  proctor: z.string().optional(),
   note: z.string().optional(),
 });
 

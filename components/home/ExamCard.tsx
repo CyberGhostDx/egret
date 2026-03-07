@@ -114,11 +114,10 @@ export default function ExamCard({ exam }: { exam: Exam }) {
   const availableExams = useMemo(
     () =>
       courseOfferings.flatMap((co) =>
-        co.exams.map((e) => ({
+        (co.exams || []).map((e) => ({
           credits: co.credits,
           offeringId: co.id,
-          instructorEn: co.instructorEn,
-          instructorTh: co.instructorTh,
+          instructors: co.instructors,
           ...e,
           section: co.section,
           sectionType: co.sectionType,
@@ -138,11 +137,15 @@ export default function ExamCard({ exam }: { exam: Exam }) {
         ? exam.courseNameEn || exam.courseNameTh
         : exam.courseNameTh || exam.courseNameEn;
     const title = `[Exam] ${exam.courseCode} ${courseTitle}`;
-    const instructorName =
-      locale === "en"
-        ? examDetails?.instructorEn || examDetails?.instructorTh
-        : examDetails?.instructorTh || examDetails?.instructorEn;
-    const calendarDescription = `${t("Instructor")}: ${instructorName || "TBA"}\n${t("Section")}: ${examDetails?.section}\n${t("Proctor")}: ${examDetails?.proctor}\n${t("Note")}: ${examDetails?.note || t("NoNote")}`;
+    const instructorName = examDetails?.instructors
+      ?.map((i) =>
+        locale === "en"
+          ? i.instructor.nameEn || i.instructor.nameTh
+          : i.instructor.nameTh || i.instructor.nameEn,
+      )
+      .filter(Boolean)
+      .join(", ");
+    const calendarDescription = `${t("Instructor")}: ${instructorName || "TBA"}\n${t("Section")}: ${examDetails?.section}\n${t("Note")}: ${examDetails?.note || t("NoNote")}`;
     const desc = calendarDescription;
     const location =
       `${examDetails?.building || ""} ${examDetails?.room || ""}`.trim() ||
@@ -290,14 +293,13 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                   </p>
                   <p>
                     <span className="font-bold">{t("Instructor")} :</span>{" "}
-                    {locale === "en"
-                      ? examDetails?.instructorEn || examDetails?.instructorTh
-                      : examDetails?.instructorTh || examDetails?.instructorEn}
-                  </p>
-
-                  <p>
-                    <span className="font-bold">{t("Proctor")} :</span>{" "}
-                    {examDetails?.proctor?.split("\n").join(", ")}
+                    {examDetails?.instructors
+                      ?.map((i) =>
+                        locale === "en"
+                          ? i.instructor.nameEn || i.instructor.nameTh
+                          : i.instructor.nameTh || i.instructor.nameEn,
+                      )
+                      .join(", ") || "-"}
                   </p>
 
                   <p>

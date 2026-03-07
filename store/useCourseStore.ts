@@ -26,7 +26,6 @@ const createEmptyCourse = (): CourseFormValues & { id: string } => ({
   room: "",
   instructorTh: "",
   instructorEn: "",
-  proctor: "",
   note: "",
 });
 

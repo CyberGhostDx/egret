@@ -50,7 +50,7 @@ const AdminExamsPage = (): React.ReactElement => {
   }, [exams, searchQuery]);
 
   const handleEdit = (exam: CourseOffering, slotIndex: number): void => {
-    const selectedSlot = exam.exams[slotIndex];
+    const selectedSlot = exam.exams?.[slotIndex];
     setCourses([
       {
         id: exam.id,
@@ -78,9 +78,16 @@ const AdminExamsPage = (): React.ReactElement => {
           : "",
         building: selectedSlot?.building || "",
         room: selectedSlot?.room || "",
-        instructorTh: exam.instructorTh || "",
-        instructorEn: exam.instructorEn || "",
-        proctor: selectedSlot?.proctor || "",
+        instructorTh:
+          exam.instructors
+            ?.map((i) => i.instructor.nameTh)
+            .filter(Boolean)
+            .join(",") || "",
+        instructorEn:
+          exam.instructors
+            ?.map((i) => i.instructor.nameEn)
+            .filter(Boolean)
+            .join(",") || "",
         note: selectedSlot?.note || "",
       },
     ]);
