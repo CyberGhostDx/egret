@@ -130,13 +130,6 @@ const AdminReviewsPage = (): React.ReactElement => {
       );
     }
 
-    result.sort((a, b) => {
-      if (sortBy === "id") return a.id.localeCompare(b.id);
-      if (sortBy === "reviews") return b.reviews.length - a.reviews.length;
-      if (sortBy === "difficulty") return b.difficulty - a.difficulty;
-      return 0;
-    });
-
     return result;
   }, [coursesWithReviews, searchQuery, sortBy]);
 
@@ -224,45 +217,39 @@ const AdminReviewsPage = (): React.ReactElement => {
               </Select.Popover>
             </Select>
 
-            <Select
-              className="w-40"
-              value={sortBy}
-              onChange={(key: Key | null) =>
-                setSortBy(key?.toString() || "newest")
-              }
-            >
-              <Select.Trigger className="h-11 rounded-2xl border border-slate-200 bg-white/80 px-3 text-[10px] font-bold shadow-sm transition-all">
-                <div className="flex items-center gap-2">
-                  <LuArrowDownAZ className="text-slate-400" />
-                  <Select.Value />
-                </div>
-                <Select.Indicator />
-              </Select.Trigger>
-              <Select.Popover>
-                <ListBox className="p-1">
-                  {(activeTab === "by-course"
-                    ? [
-                        { id: "id", name: "Course ID" },
-                        { id: "reviews", name: "Most Reviews" },
-                        { id: "difficulty", name: "Higher Difficulty" },
-                      ]
-                    : [
-                        { id: "newest", name: "Newest First" },
-                        { id: "oldest", name: "Oldest First" },
-                        { id: "difficulty", name: "Difficulty" },
-                      ]
-                  ).map((item) => (
-                    <ListBox.Item
-                      key={item.id}
-                      id={item.id}
-                      className="rounded-xl text-[10px] font-bold uppercase transition-colors"
-                    >
-                      {item.name}
-                    </ListBox.Item>
-                  ))}
-                </ListBox>
-              </Select.Popover>
-            </Select>
+            {activeTab !== "by-course" && (
+              <Select
+                className="w-40"
+                value={sortBy}
+                onChange={(key: Key | null) =>
+                  setSortBy(key?.toString() || "newest")
+                }
+              >
+                <Select.Trigger className="h-11 rounded-2xl border border-slate-200 bg-white/80 px-3 text-[10px] font-bold shadow-sm transition-all">
+                  <div className="flex items-center gap-2">
+                    <LuArrowDownAZ className="text-slate-400" />
+                    <Select.Value />
+                  </div>
+                  <Select.Indicator />
+                </Select.Trigger>
+                <Select.Popover>
+                  <ListBox className="p-1">
+                    {[
+                      { id: "newest", name: "Newest First" },
+                      { id: "oldest", name: "Oldest First" },
+                    ].map((item) => (
+                      <ListBox.Item
+                        key={item.id}
+                        id={item.id}
+                        className="rounded-xl text-[10px] font-bold uppercase transition-colors"
+                      >
+                        {item.name}
+                      </ListBox.Item>
+                    ))}
+                  </ListBox>
+                </Select.Popover>
+              </Select>
+            )}
           </div>
         </div>
 
