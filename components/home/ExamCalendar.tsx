@@ -55,7 +55,7 @@ export default function ExamCalendar() {
       });
     });
     return groups;
-  }, [user]);
+  }, [user, locale]);
 
   if (!mounted) {
     return (
@@ -112,7 +112,11 @@ export default function ExamCalendar() {
             );
           }
 
-          return arg.dayNumberText;
+          return (
+            <div className="flex w-full cursor-default justify-center">
+              {arg.dayNumberText}
+            </div>
+          );
         }}
         dayCellClassNames={(arg) => {
           const dateStr = arg.date.toLocaleDateString("en-CA", {
