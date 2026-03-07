@@ -1,7 +1,5 @@
-"use client";
-
-import React from "react";
-import { Table, Button, Skeleton, Chip, cn } from "@heroui/react";
+import React, { useMemo, useState } from "react";
+import { Table, Button, Skeleton, Chip, cn, Pagination } from "@heroui/react";
 import { LuEye, LuCopy } from "react-icons/lu";
 import { AdminReviewCourse } from "@/hooks/useAdminReviews";
 
@@ -11,11 +9,36 @@ interface AdminReviewsTableProps {
   onViewReviews: (course: AdminReviewCourse) => void;
 }
 
+const ROWS_PER_PAGE = 5;
+
 export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
   courses,
   isLoading,
   onViewReviews,
 }): React.ReactElement => {
+  const [page, setPage] = useState(1);
+
+  const totalPages = Math.ceil((courses?.length || 0) / ROWS_PER_PAGE);
+
+  const paginatedItems = useMemo(() => {
+    const start = (page - 1) * ROWS_PER_PAGE;
+    return (courses || []).slice(start, start + ROWS_PER_PAGE);
+  }, [courses, page]);
+
+  const visiblePages = useMemo(() => {
+    const pages: number[] = [];
+    const startPage = Math.max(1, page - 2);
+    const endPage = Math.min(totalPages, page + 2);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }, [page, totalPages]);
+
+  const start = (page - 1) * ROWS_PER_PAGE + 1;
+  const end = Math.min(page * ROWS_PER_PAGE, courses?.length || 0);
+
   return (
     <Table className="overflow-hidden rounded-3xl border-none bg-white/80 p-0 shadow-2xl backdrop-blur-md">
       <Table.ScrollContainer>
@@ -26,20 +49,20 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
           <Table.Header>
             <Table.Column
               isRowHeader
-              className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase"
+              className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase"
             >
               SUBJECT ID
             </Table.Column>
-            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase">
               COURSE NAME
             </Table.Column>
-            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-center text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-center text-xs font-bold tracking-wider text-slate-400 uppercase">
               REVIEWS
             </Table.Column>
-            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-center text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-center text-xs font-bold tracking-wider text-slate-400 uppercase">
               DIFFICULTY
             </Table.Column>
-            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-end text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-end text-xs font-bold tracking-wider text-slate-400 uppercase">
               ACTIONS
             </Table.Column>
           </Table.Header>
@@ -76,8 +99,8 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
                   </Table.Cell>
                 </Table.Row>
               ))
-            ) : (courses || []).length > 0 ? (
-              (courses || []).map((course) => (
+            ) : paginatedItems.length > 0 ? (
+              paginatedItems.map((course) => (
                 <Table.Row
                   key={course.id}
                   className="border-b border-slate-50 transition-colors hover:bg-slate-50/50"
@@ -99,10 +122,10 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
                   </Table.Cell>
                   <Table.Cell className="px-6 py-4">
                     <div className="flex flex-col">
-                      <span className="text-xs font-bold text-slate-800">
+                      <span className="text-[13px] font-bold text-slate-800">
                         {course.titleTh}
                       </span>
-                      <span className="text-[10px] font-bold tracking-tight text-slate-400 uppercase">
+                      <span className="text-[11px] font-bold tracking-tight text-slate-400 uppercase">
                         {course.titleEn}
                       </span>
                     </div>
@@ -158,6 +181,45 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
           </Table.Body>
         </Table.Content>
       </Table.ScrollContainer>
+      {totalPages > 1 && (
+        <Table.Footer>
+          <Pagination size="sm">
+            <Pagination.Summary>
+              {start} to {end} of {courses?.length || 0} results
+            </Pagination.Summary>
+            <Pagination.Content>
+              <Pagination.Item>
+                <Pagination.Previous
+                  isDisabled={page === 1}
+                  onPress={() => setPage((p) => Math.max(1, p - 1))}
+                >
+                  <Pagination.PreviousIcon />
+                  Prev
+                </Pagination.Previous>
+              </Pagination.Item>
+              {visiblePages.map((p) => (
+                <Pagination.Item key={p}>
+                  <Pagination.Link
+                    isActive={p === page}
+                    onPress={() => setPage(p)}
+                  >
+                    {p}
+                  </Pagination.Link>
+                </Pagination.Item>
+              ))}
+              <Pagination.Item>
+                <Pagination.Next
+                  isDisabled={page === totalPages}
+                  onPress={() => setPage((p) => Math.min(totalPages, p + 1))}
+                >
+                  Next
+                  <Pagination.NextIcon />
+                </Pagination.Next>
+              </Pagination.Item>
+            </Pagination.Content>
+          </Pagination>
+        </Table.Footer>
+      )}
     </Table>
   );
 };
