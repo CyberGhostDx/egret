@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Table, Button, Skeleton, Chip, cn, Pagination } from "@heroui/react";
+import { Table, Button, Skeleton, Chip, cn, Pagination, SortDescriptor } from "@heroui/react";
 import { LuEye, LuCopy } from "react-icons/lu";
 import { AdminReviewCourse } from "@/hooks/useAdminReviews";
 
@@ -17,13 +17,67 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
   onViewReviews,
 }): React.ReactElement => {
   const [page, setPage] = useState(1);
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+    column: "id",
+    direction: "ascending",
+  });
 
-  const totalPages = Math.ceil((courses?.length || 0) / ROWS_PER_PAGE);
+  const sortedItems = useMemo(() => {
+    if (!courses) return [];
+    
+    return [...courses].sort((a, b) => {
+      let first: any;
+      let second: any;
+      
+      switch (sortDescriptor.column) {
+        case "id":
+          first = a.id;
+          second = b.id;
+          break;
+        case "name":
+          first = a.titleTh;
+          second = b.titleTh;
+          break;
+        case "reviews":
+          first = a.reviews.length;
+          second = b.reviews.length;
+          break;
+        case "difficulty":
+          first = a.difficulty;
+          second = b.difficulty;
+          break;
+        default:
+          first = (a as any)[sortDescriptor.column!];
+          second = (b as any)[sortDescriptor.column!];
+      }
+      
+      if (typeof first === "string") {
+        const cmp = first.localeCompare(second);
+        return sortDescriptor.direction === "descending" ? -cmp : cmp;
+      }
+      
+      const cmp = (first || 0) < (second || 0) ? -1 : (first || 0) > (second || 0) ? 1 : 0;
+      return sortDescriptor.direction === "descending" ? -cmp : cmp;
+    });
+  }, [courses, sortDescriptor]);
+
+  const totalPages = Math.ceil((sortedItems.length || 0) / ROWS_PER_PAGE);
 
   const paginatedItems = useMemo(() => {
     const start = (page - 1) * ROWS_PER_PAGE;
-    return (courses || []).slice(start, start + ROWS_PER_PAGE);
-  }, [courses, page]);
+    return sortedItems.slice(start, start + ROWS_PER_PAGE);
+  }, [sortedItems, page]);
+
+  const handleSort = (column: string) => {
+    setSortDescriptor({
+      column,
+      direction:
+        sortDescriptor.column === column && sortDescriptor.direction === "ascending"
+          ? "descending"
+          : "ascending",
+    });
+    setPage(1); // Reset page on sort
+  };
 
   const visiblePages = useMemo(() => {
     const pages: number[] = [];
@@ -37,7 +91,7 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
   }, [page, totalPages]);
 
   const start = (page - 1) * ROWS_PER_PAGE + 1;
-  const end = Math.min(page * ROWS_PER_PAGE, courses?.length || 0);
+  const end = Math.min(page * ROWS_PER_PAGE, sortedItems.length);
 
   return (
     <Table className="overflow-hidden rounded-3xl border-none bg-white/80 p-0 shadow-2xl backdrop-blur-md">
@@ -51,16 +105,56 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
               isRowHeader
               className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase"
             >
-              SUBJECT ID
+              <button
+                onClick={() => handleSort("id")}
+                className="flex items-center gap-1 hover:text-slate-600 transition-colors"
+              >
+                SUBJECT ID
+                {sortDescriptor.column === "id" && (
+                  <span className="text-[8px]">
+                    {sortDescriptor.direction === "ascending" ? "▲" : "▼"}
+                  </span>
+                )}
+              </button>
             </Table.Column>
             <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase">
-              COURSE NAME
+              <button
+                onClick={() => handleSort("name")}
+                className="flex items-center gap-1 hover:text-slate-600 transition-colors"
+              >
+                COURSE NAME
+                {sortDescriptor.column === "name" && (
+                  <span className="text-[8px]">
+                    {sortDescriptor.direction === "ascending" ? "▲" : "▼"}
+                  </span>
+                )}
+              </button>
             </Table.Column>
-            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-center text-xs font-bold tracking-wider text-slate-400 uppercase">
-              REVIEWS
+            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase">
+              <button
+                onClick={() => handleSort("reviews")}
+                className="flex items-center justify-center gap-1 hover:text-slate-600 transition-colors w-full"
+              >
+                REVIEWS
+                {sortDescriptor.column === "reviews" && (
+                  <span className="text-[8px]">
+                    {sortDescriptor.direction === "ascending" ? "▲" : "▼"}
+                  </span>
+                )}
+              </button>
             </Table.Column>
-            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-center text-xs font-bold tracking-wider text-slate-400 uppercase">
-              DIFFICULTY
+            <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase">
+              <button
+                onClick={() => handleSort("difficulty")}
+                className="flex items-center justify-center gap-1 hover:text-slate-600 transition-colors w-full"
+              >
+                DIFFICULTY
+                {sortDescriptor.column === "difficulty" && (
+                  <span className="text-[8px]">
+                    {sortDescriptor.direction === "ascending" ? "▲" : "▼"}
+                  </span>
+                )}
+              </button>
             </Table.Column>
             <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-end text-xs font-bold tracking-wider text-slate-400 uppercase">
               ACTIONS
@@ -68,7 +162,7 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
           </Table.Header>
           <Table.Body>
             {isLoading ? (
-              [...Array(5)].map((_, i) => (
+              [...Array(ROWS_PER_PAGE)].map((_, i) => (
                 <Table.Row
                   key={`loading-${i}`}
                   className="border-b border-slate-50"
@@ -185,19 +279,19 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
         <Table.Footer>
           <Pagination size="sm">
             <Pagination.Summary>
-              {start} to {end} of {courses?.length || 0} results
+              {start} to {end} of {sortedItems.length} results
             </Pagination.Summary>
             <Pagination.Content>
               <Pagination.Item>
                 <Pagination.Previous
                   isDisabled={page === 1}
-                  onPress={() => setPage((p) => Math.max(1, p - 1))}
+                  onPress={() => setPage((p: number) => Math.max(1, p - 1))}
                 >
                   <Pagination.PreviousIcon />
                   Prev
                 </Pagination.Previous>
               </Pagination.Item>
-              {visiblePages.map((p) => (
+              {visiblePages.map((p: number) => (
                 <Pagination.Item key={p}>
                   <Pagination.Link
                     isActive={p === page}
@@ -210,7 +304,7 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
               <Pagination.Item>
                 <Pagination.Next
                   isDisabled={page === totalPages}
-                  onPress={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  onPress={() => setPage((p: number) => Math.min(totalPages, p + 1))}
                 >
                   Next
                   <Pagination.NextIcon />
