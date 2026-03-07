@@ -1,8 +1,11 @@
-"use client";
-
-import React from "react";
-import { Button } from "@heroui/react";
+import React, { useState } from "react";
+import { Button, toast } from "@heroui/react";
 import { HiOutlinePlus, HiOutlineCheck } from "react-icons/hi";
+import { useCourseStore } from "@/store/useCourseStore";
+import axiosInstance from "@/lib/axiosInstance";
+
+import { courseFormSchema } from "@/schema/courseForm.schema";
+import { z } from "zod";
 
 interface CoursePageHeaderProps {
   onAddCourse: () => void;
@@ -10,7 +13,49 @@ interface CoursePageHeaderProps {
 
 export const CoursePageHeader: React.FC<CoursePageHeaderProps> = ({
   onAddCourse,
-}) => {
+}): React.ReactElement => {
+  const courses = useCourseStore((state) => state.courses);
+  const reset = useCourseStore((state) => state.reset);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const handleSubmit = async (): Promise<void> => {
+    if (courses.length === 0) {
+      toast.danger("No courses to submit");
+      return;
+    }
+
+    try {
+      z.array(courseFormSchema).parse(courses);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        const firstError = err.issues[0];
+        const index = firstError.path[0];
+        const field = firstError.path[1];
+        toast.danger(
+          `Error in exam #${Number(index) + 1}: ${firstError.message}${field ? ` (${String(field)})` : ""}`,
+        );
+        return;
+      }
+      toast.danger("Validation failed");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const response = await axiosInstance.post("/api/admin/exam", courses);
+
+      if (response.status === 201 || response.status === 200) {
+        toast.success("Exams submitted successfully");
+        reset();
+      }
+    } catch (error) {
+      console.error("Submission failed:", error);
+      toast.danger("Failed to submit exams");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="mb-10 flex flex-col items-center justify-between gap-6 sm:flex-row">
       <div className="text-center sm:text-left">
@@ -30,7 +75,11 @@ export const CoursePageHeader: React.FC<CoursePageHeaderProps> = ({
           <HiOutlinePlus className="text-xl" />
           ADD EXAM
         </Button>
-        <Button className="h-12 rounded-xl bg-[#5289a1] px-8 text-sm font-black text-white shadow-lg transition-all hover:bg-[#3d6b7e] hover:shadow-[#5289a1]/20 active:scale-95">
+        <Button
+          isPending={isSubmitting}
+          onPress={handleSubmit}
+          className="h-12 rounded-xl bg-[#5289a1] px-8 text-sm font-black text-white shadow-lg transition-all hover:bg-[#3d6b7e] hover:shadow-[#5289a1]/20 active:scale-95"
+        >
           <HiOutlineCheck className="text-xl" />
           SUBMIT ALL
         </Button>

@@ -55,7 +55,6 @@ const AdminUsersPage = (): React.ReactElement => {
           </div>
         </div>
 
-        {/* Table Section */}
         <div>
           <AdminUsersTable
             users={filteredUsers}

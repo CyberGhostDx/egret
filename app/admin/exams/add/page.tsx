@@ -4,7 +4,7 @@ import React from "react";
 import { useCourseStore } from "@/store/useCourseStore";
 import { CoursePageHeader } from "@/components/admin/exams/CoursePageHeader";
 import { CourseFormCard } from "@/components/admin/exams/CourseFormCard";
-const AddCoursePage = () => {
+const AddCoursePage = (): React.ReactElement => {
   const { courses, addCourse, removeCourse, updateCourse } = useCourseStore();
 
   return (
