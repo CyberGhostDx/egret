@@ -4,30 +4,31 @@ import React from "react";
 import { useCourseStore } from "@/store/useCourseStore";
 import { CoursePageHeader } from "@/components/admin/exams/CoursePageHeader";
 import { CourseFormCard } from "@/components/admin/exams/CourseFormCard";
-import { CourseUploadSidebar } from "@/components/admin/exams/CourseUploadSidebar";
-
-const AddCoursePage = () => {
+const AddCoursePage = (): React.ReactElement => {
   const { courses, addCourse, removeCourse, updateCourse } = useCourseStore();
 
   return (
-    <div className="primary-bg text-primary min-h-screen p-6 sm:p-10">
-      <div className="mx-auto max-w-[1400px]">
-        <CoursePageHeader onAddCourse={addCourse} />
+    <div className="relative min-h-screen bg-slate-50/50 p-6 sm:p-10 md:px-12">
+      <div className="pointer-events-none absolute top-[-10%] right-[-5%] h-[500px] w-[500px] rounded-full bg-blue-100/10 blur-[120px]" />
 
-        <div className="flex flex-col items-start gap-8 lg:flex-row">
-          <div className="w-full flex-1 space-y-8">
+      <div className="relative z-10 mx-auto max-w-[1000px]">
+        <div>
+          <CoursePageHeader onAddCourse={addCourse} />
+        </div>
+
+        <div className="flex flex-col items-center gap-8">
+          <div className="w-full space-y-6">
             {courses.map((course, index) => (
-              <CourseFormCard
-                key={course.id}
-                course={course}
-                index={index}
-                onRemove={removeCourse}
-                onUpdate={updateCourse}
-              />
+              <div key={course.id}>
+                <CourseFormCard
+                  course={course}
+                  index={index}
+                  onRemove={removeCourse}
+                  onUpdate={updateCourse}
+                />
+              </div>
             ))}
           </div>
-
-          <CourseUploadSidebar />
         </div>
       </div>
     </div>

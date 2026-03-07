@@ -1,6 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 import AdminGuard from "@/components/auth/AdminGuard";
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
 
 export default function AdminLayout({
   children,
@@ -9,9 +10,18 @@ export default function AdminLayout({
 }) {
   const pathname = usePathname();
 
-  if (pathname === "/admin/login") {
+  if (pathname.includes("/admin/login")) {
     return <>{children}</>;
   }
 
-  return <AdminGuard>{children}</AdminGuard>;
+  return (
+    <AdminGuard>
+      <div className="flex h-screen overflow-hidden bg-slate-50/50">
+        <AdminSidebar />
+        <main className="flex-1 overflow-y-auto">
+          {children}
+        </main>
+      </div>
+    </AdminGuard>
+  );
 }
