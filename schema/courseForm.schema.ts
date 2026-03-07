@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export const courseFormSchema = z.object({
+  examId: z.string().optional(),
   courseId: z.string().min(1, "Course ID is required"),
   subjectEn: z.string().min(1, "Subject (EN) is required"),
   subjectTh: z.string().min(1, "Subject (TH) is required"),

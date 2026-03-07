@@ -1,7 +1,15 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
-import { Table, Button, Skeleton, Avatar, Chip, cn, Pagination } from "@heroui/react";
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  Table,
+  Button,
+  Skeleton,
+  Avatar,
+  Chip,
+  cn,
+  Pagination,
+} from "@heroui/react";
 import { LuPencil, LuTrash, LuCopy, LuUser, LuMapPin } from "react-icons/lu";
 import { type CourseOffering } from "@/schema/backend.schema";
 import { SortDescriptor } from "@heroui/react";
@@ -16,7 +24,7 @@ interface AdminExamsTableProps {
   exams: CourseOffering[] | null;
   isLoading: boolean;
   onEdit: (offering: CourseOffering, slotIndex: number) => void;
-  onDelete?: (id: string) => void;
+  onDelete?: (id: string, isExam: boolean) => void;
 }
 
 const ROWS_PER_PAGE = 5;
@@ -25,6 +33,7 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
   exams,
   isLoading,
   onEdit,
+  onDelete,
 }): React.ReactElement => {
   const [page, setPage] = useState(1);
   const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
@@ -32,17 +41,23 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
     direction: "ascending",
   });
 
+  useEffect(() => {
+    setPage(1);
+  }, [exams]);
+
   const allRows = useMemo((): ExamRow[] => {
     if (!exams) return [];
     return exams.flatMap((offering): ExamRow[] => {
       if (!offering.exams || offering.exams.length === 0) {
         return [{ offering, exam: null, slotIndex: 0 }];
       }
-      return offering.exams.map((exam, index): ExamRow => ({
-        offering,
-        exam,
-        slotIndex: index,
-      }));
+      return offering.exams.map(
+        (exam, index): ExamRow => ({
+          offering,
+          exam,
+          slotIndex: index,
+        }),
+      );
     });
   }, [exams]);
 
@@ -69,7 +84,9 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
           second = (b.offering as any)[sortDescriptor.column!];
       }
 
-      const cmp = (first || "").toString().localeCompare((second || "").toString());
+      const cmp = (first || "")
+        .toString()
+        .localeCompare((second || "").toString());
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [allRows, sortDescriptor]);
@@ -264,7 +281,7 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                   </Table.Cell>
                   <Table.Cell className="px-6 py-4">
                     <div className="flex flex-col gap-1">
-                      <span className="text-xs font-bold text-primary">
+                      <span className="text-primary text-xs font-bold">
                         SEC {row.offering.section}
                       </span>
                       <span className="text-xs font-bold text-slate-400 uppercase">
@@ -283,7 +300,10 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                         </Avatar.Fallback>
                       </Avatar>
                       <span className="text-sm font-bold text-slate-600">
-                        {formatValue(row.offering.instructorTh || row.offering.instructorEn)}
+                        {formatValue(
+                          row.offering.instructorTh ||
+                            row.offering.instructorEn,
+                        )}
                       </span>
                     </div>
                   </Table.Cell>
@@ -293,32 +313,33 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                         <div className="flex flex-col gap-1.5 px-1 py-1">
                           <div className="flex flex-col gap-0.5 rounded-xl border border-slate-100/50 bg-slate-50 p-2">
                             <span className="text-xs font-black text-slate-700">
-                              {new Date(
-                                row.exam.examDate,
-                              ).toLocaleDateString("th-TH")}
+                              {new Date(row.exam.examDate).toLocaleDateString(
+                                "th-TH",
+                              )}
                             </span>
                             <span className="text-primary text-xs font-bold">
-                              {new Date(
-                                row.exam.startTime,
-                              ).toLocaleTimeString("th-TH", {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}{" "}
+                              {new Date(row.exam.startTime).toLocaleTimeString(
+                                "th-TH",
+                                {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                },
+                              )}{" "}
                               -{" "}
-                              {new Date(
-                                row.exam.endTime,
-                              ).toLocaleTimeString("th-TH", {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              })}
+                              {new Date(row.exam.endTime).toLocaleTimeString(
+                                "th-TH",
+                                {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                },
+                              )}
                             </span>
                           </div>
                           {(row.exam.building || row.exam.room) && (
                             <div className="flex items-center gap-1.5 px-1.5 text-xs font-bold text-slate-500">
                               <LuMapPin className="size-3 text-slate-300" />
                               <span className="truncate">
-                                {row.exam.building || ""}{" "}
-                                {row.exam.room || ""}
+                                {row.exam.building || ""} {row.exam.room || ""}
                               </span>
                             </div>
                           )}
@@ -343,6 +364,14 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                       <Button
                         isIconOnly
                         variant="ghost"
+                        onPress={() => {
+                          if (onDelete) {
+                            onDelete(
+                              row.exam?.id || row.offering.id,
+                              !!row.exam,
+                            );
+                          }
+                        }}
                         className="h-9 w-9 min-w-9 rounded-xl bg-red-50 text-red-500 shadow-sm transition-all hover:bg-red-500 hover:text-white active:scale-95"
                       >
                         <LuTrash className="text-base" />
