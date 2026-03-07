@@ -24,6 +24,7 @@ import {
   LuInfo,
   LuFilter,
   LuArrowDownAZ,
+  LuRotateCcw,
 } from "react-icons/lu";
 import {
   useAdminReviews,
@@ -419,7 +420,7 @@ const AdminReviewsPage = (): React.ReactElement => {
                                 </p>
                               </div>
                             </div>
-                            {!isDeleted && (
+                            {!isDeleted ? (
                               <Button
                                 isIconOnly
                                 size="sm"
@@ -428,6 +429,16 @@ const AdminReviewsPage = (): React.ReactElement => {
                                 onPress={() => handleDeleteReview(review._id)}
                               >
                                 <LuTrash2 className="text-sm" />
+                              </Button>
+                            ) : (
+                              <Button
+                                isIconOnly
+                                size="sm"
+                                variant="ghost"
+                                className="border-none bg-transparent text-green-500 hover:text-green-600"
+                                onPress={() => console.log("Restore clicked from Feed:", review.courseId, review._id)}
+                              >
+                                <LuRotateCcw className="text-sm" />
                               </Button>
                             )}
                           </div>
