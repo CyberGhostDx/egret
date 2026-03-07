@@ -264,6 +264,9 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                         size="sm"
                         variant="ghost"
                         className="h-8 min-w-8 rounded-lg text-slate-400 opacity-0 transition-opacity group-hover:opacity-100"
+                        onPress={() => {
+                          navigator.clipboard.writeText(row.offering.courseId);
+                        }}
                       >
                         <LuCopy className="size-3.5" />
                       </Button>

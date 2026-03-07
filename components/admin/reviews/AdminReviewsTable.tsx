@@ -1,5 +1,13 @@
 import React, { useMemo, useState } from "react";
-import { Table, Button, Skeleton, Chip, cn, Pagination, SortDescriptor } from "@heroui/react";
+import {
+  Table,
+  Button,
+  Skeleton,
+  Chip,
+  cn,
+  Pagination,
+  SortDescriptor,
+} from "@heroui/react";
 import { LuEye, LuCopy } from "react-icons/lu";
 import { AdminReviewCourse } from "@/hooks/useAdminReviews";
 
@@ -24,11 +32,11 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
 
   const sortedItems = useMemo(() => {
     if (!courses) return [];
-    
+
     return [...courses].sort((a, b) => {
       let first: any;
       let second: any;
-      
+
       switch (sortDescriptor.column) {
         case "id":
           first = a.id;
@@ -50,13 +58,18 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
           first = (a as any)[sortDescriptor.column!];
           second = (b as any)[sortDescriptor.column!];
       }
-      
+
       if (typeof first === "string") {
         const cmp = first.localeCompare(second);
         return sortDescriptor.direction === "descending" ? -cmp : cmp;
       }
-      
-      const cmp = (first || 0) < (second || 0) ? -1 : (first || 0) > (second || 0) ? 1 : 0;
+
+      const cmp =
+        (first || 0) < (second || 0)
+          ? -1
+          : (first || 0) > (second || 0)
+            ? 1
+            : 0;
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [courses, sortDescriptor]);
@@ -72,7 +85,8 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
     setSortDescriptor({
       column,
       direction:
-        sortDescriptor.column === column && sortDescriptor.direction === "ascending"
+        sortDescriptor.column === column &&
+        sortDescriptor.direction === "ascending"
           ? "descending"
           : "ascending",
     });
@@ -107,7 +121,7 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
             >
               <button
                 onClick={() => handleSort("id")}
-                className="flex items-center gap-1 hover:text-slate-600 transition-colors"
+                className="flex items-center gap-1 transition-colors hover:text-slate-600"
               >
                 SUBJECT ID
                 {sortDescriptor.column === "id" && (
@@ -120,7 +134,7 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
             <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase">
               <button
                 onClick={() => handleSort("name")}
-                className="flex items-center gap-1 hover:text-slate-600 transition-colors"
+                className="flex items-center gap-1 transition-colors hover:text-slate-600"
               >
                 COURSE NAME
                 {sortDescriptor.column === "name" && (
@@ -133,7 +147,7 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
             <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase">
               <button
                 onClick={() => handleSort("reviews")}
-                className="flex items-center justify-center gap-1 hover:text-slate-600 transition-colors w-full"
+                className="flex w-full items-center justify-center gap-1 transition-colors hover:text-slate-600"
               >
                 REVIEWS
                 {sortDescriptor.column === "reviews" && (
@@ -146,7 +160,7 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
             <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-xs font-bold tracking-wider text-slate-400 uppercase">
               <button
                 onClick={() => handleSort("difficulty")}
-                className="flex items-center justify-center gap-1 hover:text-slate-600 transition-colors w-full"
+                className="flex w-full items-center justify-center gap-1 transition-colors hover:text-slate-600"
               >
                 DIFFICULTY
                 {sortDescriptor.column === "difficulty" && (
@@ -209,6 +223,9 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
                         size="sm"
                         variant="ghost"
                         className="hover:text-primary h-8 min-w-8 rounded-lg text-slate-400 opacity-0 transition-opacity group-hover:opacity-100"
+                        onPress={() => {
+                          navigator.clipboard.writeText(course.id);
+                        }}
                       >
                         <LuCopy className="size-3.5" />
                       </Button>
@@ -304,7 +321,9 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
               <Pagination.Item>
                 <Pagination.Next
                   isDisabled={page === totalPages}
-                  onPress={() => setPage((p: number) => Math.min(totalPages, p + 1))}
+                  onPress={() =>
+                    setPage((p: number) => Math.min(totalPages, p + 1))
+                  }
                 >
                   Next
                   <Pagination.NextIcon />
