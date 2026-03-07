@@ -96,6 +96,7 @@ export const AdminEditExamModalForm: React.FC<AdminEditExamModalFormProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
                     <DatePicker
                         className="w-full"
+                        hourCycle={24}
                         value={course.date ? parseDate(course.date) : null}
                         onChange={(val: DateValue | null) => {
                             if (val) onUpdate(course.id, { date: val.toString() });
@@ -110,36 +111,36 @@ export const AdminEditExamModalForm: React.FC<AdminEditExamModalFormProps> = ({
                                 <DatePicker.TriggerIndicator className="size-4" />
                             </DatePicker.Trigger>
                         </DateField.Group>
-                        <DatePicker.Popover className="border-primary/10 rounded-2xl border bg-white shadow-2xl p-2 mt-2">
-                            <Calendar aria-label="Exam date" className="w-full">
-                                <Calendar.Header className="flex items-center justify-between mb-2">
-                                    <Calendar.YearPickerTrigger className="text-sm font-bold text-primary flex items-center gap-1 hover:bg-primary/5 px-2 py-1 rounded-lg">
+                        <DatePicker.Popover className="z-[100] border-primary/10 rounded-2xl border bg-white shadow-2xl p-2 mt-2">
+                            <Calendar aria-label="Exam date" className="min-w-[280px]">
+                                <Calendar.Header className="flex items-center justify-between mb-2 px-1">
+                                    <Calendar.YearPickerTrigger className="text-sm font-bold text-primary flex items-center gap-1 hover:bg-primary/5 px-2 py-1 rounded-lg transition-colors">
                                         <Calendar.YearPickerTriggerHeading />
                                         <Calendar.YearPickerTriggerIndicator className="size-3" />
                                     </Calendar.YearPickerTrigger>
                                     <div className="flex items-center gap-1">
-                                        <Calendar.NavButton slot="previous" className="p-1 hover:bg-primary/5 rounded-lg text-primary" />
-                                        <Calendar.NavButton slot="next" className="p-1 hover:bg-primary/5 rounded-lg text-primary" />
+                                        <Calendar.NavButton slot="previous" className="p-1.5 hover:bg-primary/5 rounded-lg text-primary transition-colors" />
+                                        <Calendar.NavButton slot="next" className="p-1.5 hover:bg-primary/5 rounded-lg text-primary transition-colors" />
                                     </div>
                                 </Calendar.Header>
                                 <Calendar.Grid className="w-full border-separate border-spacing-1">
                                     <Calendar.GridHeader>
                                         {(day: string) => (
-                                            <Calendar.HeaderCell className="text-[10px] font-bold text-slate-400 uppercase w-8 h-8">
+                                            <Calendar.HeaderCell className="text-[10px] font-bold text-slate-400 uppercase w-9 h-9">
                                                 {day}
                                             </Calendar.HeaderCell>
                                         )}
                                     </Calendar.GridHeader>
                                     <Calendar.GridBody>
                                         {(date: CalendarDate) => (
-                                            <Calendar.Cell date={date} className="w-8 h-8 text-xs font-bold rounded-lg hover:bg-primary/10 cursor-pointer flex items-center justify-center aria-selected:bg-primary aria-selected:text-white transition-all" />
+                                            <Calendar.Cell date={date} className="w-9 h-9 text-xs font-bold rounded-lg hover:bg-primary/10 cursor-pointer flex items-center justify-center aria-selected:bg-primary aria-selected:text-white transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary/20" />
                                         )}
                                     </Calendar.GridBody>
                                 </Calendar.Grid>
                                 <Calendar.YearPickerGrid className="w-full border-separate border-spacing-1 mt-2">
                                     <Calendar.YearPickerGridBody>
                                         {({ year }: { year: number }) => (
-                                            <Calendar.YearPickerCell year={year} className="text-xs font-bold p-2 text-center rounded-lg hover:bg-primary/10 cursor-pointer aria-selected:bg-primary aria-selected:text-white transition-all" />
+                                            <Calendar.YearPickerCell year={year} className="text-xs font-bold p-2 text-center rounded-lg hover:bg-primary/10 cursor-pointer aria-selected:bg-primary aria-selected:text-white transition-all outline-none focus-visible:ring-2 focus-visible:ring-primary/20" />
                                         )}
                                     </Calendar.YearPickerGridBody>
                                 </Calendar.YearPickerGrid>
@@ -150,6 +151,7 @@ export const AdminEditExamModalForm: React.FC<AdminEditExamModalFormProps> = ({
                     <div className="grid grid-cols-2 gap-3">
                         <TimeField
                             className="w-full"
+                            hourCycle={24}
                             value={course.startTime ? parseTime(course.startTime) : null}
                             onChange={(val: TimeValue | null) =>
                                 onUpdate(course.id, { startTime: val ? val.toString().slice(0, 5) : "" })
@@ -165,6 +167,7 @@ export const AdminEditExamModalForm: React.FC<AdminEditExamModalFormProps> = ({
 
                         <TimeField
                             className="w-full"
+                            hourCycle={24}
                             value={course.endTime ? parseTime(course.endTime) : null}
                             onChange={(val: TimeValue | null) =>
                                 onUpdate(course.id, { endTime: val ? val.toString().slice(0, 5) : "" })
