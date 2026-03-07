@@ -19,9 +19,7 @@ const AddCoursePage = () => {
         <div className="flex flex-col items-center gap-8">
           <div className="w-full space-y-6">
             {courses.map((course, index) => (
-              <div
-                key={course.id}
-              >
+              <div key={course.id}>
                 <CourseFormCard
                   course={course}
                   index={index}

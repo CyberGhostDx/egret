@@ -31,6 +31,8 @@ export const courseOfferingSchema = z.object({
   exams: z.array(examSchema),
 });
 
+export type CourseOffering = z.infer<typeof courseOfferingSchema>;
+
 export const userCourseSchema = z.object({
   offering: courseOfferingSchema,
 });
