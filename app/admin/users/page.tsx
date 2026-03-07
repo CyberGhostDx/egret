@@ -2,13 +2,14 @@
 
 import React, { useMemo, useState } from "react";
 import { AdminUsersTable } from "@/components/admin/users/AdminUsersTable";
-import { Input } from "@heroui/react";
-import { LuSearch, LuUsers } from "react-icons/lu";
+import { Button, Input } from "@heroui/react";
+import { LuSearch, LuUsers, LuEye, LuEyeOff } from "react-icons/lu";
 import { useAdminUsers, AdminUser } from "@/hooks/useAdminUsers";
 
 const AdminUsersPage = (): React.ReactElement => {
   const { users, isLoading, banUser, unbanUser } = useAdminUsers();
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [showNames, setShowNames] = useState<boolean>(false);
 
   const filteredUsers = useMemo((): AdminUser[] => {
     const query = searchQuery.toLowerCase().trim();
@@ -52,6 +53,21 @@ const AdminUsersPage = (): React.ReactElement => {
               />
               <LuSearch className="absolute top-1/2 left-4 -translate-y-1/2 text-slate-400" />
             </div>
+
+            <Button
+              variant="ghost"
+              onPress={() => setShowNames(!showNames)}
+              className="h-12 rounded-2xl border border-slate-200 bg-white/80 px-5 font-bold text-slate-600"
+            >
+              <div className="flex items-center gap-2">
+                {showNames ? (
+                  <LuEyeOff className="text-lg" />
+                ) : (
+                  <LuEye className="text-lg" />
+                )}
+                <span>{showNames ? "Hide Names" : "Show Names"}</span>
+              </div>
+            </Button>
           </div>
         </div>
 
@@ -61,6 +77,7 @@ const AdminUsersPage = (): React.ReactElement => {
             isLoading={isLoading}
             onBan={banUser}
             onUnban={unbanUser}
+            showNames={showNames}
           />
         </div>
       </div>

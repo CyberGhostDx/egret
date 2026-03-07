@@ -1,37 +1,67 @@
 import useSWR from "swr";
 import { z } from "zod";
-import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "@heroui/react";
 import { useMemo } from "react";
+import { authClient } from "@/lib/auth-client";
 
 export const adminUserSchema = z.object({
   id: z.string(),
   name: z.string().nullable(),
   email: z.string(),
+  image: z.string().nullable().optional(),
   role: z.string().nullable(),
   banned: z.boolean().nullable(),
+  banReason: z.string().nullable().optional(),
+  banExpires: z.coerce.date().nullable().optional(),
   createdAt: z.coerce.date().optional(),
 });
 
 export type AdminUser = z.infer<typeof adminUserSchema>;
 
-export const adminUsersResponseSchema = z.array(adminUserSchema);
-
 export function useAdminUsers() {
   const { data, error, isLoading, isValidating, mutate } = useSWR(
-    "/api/admin/users",
+    "admin.listUsers",
+    async () => {
+      const res = await authClient.admin.listUsers({
+        query: {
+          limit: 100,
+        },
+      });
+
+      if (res.error) {
+        throw res.error;
+      }
+      console.log(res.data.users);
+
+      return res.data.users;
+    },
     {
       revalidateOnFocus: false,
     },
   );
 
   const users = useMemo((): AdminUser[] => {
-    return data ? adminUsersResponseSchema.parse(data) : [];
+    if (!data) return [];
+    return z.array(adminUserSchema).parse(data);
   }, [data]);
 
-  const banUser = async (userId: string): Promise<boolean> => {
+  const banUser = async (
+    userId: string,
+    reason?: string,
+    expires?: number,
+  ): Promise<boolean> => {
     try {
-      await axiosInstance.post(`/api/admin/users/${userId}/ban`);
+      const res = await authClient.admin.banUser({
+        userId,
+        banReason: reason,
+        banExpiresIn: expires,
+      });
+
+      if (res.error) {
+        toast.danger("Failed to ban user");
+        return false;
+      }
+
       toast.success("User banned successfully");
       await mutate();
       return true;
@@ -43,7 +73,15 @@ export function useAdminUsers() {
 
   const unbanUser = async (userId: string): Promise<boolean> => {
     try {
-      await axiosInstance.post(`/api/admin/users/${userId}/unban`);
+      const res = await authClient.admin.unbanUser({
+        userId,
+      });
+
+      if (res.error) {
+        toast.danger("Failed to unban user");
+        return false;
+      }
+
       toast.success("User unbanned successfully");
       await mutate();
       return true;
@@ -56,7 +94,7 @@ export function useAdminUsers() {
   return {
     users,
     isLoading: isLoading || (!users.length && !error && isValidating),
-    isError: error,
+    isError: !!error,
     banUser,
     unbanUser,
     mutate,
