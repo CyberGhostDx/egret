@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import { Table, Button, Skeleton, Avatar, Chip, cn, Pagination } from "@heroui/react";
-import { LuPencil, LuTrash, LuCopy, LuUser } from "react-icons/lu";
+import { LuPencil, LuTrash, LuCopy, LuUser, LuMapPin } from "react-icons/lu";
 import { type CourseOffering } from "@/schema/backend.schema";
 import { SortDescriptor } from "@heroui/react";
 
@@ -264,13 +264,9 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                   </Table.Cell>
                   <Table.Cell className="px-6 py-4">
                     <div className="flex flex-col gap-1">
-                      <Chip
-                        size="sm"
-                        variant="soft"
-                        className="bg-primary/5 text-primary h-5 px-1 text-xs font-bold"
-                      >
+                      <span className="text-xs font-bold text-primary">
                         SEC {row.offering.section}
-                      </Chip>
+                      </span>
                       <span className="text-xs font-bold text-slate-400 uppercase">
                         {formatValue(row.offering.sectionType)}
                       </span>
@@ -319,7 +315,7 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                           </div>
                           {(row.exam.building || row.exam.room) && (
                             <div className="flex items-center gap-1.5 px-1.5 text-xs font-bold text-slate-500">
-                              <LuUser className="size-3 text-slate-300" />
+                              <LuMapPin className="size-3 text-slate-300" />
                               <span className="truncate">
                                 {row.exam.building || ""}{" "}
                                 {row.exam.room || ""}
