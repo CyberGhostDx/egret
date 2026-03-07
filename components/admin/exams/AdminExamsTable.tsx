@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
-import { Table, Button, Skeleton, Avatar, Chip, cn } from "@heroui/react";
+import React, { useMemo, useState } from "react";
+import { Table, Button, Skeleton, Avatar, Chip, cn, Pagination } from "@heroui/react";
 import { LuPencil, LuTrash, LuCopy, LuUser } from "react-icons/lu";
 import { type CourseOffering } from "@/schema/backend.schema";
+import { SortDescriptor } from "@heroui/react";
 
 interface AdminExamsTableProps {
   exams: CourseOffering[] | null;
@@ -12,11 +13,69 @@ interface AdminExamsTableProps {
   onDelete?: (id: string) => void;
 }
 
+const ROWS_PER_PAGE = 5;
+
 export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
   exams,
   isLoading,
   onEdit,
 }): React.ReactElement => {
+  const [page, setPage] = useState(1);
+  const [sortDescriptor, setSortDescriptor] = useState<SortDescriptor>({
+    column: "courseId",
+    direction: "ascending",
+  });
+
+  const sortedExams = useMemo(() => {
+    if (!exams) return [];
+    return [...exams].sort((a, b) => {
+      let first: any;
+      let second: any;
+
+      switch (sortDescriptor.column) {
+        case "courseId":
+          first = a.courseId;
+          second = b.courseId;
+          break;
+        case "courseName":
+          first = a.course.titleTh;
+          second = b.course.titleTh;
+          break;
+        case "instructor":
+          first = a.instructorTh || a.instructorEn || "";
+          second = b.instructorTh || b.instructorEn || "";
+          break;
+        default:
+          first = (a as any)[sortDescriptor.column!];
+          second = (b as any)[sortDescriptor.column!];
+      }
+
+      const cmp = (first || "").toString().localeCompare((second || "").toString());
+      return sortDescriptor.direction === "descending" ? -cmp : cmp;
+    });
+  }, [exams, sortDescriptor]);
+
+  const totalPages = Math.ceil((sortedExams?.length || 0) / ROWS_PER_PAGE);
+
+  const paginatedItems = useMemo(() => {
+    const start = (page - 1) * ROWS_PER_PAGE;
+    return sortedExams.slice(start, start + ROWS_PER_PAGE);
+  }, [sortedExams, page]);
+
+  const visiblePages = useMemo(() => {
+    const pages: number[] = [];
+    const startPage = Math.max(1, page - 2);
+    const endPage = Math.min(totalPages, page + 2);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }, [page, totalPages]);
+
+  const start = (page - 1) * ROWS_PER_PAGE + 1;
+  const end = Math.min(page * ROWS_PER_PAGE, sortedExams?.length || 0);
+
   const formatValue = (
     value: string | number | undefined | null,
   ): React.ReactNode => {
@@ -39,16 +98,73 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
               isRowHeader
               className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase"
             >
-              SUBJECT ID
+              <button
+                onClick={() => {
+                  setSortDescriptor({
+                    column: "courseId",
+                    direction:
+                      sortDescriptor.column === "courseId" &&
+                      sortDescriptor.direction === "ascending"
+                        ? "descending"
+                        : "ascending",
+                  });
+                }}
+                className="flex items-center gap-1 hover:text-slate-600"
+              >
+                SUBJECT ID
+                {sortDescriptor.column === "courseId" && (
+                  <span className="text-[8px]">
+                    {sortDescriptor.direction === "ascending" ? "▲" : "▼"}
+                  </span>
+                )}
+              </button>
             </Table.Column>
             <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
-              SUBJECT NAME
+              <button
+                onClick={() => {
+                  setSortDescriptor({
+                    column: "courseName",
+                    direction:
+                      sortDescriptor.column === "courseName" &&
+                      sortDescriptor.direction === "ascending"
+                        ? "descending"
+                        : "ascending",
+                  });
+                }}
+                className="flex items-center gap-1 hover:text-slate-600"
+              >
+                SUBJECT NAME
+                {sortDescriptor.column === "courseName" && (
+                  <span className="text-[8px]">
+                    {sortDescriptor.direction === "ascending" ? "▲" : "▼"}
+                  </span>
+                )}
+              </button>
             </Table.Column>
             <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
               SEC / TYPE
             </Table.Column>
             <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
-              INSTRUCTOR
+              <button
+                onClick={() => {
+                  setSortDescriptor({
+                    column: "instructor",
+                    direction:
+                      sortDescriptor.column === "instructor" &&
+                      sortDescriptor.direction === "ascending"
+                        ? "descending"
+                        : "ascending",
+                  });
+                }}
+                className="flex items-center gap-1 hover:text-slate-600"
+              >
+                INSTRUCTOR
+                {sortDescriptor.column === "instructor" && (
+                  <span className="text-[8px]">
+                    {sortDescriptor.direction === "ascending" ? "▲" : "▼"}
+                  </span>
+                )}
+              </button>
             </Table.Column>
             <Table.Column className="h-14 border-b border-slate-100 bg-slate-50/50 px-6 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
               SCHEDULE
@@ -96,8 +212,8 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                   </Table.Cell>
                 </Table.Row>
               ))
-            ) : exams && exams.length > 0 ? (
-              exams.map((exam) => (
+            ) : paginatedItems && paginatedItems.length > 0 ? (
+              paginatedItems.map((exam) => (
                 <Table.Row
                   key={exam.id}
                   className="border-b border-slate-50 transition-colors hover:bg-slate-50/50"
@@ -159,25 +275,38 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                   <Table.Cell className="min-w-[200px] px-6 py-4">
                     <div className="flex flex-col">
                       {exam.exams && exam.exams.length > 0 ? (
-                        <div className="flex flex-col gap-0.5 rounded-xl border border-slate-100/50 bg-slate-50 p-2">
-                          <span className="text-[10px] font-black text-slate-700">
-                            {new Date(
-                              exam.exams[0].examDate,
-                            ).toLocaleDateString("th-TH")}
-                          </span>
-                          <span className="text-primary text-[10px] font-bold">
-                            {new Date(
-                              exam.exams[0].startTime,
-                            ).toLocaleTimeString("th-TH", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}{" "}
-                            -{" "}
-                            {new Date(exam.exams[0].endTime).toLocaleTimeString(
-                              "th-TH",
-                              { hour: "2-digit", minute: "2-digit" },
-                            )}
-                          </span>
+                        <div className="flex flex-col gap-1.5 px-1 py-1">
+                          <div className="flex flex-col gap-0.5 rounded-xl border border-slate-100/50 bg-slate-50 p-2">
+                            <span className="text-[10px] font-black text-slate-700">
+                              {new Date(
+                                exam.exams[0].examDate,
+                              ).toLocaleDateString("th-TH")}
+                            </span>
+                            <span className="text-primary text-[10px] font-bold">
+                              {new Date(
+                                exam.exams[0].startTime,
+                              ).toLocaleTimeString("th-TH", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}{" "}
+                              -{" "}
+                              {new Date(
+                                exam.exams[0].endTime,
+                              ).toLocaleTimeString("th-TH", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </span>
+                          </div>
+                          {(exam.exams[0].building || exam.exams[0].room) && (
+                            <div className="flex items-center gap-1.5 px-1.5 text-[10px] font-bold text-slate-500">
+                              <LuUser className="size-3 text-slate-300" />
+                              <span className="truncate">
+                                {exam.exams[0].building || ""}{" "}
+                                {exam.exams[0].room || ""}
+                              </span>
+                            </div>
+                          )}
                         </div>
                       ) : (
                         <span className="text-xs font-medium text-slate-300 italic">
@@ -224,6 +353,45 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
           </Table.Body>
         </Table.Content>
       </Table.ScrollContainer>
+      {totalPages > 1 && (
+        <Table.Footer>
+          <Pagination size="sm">
+            <Pagination.Summary>
+              {start} to {end} of {sortedExams?.length || 0} results
+            </Pagination.Summary>
+            <Pagination.Content>
+              <Pagination.Item>
+                <Pagination.Previous
+                  isDisabled={page === 1}
+                  onPress={() => setPage((p) => Math.max(1, p - 1))}
+                >
+                  <Pagination.PreviousIcon />
+                  Prev
+                </Pagination.Previous>
+              </Pagination.Item>
+              {visiblePages.map((p) => (
+                <Pagination.Item key={p}>
+                  <Pagination.Link
+                    isActive={p === page}
+                    onPress={() => setPage(p)}
+                  >
+                    {p}
+                  </Pagination.Link>
+                </Pagination.Item>
+              ))}
+              <Pagination.Item>
+                <Pagination.Next
+                  isDisabled={page === totalPages}
+                  onPress={() => setPage((p) => Math.min(totalPages, p + 1))}
+                >
+                  Next
+                  <Pagination.NextIcon />
+                </Pagination.Next>
+              </Pagination.Item>
+            </Pagination.Content>
+          </Pagination>
+        </Table.Footer>
+      )}
     </Table>
   );
 };

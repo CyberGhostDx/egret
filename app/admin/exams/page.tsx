@@ -69,7 +69,7 @@ const AdminExamsPage = (): React.ReactElement => {
               minute: "2-digit",
             })
           : "",
-        building: firstExam?.building || exam.instructorTh || "", // fallback or logic adjustment if needed
+        building: firstExam?.building || "",
         room: firstExam?.room || "",
         instructorTh: exam.instructorTh || "",
         instructorEn: exam.instructorEn || "",

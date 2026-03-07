@@ -92,26 +92,10 @@ export const AdminEditExamModalForm: React.FC<AdminEditExamModalFormProps> = ({
                     <h3 className="text-primary font-black tracking-tight uppercase text-[11px]">Exam Schedule</h3>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-3">
-                    <Select
-                        onChange={(key) => key && onUpdate(course.id, { date: key.toString() })}
-                        value={course.date || null}
-                        placeholder="Select Day"
-                    >
-                        <Label className="text-primary/60 mb-1 block text-[9px] font-bold tracking-wider uppercase">Exam Day</Label>
-                        <Select.Trigger className="bg-primary/5 hover:bg-primary/10 flex h-9 w-full items-center justify-between rounded-xl border-none px-3 text-sm font-bold transition-all">
-                            <Select.Value />
-                            <Select.Indicator className="text-primary/30" />
-                        </Select.Trigger>
-                        <Select.Popover className="border-primary/10 rounded-xl border bg-white shadow-2xl">
-                            <ListBox className="max-h-[180px] overflow-y-auto p-1">
-                                {DAYS.map((day) => (
-                                    <ListBox.Item key={day} id={day} className="hover:bg-primary/5 cursor-pointer rounded-lg px-3 py-1.5 text-xs font-bold transition-colors">
-                                        {day}
-                                    </ListBox.Item>
-                                ))}
-                            </ListBox>
-                        </Select.Popover>
-                    </Select>
+                    <TextField type="date" value={course.date} onChange={(val) => onUpdate(course.id, { date: val })}>
+                        <Label className="text-primary/60 mb-1 block text-[9px] font-bold tracking-wider uppercase">Exam Date</Label>
+                        <Input className="bg-primary/5 hover:bg-primary/10 h-9 w-full rounded-xl border-none px-3 text-sm font-bold transition-all" />
+                    </TextField>
 
                     <div className="grid grid-cols-2 gap-3">
                         <TextField type="time" value={course.startTime} onChange={(val) => onUpdate(course.id, { startTime: val })}>
