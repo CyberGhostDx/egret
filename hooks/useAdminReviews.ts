@@ -5,24 +5,31 @@ import { z } from "zod";
 import axiosInstance from "@/lib/axiosInstance";
 import { toast } from "@heroui/react";
 import { useMemo } from "react";
-import {
-  coursesOfferingsResponseSchema,
-  reviewCourseSchema,
-} from "@/schema/backend.schema";
 
-export type AdminReviewCourse = z.infer<typeof reviewCourseSchema>;
-export type AdminReview = AdminReviewCourse["reviews"][0];
+export const adminReviewSchema = z.object({
+  _id: z.string(),
+  username: z.string(),
+  content: z.string(),
+  difficulty: z.coerce.number(),
+  status: z.enum(["published", "deleted"]).default("published"),
+  vote: z.coerce.number().default(0),
+  createdAt: z.coerce.date(),
+});
 
-const adminReviewsResponseSchema = z.array(reviewCourseSchema);
+export const adminReviewCourseSchema = z.object({
+  id: z.string(),
+  titleTh: z.string(),
+  titleEn: z.string(),
+  difficulty: z.coerce.number().default(0),
+  reviews: z.array(adminReviewSchema),
+});
+
+export type AdminReviewCourse = z.infer<typeof adminReviewCourseSchema>;
+export type AdminReview = z.infer<typeof adminReviewSchema>;
+
+const adminReviewsResponseSchema = z.array(adminReviewCourseSchema);
 
 export function useAdminReviews() {
-  // 1. Fetch all courses (reliable base list)
-  const { data: coursesData, isLoading: isCoursesLoading } = useSWR(
-    "/api/courses/offerings",
-    { revalidateOnFocus: false },
-  );
-
-  // 2. Fetch specific review metrics from admin endpoint
   const {
     data: adminReviewsData,
     error,
@@ -31,49 +38,29 @@ export function useAdminReviews() {
     mutate,
   } = useSWR("/api/admin/reviews", { revalidateOnFocus: false });
 
-  // 3. Merge data to ensure we show all courses even if they have 0 reviews
   const coursesWithReviews = useMemo((): AdminReviewCourse[] => {
-    // Parse all courses
-    let baseCourses: z.infer<typeof coursesOfferingsResponseSchema> = [];
-    try {
-      baseCourses = coursesData
-        ? coursesOfferingsResponseSchema.parse(coursesData)
-        : [];
-    } catch (err) {
-      baseCourses = Array.isArray(coursesData) ? coursesData : [];
-    }
+    if (!adminReviewsData) return [];
 
-    // Parse review data
     let reviewData: AdminReviewCourse[] = [];
     try {
-      reviewData = adminReviewsData
-        ? adminReviewsResponseSchema.parse(adminReviewsData)
-        : [];
+      reviewData = adminReviewsResponseSchema.parse(adminReviewsData);
     } catch (err) {
+      console.error("Schema validation failed for admin reviews:", err);
       reviewData = Array.isArray(adminReviewsData) ? adminReviewsData : [];
     }
 
-    // Merge: Map through base courses and add review details if found
-    return baseCourses.map((course) => {
-      const reviewsForCourse = reviewData.find((r) => r.id === course.id);
-      return {
-        ...course,
-        reviews: reviewsForCourse?.reviews || [],
-        // Ensure difficulty is synced or used from base
-        difficulty:
-          reviewsForCourse?.difficulty ?? (course as any).difficulty ?? 0,
-      };
-    }) as AdminReviewCourse[];
-  }, [coursesData, adminReviewsData]);
+    return reviewData.map((course) => ({
+      ...course,
+      reviews: course.reviews || [],
+      difficulty: course.difficulty ?? 0,
+    }));
+  }, [adminReviewsData]);
 
-  const deleteReview = async (
-    courseId: string,
-    reviewId: string,
-  ): Promise<boolean> => {
+  const deleteReview = async (reviewId: string): Promise<boolean> => {
     try {
       await axiosInstance.delete(`/api/admin/reviews/${reviewId}`);
       toast.success("Review deleted successfully");
-      await mutate(); // Refresh the reviews list
+      await mutate();
       return true;
     } catch (err) {
       toast.danger("Failed to delete review");
@@ -83,10 +70,7 @@ export function useAdminReviews() {
 
   return {
     coursesWithReviews,
-    isLoading:
-      isCoursesLoading ||
-      isLoading ||
-      (!adminReviewsData && !error && isValidating),
+    isLoading: isLoading || (!adminReviewsData && !error && isValidating),
     isError: error,
     deleteReview,
     mutate,

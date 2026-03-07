@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { Modal, Button, Avatar, Card } from "@heroui/react";
-import { LuTrash2, LuCalendar } from "react-icons/lu";
+import { Modal, Button, Avatar, Card, Chip, cn } from "@heroui/react";
+import { LuTrash2, LuCalendar, LuCheck, LuInfo } from "react-icons/lu";
 import { AdminReviewCourse, AdminReview } from "@/hooks/useAdminReviews";
 import { getDifficultyColor } from "@/lib/difficulty-utils";
 
@@ -25,8 +25,8 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
     <Modal>
       <Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange}>
         <Modal.Container size="lg" className="max-w-2xl sm:max-w-3xl">
-          <Modal.Dialog className="relative overflow-visible rounded-3xl border-none bg-[#f8f9fa] p-0 shadow-2xl outline-none">
-            <Modal.Header className="flex flex-col border-b border-white bg-white/50 px-8 py-6 backdrop-blur-md">
+          <Modal.Dialog className="relative overflow-hidden rounded-3xl border-none bg-[#f8f9fa] p-0 shadow-2xl outline-none">
+            <Modal.Header className="flex flex-col rounded-t-3xl border-b border-white bg-white/50 px-8 py-6 backdrop-blur-md">
               <h2 className="text-primary text-2xl font-black tracking-tight">
                 Course Reviews
               </h2>
@@ -49,14 +49,19 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
                 ) : (
                   course.reviews.map((review: AdminReview) => {
                     const diffColor = getDifficultyColor(review.difficulty);
+                    const isDeleted = review.status === "deleted";
+
                     return (
                       <Card
                         key={review._id}
-                        className="overflow-hidden border-none bg-white p-5 shadow-sm transition-all hover:shadow-md"
+                        className={cn(
+                          "overflow-hidden border-none p-5 shadow-sm transition-all hover:shadow-md",
+                          isDeleted ? "bg-slate-50 opacity-60" : "bg-white",
+                        )}
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex items-center gap-3">
-                            <Avatar className="text-primary bg-primary/5 h-10 w-10 text-xs font-black">
+                            <Avatar className="bg-primary/5 size-10 font-black text-blue-500">
                               {(review.username || "U")[0].toUpperCase()}
                             </Avatar>
                             <div>
@@ -64,29 +69,55 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
                                 <span className="text-sm font-black text-slate-800">
                                   {review.username}
                                 </span>
-                                <div
-                                  className={`h-2 w-2 rounded-full ${diffColor}`}
-                                  title={`Difficulty: ${review.difficulty}`}
-                                />
+                                <Chip
+                                  size="sm"
+                                  variant="soft"
+                                  className={cn(
+                                    "h-5 border-none px-2 text-[10px] font-bold uppercase",
+                                    isDeleted
+                                      ? "bg-red-100 text-red-600"
+                                      : "bg-green-100 text-green-600",
+                                  )}
+                                >
+                                  <div className="flex items-center gap-1">
+                                    {isDeleted ? (
+                                      <LuInfo className="size-3" />
+                                    ) : (
+                                      <LuCheck className="size-3" />
+                                    )}
+                                    {review.status}
+                                  </div>
+                                </Chip>
                               </div>
-                              <div className="flex items-center gap-2 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
-                                <LuCalendar className="text-xs" />
-                                {new Date(
-                                  review.createdAt,
-                                ).toLocaleDateString()}
+                              <div className="flex items-center gap-2 text-xs font-medium tracking-wider text-slate-400 uppercase">
+                                {new Date(review.createdAt).toLocaleDateString(
+                                  "en-GB",
+                                  {
+                                    timeZone: "Asia/Bangkok",
+                                  },
+                                )}
                               </div>
                             </div>
                           </div>
-                          <Button
-                            isIconOnly
-                            onPress={() => onDeleteReview(review._id)}
-                            className="h-9 w-9 min-w-9 rounded-xl border-none bg-red-50 text-red-500 transition-all hover:bg-red-500 hover:text-white active:scale-95"
-                          >
-                            <LuTrash2 className="text-base" />
-                          </Button>
+                          {!isDeleted && (
+                            <Button
+                              isIconOnly
+                              onPress={() => onDeleteReview(review._id)}
+                              className="h-9 w-9 min-w-9 rounded-xl border-none bg-red-50 text-red-500 transition-all hover:bg-red-500 hover:text-white active:scale-95"
+                            >
+                              <LuTrash2 className="text-base" />
+                            </Button>
+                          )}
                         </div>
 
-                        <div className="mt-4 rounded-xl border border-slate-100/50 bg-slate-50/50 p-3 text-sm leading-relaxed text-slate-600 italic">
+                        <div
+                          className={cn(
+                            "mt-4 rounded-xl border border-slate-100/50 p-3 text-sm leading-relaxed",
+                            isDeleted
+                              ? "bg-slate-100 text-slate-400 line-through"
+                              : "bg-slate-50/50 text-slate-600",
+                          )}
+                        >
                           "{review.content}"
                         </div>
 
@@ -113,11 +144,8 @@ export const AdminReviewModal: React.FC<AdminReviewModalProps> = ({
               </div>
             </Modal.Body>
 
-            <Modal.Footer className="flex justify-end border-t border-white bg-white/50 px-8 py-4 backdrop-blur-md">
-              <Button
-                onPress={() => onOpenChange(false)}
-                className="h-10 rounded-xl border-none bg-slate-200 px-8 text-sm font-bold text-slate-600 transition-all hover:bg-slate-300 active:scale-95"
-              >
+            <Modal.Footer className="flex justify-end rounded-b-3xl border-t border-white bg-white/50 px-8 py-4 backdrop-blur-md">
+              <Button onPress={() => onOpenChange(false)} variant="primary">
                 CLOSE
               </Button>
             </Modal.Footer>

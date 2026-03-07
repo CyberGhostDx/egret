@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Table, Button, Skeleton, Avatar, Chip, cn } from "@heroui/react";
+import { Table, Button, Skeleton, Chip, cn } from "@heroui/react";
 import { LuEye, LuCopy } from "react-icons/lu";
 import { AdminReviewCourse } from "@/hooks/useAdminReviews";
 
@@ -85,7 +85,7 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
                   <Table.Cell className="px-6 py-4">
                     <div className="group flex items-center gap-2">
                       <span className="text-primary text-sm font-bold">
-                        #{course.id}
+                        {course.id}
                       </span>
                       <Button
                         isIconOnly
@@ -123,7 +123,9 @@ export const AdminReviewsTable: React.FC<AdminReviewsTableProps> = ({
                   </Table.Cell>
                   <Table.Cell className="px-6 py-4 text-center">
                     <span className="text-sm font-bold text-slate-600">
-                      {course.difficulty ? course.difficulty.toFixed(1) : "N/A"}
+                      {typeof course.difficulty === "number"
+                        ? course.difficulty.toFixed(1)
+                        : 0}
                     </span>
                   </Table.Cell>
                   <Table.Cell className="px-6 py-4">
