@@ -292,16 +292,6 @@ export const AdminEditExamModalForm: React.FC<AdminEditExamModalFormProps> = ({
             <Input className="bg-primary/5 hover:bg-primary/10 h-10 w-full rounded-xl border-none px-3 text-sm font-bold transition-all" />
           </TextField>
 
-          <TextField
-            value={course.proctor || ""}
-            onChange={(val) => onUpdate(course.id, { proctor: val })}
-          >
-            <Label className="text-primary/60 mb-1 block text-[10px] font-bold tracking-wider uppercase">
-              Proctor
-            </Label>
-            <Input className="bg-primary/5 hover:bg-primary/10 h-10 w-full rounded-xl border-none px-3 text-sm font-bold transition-all" />
-          </TextField>
-
           <div className="grid grid-cols-2 gap-3">
             <TextField
               value={course.building || ""}

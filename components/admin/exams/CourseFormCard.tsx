@@ -303,19 +303,7 @@ export const CourseFormCard: React.FC<CourseFormCardProps> = ({
             </TextField>
           </div>
 
-          <div className="col-span-2 lg:col-span-4">
-            <TextField
-              className="w-full"
-              value={course.proctor || ""}
-              onChange={(val: string) => onUpdate(course.id, { proctor: val })}
-            >
-              <Label className="text-primary/60 mb-1 block text-[10px] font-bold tracking-wider uppercase">
-                Proctor
-              </Label>
-              <Input placeholder="ผู้คุมสอบ" />
-            </TextField>
-          </div>
-          <div className="col-span-2 lg:col-span-4">
+          <div className="col-span-2 lg:col-span-6">
             <TextField
               className="w-full"
               value={course.instructorTh || ""}
@@ -329,7 +317,7 @@ export const CourseFormCard: React.FC<CourseFormCardProps> = ({
               <Input placeholder="อาจารย์ผู้สอน" />
             </TextField>
           </div>
-          <div className="col-span-2 lg:col-span-4">
+          <div className="col-span-2 lg:col-span-6">
             <TextField
               className="w-full"
               value={course.instructorEn || ""}

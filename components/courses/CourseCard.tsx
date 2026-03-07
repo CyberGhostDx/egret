@@ -126,13 +126,18 @@ const CourseCard = memo(({ course, difficulty }: CourseCardProps) => {
                                 {t("Section")} {offering.section}
                               </span>
                               <span className="text-sm text-gray-500">
-                                {locale === "en"
-                                  ? offering.instructorEn ||
-                                    offering.instructorTh ||
-                                    t("NoInstructor")
-                                  : offering.instructorTh ||
-                                    offering.instructorEn ||
-                                    t("NoInstructor")}
+                                {offering.instructors?.length
+                                  ? offering.instructors
+                                      .map((i) =>
+                                        locale === "en"
+                                          ? i.instructor.nameEn ||
+                                            i.instructor.nameTh
+                                          : i.instructor.nameTh ||
+                                            i.instructor.nameEn,
+                                      )
+                                      .filter(Boolean)
+                                      .join(", ")
+                                  : t("NoInstructor")}
                               </span>
                               <span className="text-primary/60 text-xs font-medium">
                                 {offering.credits} {t("Credits")} •{" "}

@@ -9,7 +9,6 @@ export const examSchema = z.object({
   building: z.string().nullable(),
   room: z.string().nullable(),
   note: z.string().nullable(),
-  proctor: z.string().nullable(),
   updatedAt: z.coerce.date(),
 });
 
@@ -19,16 +18,21 @@ export const courseSchema = z.object({
   titleEn: z.string(),
 });
 
+export const instructorSchema = z.object({
+  id: z.string(),
+  nameTh: z.string().nullable(),
+  nameEn: z.string().nullable(),
+});
+
 export const courseOfferingSchema = z.object({
   id: z.string(),
   courseId: z.string(),
   section: z.string(),
-  instructorTh: z.string().nullable(),
-  instructorEn: z.string().nullable(),
   sectionType: z.string().nullable(),
   credits: z.coerce.number(),
   course: courseSchema,
-  exams: z.array(examSchema),
+  exams: z.array(examSchema).optional(),
+  instructors: z.array(z.object({ instructor: instructorSchema })).optional(),
 });
 
 export type CourseOffering = z.infer<typeof courseOfferingSchema>;

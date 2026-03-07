@@ -23,7 +23,7 @@ export default function ExamCalendar() {
   const groupedExams = useMemo(() => {
     const groups: Record<string, any[]> = {};
     user?.userCourses?.forEach((uc) => {
-      uc.offering.exams.forEach((e) => {
+      uc.offering.exams?.forEach((e) => {
         const d = new Date(e.examDate);
         const dateStr = d.toLocaleDateString("en-CA", {
           timeZone: "Asia/Bangkok",

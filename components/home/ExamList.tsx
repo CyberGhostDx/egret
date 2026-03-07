@@ -19,7 +19,7 @@ export default function ExamList() {
   const exams: (Exam & { sectionType: string | null })[] =
     user?.userCourses?.flatMap((uc) => {
       const course = uc.offering.course;
-      return uc.offering.exams.map((e) => ({
+      return (uc.offering.exams || []).map((e) => ({
         id: e.id,
         courseCode: uc.offering.courseId,
         offeringId: uc.offering.id,
