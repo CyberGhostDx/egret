@@ -12,6 +12,7 @@ import {
   Avatar,
   Chip,
   cn,
+  Pagination,
 } from "@heroui/react";
 import {
   LuSearch,
@@ -34,6 +35,8 @@ import {
 import type { Key } from "react";
 import { Select, ListBox } from "@heroui/react";
 
+const FEED_ROWS_PER_PAGE = 9;
+
 const AdminReviewsPage = (): React.ReactElement => {
   const { coursesWithReviews, isLoading, deleteReview } = useAdminReviews();
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -42,6 +45,7 @@ const AdminReviewsPage = (): React.ReactElement => {
   const [activeTab, setActiveTab] = useState<string>("by-course");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("newest");
+  const [feedPage, setFeedPage] = useState(1);
   const reviewModalState = useOverlayState();
 
   const { stats, allReviews } = useMemo(() => {
@@ -100,6 +104,18 @@ const AdminReviewsPage = (): React.ReactElement => {
       allReviews: flattened,
     };
   }, [coursesWithReviews, statusFilter, sortBy]);
+
+  // Reset feed page when filters change
+  React.useEffect(() => {
+    setFeedPage(1);
+  }, [statusFilter, sortBy, searchQuery]);
+
+  const paginatedFeedReviews = useMemo(() => {
+    const start = (feedPage - 1) * FEED_ROWS_PER_PAGE;
+    return allReviews.slice(start, start + FEED_ROWS_PER_PAGE);
+  }, [allReviews, feedPage]);
+
+  const totalFeedPages = Math.ceil(allReviews.length / FEED_ROWS_PER_PAGE);
 
   const filteredCourses = useMemo((): AdminReviewCourse[] => {
     const query = searchQuery.toLowerCase().trim();
@@ -372,7 +388,7 @@ const AdminReviewsPage = (): React.ReactElement => {
             <Tabs.Panel id="all-reviews">
               <div className="mt-8">
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {allReviews.map((review) => {
+                  {paginatedFeedReviews.map((review) => {
                     const isDeleted = review.status === "deleted";
                     return (
                       <Card
@@ -487,6 +503,70 @@ const AdminReviewsPage = (): React.ReactElement => {
                     </div>
                   )}
                 </div>
+
+                {totalFeedPages > 1 && (
+                  <div className="mt-12 flex w-full flex-col items-center justify-between gap-6 border-t border-slate-100 pt-8 sm:flex-row">
+                    <p className="whitespace-nowrap text-xs font-bold text-slate-400">
+                      Showing {(feedPage - 1) * FEED_ROWS_PER_PAGE + 1} to{" "}
+                      {Math.min(feedPage * FEED_ROWS_PER_PAGE, allReviews.length)}{" "}
+                      of {allReviews.length} reviews
+                    </p>
+                    <div className="flex sm:ml-auto">
+                      <Pagination size="sm">
+                        <Pagination.Content>
+                          <Pagination.Item>
+                            <Pagination.Previous
+                              isDisabled={feedPage === 1}
+                              onPress={() => setFeedPage((p) => Math.max(1, p - 1))}
+                            >
+                              <Pagination.PreviousIcon />
+                              Prev
+                            </Pagination.Previous>
+                          </Pagination.Item>
+                          {Array.from({ length: totalFeedPages }, (_, i) => i + 1)
+                            .filter(
+                              (p) =>
+                                p === 1 ||
+                                p === totalFeedPages ||
+                                (p >= feedPage - 1 && p <= feedPage + 1),
+                            )
+                            .map((p, i, arr) => {
+                              const elements = [];
+                              if (i > 0 && p !== arr[i - 1] + 1) {
+                                elements.push(
+                                  <Pagination.Item key={`ellipsis-${p}`}>
+                                    <Pagination.Ellipsis />
+                                  </Pagination.Item>,
+                                );
+                              }
+                              elements.push(
+                                <Pagination.Item key={p}>
+                                  <Pagination.Link
+                                    isActive={p === feedPage}
+                                    onPress={() => setFeedPage(p)}
+                                  >
+                                    {p}
+                                  </Pagination.Link>
+                                </Pagination.Item>,
+                              );
+                              return elements;
+                            })}
+                          <Pagination.Item>
+                            <Pagination.Next
+                              isDisabled={feedPage === totalFeedPages}
+                              onPress={() =>
+                                setFeedPage((p) => Math.min(totalFeedPages, p + 1))
+                              }
+                            >
+                              Next
+                              <Pagination.NextIcon />
+                            </Pagination.Next>
+                          </Pagination.Item>
+                        </Pagination.Content>
+                      </Pagination>
+                    </div>
+                  </div>
+                )}
               </div>
             </Tabs.Panel>
           </Tabs>
