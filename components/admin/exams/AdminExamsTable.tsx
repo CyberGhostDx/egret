@@ -328,6 +328,9 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                             <span className="text-xs font-black text-slate-700">
                               {new Date(row.exam.examDate).toLocaleDateString(
                                 "th-TH",
+                                {
+                                  timeZone: "UTC",
+                                },
                               )}
                             </span>
                             <span className="text-primary text-xs font-bold">
@@ -336,6 +339,7 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                                 {
                                   hour: "2-digit",
                                   minute: "2-digit",
+                                  timeZone: "UTC",
                                 },
                               )}{" "}
                               -{" "}
@@ -344,6 +348,7 @@ export const AdminExamsTable: React.FC<AdminExamsTableProps> = ({
                                 {
                                   hour: "2-digit",
                                   minute: "2-digit",
+                                  timeZone: "UTC",
                                 },
                               )}
                             </span>
