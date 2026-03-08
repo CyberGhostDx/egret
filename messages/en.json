@@ -88,7 +88,8 @@
     "CourseReview": "Course Review",
     "SelectSectionRoom": "Select Section and Room",
     "NoNote": "No note",
-    "StartsIn": "Starts In"
+    "StartsIn": "Starts In",
+    "DoubleCheck": "* Please double check details with your instructor *"
   },
   "Toast": {
     "CourseAdded": "Course added successfully.",
