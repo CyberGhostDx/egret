@@ -42,7 +42,28 @@ export const CoursePageHeader: React.FC<CoursePageHeaderProps> = ({
 
     try {
       setIsSubmitting(true);
-      const response = await axiosInstance.post("/api/admin/exam", courses);
+
+      const payload = courses.map((course) => {
+        const examDate = course.date;
+        const startTimeStr = course.startTime;
+        const endTimeStr = course.endTime;
+
+        const adjustTime = (timeStr: string) => {
+          if (!timeStr) return undefined;
+          const [hours, minutes] = timeStr.split(":").map(Number);
+          const adjustedHours = (hours + 7) % 24;
+          return `${String(adjustedHours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+        };
+
+        return {
+          ...course,
+          date: examDate ? `${examDate}T00:00:00Z` : undefined,
+          startTime: adjustTime(startTimeStr),
+          endTime: adjustTime(endTimeStr),
+        };
+      });
+
+      const response = await axiosInstance.post("/api/admin/exam", payload);
 
       if (response.status === 201 || response.status === 200) {
         toast.success("Exams submitted successfully");
