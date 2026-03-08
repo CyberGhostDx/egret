@@ -48,18 +48,11 @@ export const CoursePageHeader: React.FC<CoursePageHeaderProps> = ({
         const startTimeStr = course.startTime;
         const endTimeStr = course.endTime;
 
-        const adjustTime = (timeStr: string) => {
-          if (!timeStr) return undefined;
-          const [hours, minutes] = timeStr.split(":").map(Number);
-          const adjustedHours = (hours + 7) % 24;
-          return `${String(adjustedHours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
-        };
-
         return {
           ...course,
           date: examDate ? `${examDate}T00:00:00Z` : undefined,
-          startTime: adjustTime(startTimeStr),
-          endTime: adjustTime(endTimeStr),
+          startTime: startTimeStr,
+          endTime: endTimeStr,
         };
       });
 
