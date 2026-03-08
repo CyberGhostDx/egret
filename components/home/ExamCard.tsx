@@ -49,7 +49,7 @@ const calculateTimeLeft = (examDate: Date, startTimeStr: string, now: Date) => {
   const day = parts.find((p) => p.type === "day")?.value;
 
   const targetTime = new Date(
-    `${year}-${month}-${day}T${hoursStr.padStart(2, "0")}:${minutesStr.padStart(2, "0")}:00+07:00`,
+    `${year}-${month}-${day}T${hoursStr.padStart(2, "0")}:${minutesStr.padStart(2, "0")}:00+00:00`,
   );
 
   const difference = targetTime.getTime() - now.getTime();

@@ -61,19 +61,23 @@ const AdminExamsPage = (): React.ReactElement => {
         section: exam.section,
         sectionType: exam.sectionType || "Lecture",
         date: selectedSlot
-          ? new Date(selectedSlot.examDate).toLocaleDateString("en-CA")
+          ? new Date(selectedSlot.examDate).toLocaleDateString("en-CA", {
+              timeZone: "UTC",
+            })
           : "", // en-CA gives YYYY-MM-DD
         credits: exam.credits,
         startTime: selectedSlot
           ? new Date(selectedSlot.startTime).toLocaleTimeString("en-GB", {
               hour: "2-digit",
               minute: "2-digit",
+              timeZone: "UTC",
             })
           : "",
         endTime: selectedSlot
           ? new Date(selectedSlot.endTime).toLocaleTimeString("en-GB", {
               hour: "2-digit",
               minute: "2-digit",
+              timeZone: "UTC",
             })
           : "",
         building: selectedSlot?.building || "",
@@ -107,7 +111,25 @@ const AdminExamsPage = (): React.ReactElement => {
 
     setIsSaving(true);
     try {
-      const response = await axiosInstance.patch("/api/admin/exams", course);
+      const examDate = course.date;
+      const startTimeStr = course.startTime;
+      const endTimeStr = course.endTime;
+
+      const adjustTime = (timeStr: string) => {
+        if (!timeStr) return undefined;
+        const [hours, minutes] = timeStr.split(":").map(Number);
+        const adjustedHours = (hours + 7) % 24;
+        return `${String(adjustedHours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+      };
+
+      const payload = {
+        ...course,
+        date: examDate ? `${examDate}T00:00:00Z` : undefined,
+        startTime: adjustTime(startTimeStr),
+        endTime: adjustTime(endTimeStr),
+      };
+
+      const response = await axiosInstance.patch("/api/admin/exams", payload);
       if (response.data.success) {
         await mutate();
         toast.success("Changes saved successfully");
