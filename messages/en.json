@@ -162,5 +162,16 @@
   "Footer": {
     "Copyright": "© 2026 EGRET. Built for Kasetsart University Engineering Students (Bangkhen).",
     "Terms": "Terms and Conditions"
+  },
+  "NotFound": {
+    "Title": "Page Not Found",
+    "Description": "Oops! The page you're looking for doesn't exist or has been moved.",
+    "BackToHome": "Back to Home"
+  },
+  "Error": {
+    "Title": "Something Went Wrong",
+    "Description": "We encountered an unexpected error. Please try again later or contact support if the issue persists.",
+    "TryAgain": "Try Again",
+    "BackToHome": "Back to Home"
   }
 }

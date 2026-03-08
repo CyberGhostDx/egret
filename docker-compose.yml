@@ -1,0 +1,13 @@
+services:
+  web:
+    build:
+      context: .
+      args:
+        - BACKEND_URL=${BACKEND_URL}
+
+    container_name: egret-frontend
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    restart: always

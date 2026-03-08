@@ -1,7 +1,7 @@
 "use client";
 
 import { z } from "zod";
-import { Link } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 import { useState, useMemo } from "react";
 import {
@@ -15,6 +15,7 @@ import {
 import { useUser } from "@/hooks/useUser";
 import { useTimeStore } from "@/store/useTimeStore";
 import { LuCalendarPlus } from "react-icons/lu";
+import { HiDotsHorizontal } from "react-icons/hi";
 import { SiGooglecalendar, SiApple } from "react-icons/si";
 import { PiMicrosoftOutlookLogoFill } from "react-icons/pi";
 import { FaYahoo } from "react-icons/fa";
@@ -88,6 +89,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
   const [isPending, setIsPending] = useState(false);
   const modalState = useOverlayState();
   const { user, unenrollCourse } = useUser();
+  const router = useRouter();
 
   const now = useTimeStore((state) => state.now);
 
@@ -365,8 +367,10 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                 )}
               </Modal.Body>
 
-              <Modal.Footer className="mt-10 flex justify-between">
+              <Modal.Footer className="mt-8 flex w-full flex-col sm:mt-10 sm:flex-row sm:justify-between">
+                {/* Desktop View */}
                 <Button
+                  className="hidden sm:flex"
                   variant="danger"
                   onPress={() =>
                     handleUnenroll(
@@ -379,7 +383,7 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                   {t("Unenroll")}
                 </Button>
 
-                <div className="flex items-center gap-2">
+                <div className="hidden items-center gap-2 sm:flex">
                   <Dropdown>
                     <Button
                       variant="secondary"
@@ -424,6 +428,84 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                   <Link href={`courses/${exam.courseCode}`}>
                     <Button variant="primary">{t("CourseReview")}</Button>
                   </Link>
+                </div>
+
+                {/* Mobile View */}
+                <div className="flex w-full items-center gap-2 sm:hidden">
+                  <Dropdown>
+                    <Button
+                      variant="secondary"
+                      className="bg-primary/10 text-primary flex-1 border-none"
+                    >
+                      <LuCalendarPlus className="size-5" />
+                      {t("AddToCalendar")}
+                    </Button>
+                    <Dropdown.Popover>
+                      <Dropdown.Menu onAction={handleAddToCalendar}>
+                        <Dropdown.Item
+                          id="google"
+                          className="flex items-center gap-2"
+                        >
+                          <SiGooglecalendar className="size-5" />
+                          Google Calendar
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          id="outlook"
+                          className="flex items-center gap-2"
+                        >
+                          <PiMicrosoftOutlookLogoFill className="size-5" />
+                          Outlook
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          id="apple"
+                          className="flex items-center gap-2"
+                        >
+                          <SiApple className="size-5" />
+                          Apple / iCal
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          id="yahoo"
+                          className="flex items-center gap-2"
+                        >
+                          <FaYahoo className="size-5" />
+                          Yahoo
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown.Popover>
+                  </Dropdown>
+
+                  <Dropdown>
+                    <Button
+                      isIconOnly
+                      variant="secondary"
+                      className="bg-gray-100 text-slate-800"
+                    >
+                      <HiDotsHorizontal className="size-5" />
+                    </Button>
+                    <Dropdown.Popover>
+                      <Dropdown.Menu
+                        disabledKeys={isPending ? ["unenroll"] : []}
+                        onAction={(key) => {
+                          if (key === "review") {
+                            router.push(`/courses/${exam.courseCode}`);
+                          } else if (key === "unenroll") {
+                            handleUnenroll(
+                              availableExams.find(
+                                (e) => e.id === selectedExamId,
+                              )?.offeringId || "",
+                            );
+                          }
+                        }}
+                      >
+                        <Dropdown.Item id="review" className="text-accent">
+                          {t("CourseReview")}
+                        </Dropdown.Item>
+                        <Dropdown.Item id="unenroll" className="text-danger">
+                          {t("Unenroll")}
+                        </Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown.Popover>
+                  </Dropdown>
                 </div>
               </Modal.Footer>
             </Modal.Dialog>

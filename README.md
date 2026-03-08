@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+  <img src="https://lh3.googleusercontent.com/d/1vRrDe-028hDsVOTA6Ul6zMQhOaG5oXVB" alt="egret" width="200" height="200">
+</p>
 
-## Getting Started
+# EGRET Frontend
 
-First, run the development server:
+This is the frontend application for the EGRET project, built with **Next.js**, **React**, **Tailwind CSS v4**, and leveraging **HeroUI** components for a beautiful, responsive user interface.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 📋 Prerequisites
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [Bun](https://bun.sh/) (Version >= 1.3.0)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Quick Start
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. **Install Dependencies**
 
-## Learn More
+   ```bash
+   bun install
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. **Environment Variables Setup**
+   Copy the `.env.example` file to create your `.env`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   cp .env.example .env
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   Open the `.env` file and define the correct URLs:
+   - `NEXT_PUBLIC_API_URL`: The URL of your backend services
+   - `BACKEND_URL`: Used for the reverse proxy (this can be the same as `NEXT_PUBLIC_API_URL`)
 
-## Deploy on Vercel
+3. **Start Development Server**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   ```bash
+   bun run dev
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   Once the server starts, open your browser and navigate to `http://localhost:3000` (or the port specified by Next.js) to view the application.
+
+   > [!TIP]
+   > For local development, **`bun run dev`** is recommended to avoid hostname and environment variable synchronization issues within Docker.
+
+## 🐳 Running with Docker
+
+If you prefer to run the application in a containerized environment:
+
+1. **Build and Start:**
+
+   ```bash
+   docker compose up -d --build
+   ```
+
+2. **Important Note on `BACKEND_URL`:**
+   Since the frontend runs inside a container, **`localhost`** will point to the container itself, not your host machine.
+   - If your backend is running on your host machine (not in Docker), change your `.env` to:
+     `BACKEND_URL=http://host.docker.internal:8000` (for Mac/Windows)
+   - If you experience issues with API rewrites, ensure you rebuild the image after changing high-level environment variables:
+     `docker compose build --no-cache`
+
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js
+- **UI & Styling:** HeroUI (v3), Tailwind CSS v4, Framer Motion
+- **Data Fetching & State Management:** SWR, Zustand, Axios
+- **Calendar & Icons:** FullCalendar, React Icons
+
+## Authentication
+
+The main application supports login via Google. However, if you do not have `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` set up in the backend:
+
+- Navigate directly to the **`/admin/login`** route in your browser.
+- Log in using the email and password you configured in the backend's `.env` file (`ADMIN_EMAIL` and `ADMIN_PASSWORD`).
+  _(Note: Ensure you have run the database seed command on the backend first!)_
+
+## 🔗 Backend Repository
+
+[EGRET-Backend](https://github.com/cyberghostdx/egret-backend)
+
+## Database Design
+
+[PDF](https://github.com/CyberGhostDx/egret-backend/blob/develop/docs/EGRET%20Database%20Design.pdf)
