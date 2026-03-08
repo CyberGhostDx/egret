@@ -6,6 +6,13 @@
 
 This is the frontend application for the EGRET project, built with **Next.js**, **React**, **Tailwind CSS v4**, and leveraging **HeroUI** components for a beautiful, responsive user interface.
 
+## 🛠️ Tech Stack
+
+- **Framework:** Next.js
+- **UI & Styling:** HeroUI (v3), Tailwind CSS v4, Framer Motion
+- **Data Fetching & State Management:** SWR, Zustand, Axios
+- **Calendar & Icons:** FullCalendar, React Icons
+
 ## 📋 Prerequisites
 
 - [Bun](https://bun.sh/) (Version >= 1.3.0)
@@ -57,12 +64,27 @@ If you prefer to run the application in a containerized environment:
    - If you experience issues with API rewrites, ensure you rebuild the image after changing high-level environment variables:
      `docker compose build --no-cache`
 
-## 🛠️ Tech Stack
+## 📁 Folder Structure
 
-- **Framework:** Next.js
-- **UI & Styling:** HeroUI (v3), Tailwind CSS v4, Framer Motion
-- **Data Fetching & State Management:** SWR, Zustand, Axios
-- **Calendar & Icons:** FullCalendar, React Icons
+```text
+app/                    # Next.js App Router
+├── [locale]/           # Internationalization routes
+│   └── (user)/         # User routes
+├── admin/              # Admin routes
+├── globals.css         # Global styles
+├── layout.tsx          # Root layout
+└── providers.tsx       # Root providers (SWR, HeroUI)
+
+components/             # Reusable UI components
+hooks/                  # Custom React hooks
+i18n/                   # I18n configuration
+lib/                    # Utility functions and axios instance
+messages/               # Translation files
+middleware/             # Next.js middleware
+schema/                 # Zod validation schemas
+store/                  # Zustand state stores
+proxy.ts                # Proxy configuration
+```
 
 ## Authentication
 
