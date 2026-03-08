@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://lh3.googleusercontent.com/d/1vRrDe-028hDsVOTA6Ul6zMQhOaG5oXVB" alt="egret" width="200" height="200">
+</p>
+
 # EGRET Frontend
 
 This is the frontend application for the EGRET project, built with **Next.js**, **React**, **Tailwind CSS v4**, and leveraging **HeroUI** components for a beautiful, responsive user interface.
@@ -68,6 +72,10 @@ The main application supports login via Google. However, if you do not have `GOO
 - Log in using the email and password you configured in the backend's `.env` file (`ADMIN_EMAIL` and `ADMIN_PASSWORD`).
   _(Note: Ensure you have run the database seed command on the backend first!)_
 
-## 🔗 Backend
+## 🔗 Backend Repository
 
 [EGRET-Backend](https://github.com/cyberghostdx/egret-backend)
+
+## Database Design
+
+[PDF](https://github.com/CyberGhostDx/egret-backend/blob/develop/docs/EGRET%20Database%20Design.pdf)
