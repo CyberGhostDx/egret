@@ -301,13 +301,15 @@ export default function ExamCard({ exam }: { exam: Exam }) {
                       )
                       .join(", ") || "-"}
                   </p>
-
                   <p>
                     <span className="font-bold text-red-500">*</span>
                     <span className="font-bold">{t("Note")} : </span>
                     <span className="font-normal text-slate-600">
                       {examDetails?.note || t("NoNote")}
                     </span>
+                  </p>
+                  <p className="text-base font-bold text-red-500">
+                    {t("DoubleCheck")}
                   </p>
                 </div>
                 {availableExams.length > 1 && (
