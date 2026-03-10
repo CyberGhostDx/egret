@@ -4,6 +4,9 @@
 
 # EGRET Frontend
 
+[![EGRET Frontend CI](https://github.com/cyberghostdx/egret/actions/workflows/ci.yml/badge.svg)](https://github.com/cyberghostdx/egret/actions/workflows/ci.yml)
+[![EGRET Frontend Release](https://github.com/cyberghostdx/egret/actions/workflows/release.yml/badge.svg)](https://github.com/cyberghostdx/egret/actions/workflows/release.yml)
+
 This is the frontend application for the EGRET project, built with **Next.js**, **React**, **Tailwind CSS v4**, and leveraging **HeroUI** components for a beautiful, responsive user interface.
 
 ## 🛠️ Tech Stack
