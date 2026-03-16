@@ -70,7 +70,10 @@
     "LoadingExams": "Loading exams...",
     "NoRegisteredCourses": "No Registered Courses",
     "RegisterInvitation": "Add subjects to track your exam schedule.",
-    "RegisterButton": "Add Courses"
+    "RegisterButton": "Add Courses",
+    "ShowPassedExams": "Show passed exams",
+    "HidePassedExams": "Hide passed exams",
+    "NoUpcomingExams": "No upcoming exams"
   },
   "ExamCard": {
     "Days": "Days",
