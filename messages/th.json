@@ -70,7 +70,10 @@
     "LoadingExams": "กำลังโหลดข้อมูลการสอบ...",
     "NoRegisteredCourses": "ไม่พบรายวิชาที่ลงทะเบียน",
     "RegisterInvitation": "เพิ่มรายวิชาเพื่อเริ่มติดตามตารางสอบของคุณ",
-    "RegisterButton": "เพิ่มรายวิชา"
+    "RegisterButton": "เพิ่มรายวิชา",
+    "ShowPassedExams": "แสดงวิชาที่สอบผ่านไปแล้ว",
+    "HidePassedExams": "ซ่อนวิชาที่สอบผ่านไปแล้ว",
+    "NoUpcomingExams": "ไม่มีการสอบที่กำลังจะมาถึง"
   },
   "ExamCard": {
     "Days": "วัน",
