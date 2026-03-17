@@ -7,11 +7,17 @@ import { Link, useRouter } from "@/i18n/routing";
 import Image from "next/image";
 import { FcGoogle } from "react-icons/fc";
 import { useTranslations } from "next-intl";
+import { motion } from "framer-motion";
+import { IoInformationCircle } from "react-icons/io5";
 
 const LoginPage = () => {
   const router = useRouter();
   const t = useTranslations("Login");
   const { data: session, isPending } = authClient.useSession();
+
+  const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
+  const maintenanceMessage =
+    process.env.NEXT_PUBLIC_MAINTENANCE_MESSAGE ?? t("Maintenance");
 
   useEffect(() => {
     if (!isPending && session) {
@@ -29,6 +35,20 @@ const LoginPage = () => {
   return (
     <div className="primary-bg flex min-h-screen flex-col items-center justify-center p-4">
       <div className="z-20 flex w-full max-w-sm flex-col items-center space-y-6">
+        {isMaintenance && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-20 flex w-full items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50/80 p-4 shadow-sm backdrop-blur-md"
+          >
+            <IoInformationCircle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+            <p className="text-sm font-medium text-amber-800">
+              {maintenanceMessage}
+            </p>
+          </motion.div>
+        )}
+
         <div className="relative h-32 w-32">
           <Image
             src="/images/egret_logo.png"

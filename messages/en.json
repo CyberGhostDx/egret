@@ -160,7 +160,8 @@
     "SignInWithGoogle": "Sign in with Google",
     "PleaseUseKUOnly": "Please use @ku.th only",
     "AgreeToTerms": "By signing in, you agree to our",
-    "TermsAndConditions": "Terms and Conditions"
+    "TermsAndConditions": "Terms and Conditions",
+    "Maintenance": "The website is undergoing maintenance and will be back to normal operation tomorrow."
   },
   "Footer": {
     "Copyright": "© 2026 EGRET. Built for Kasetsart University Engineering Students (Bangkhen).",
