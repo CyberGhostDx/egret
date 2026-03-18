@@ -23,11 +23,11 @@ export default async function authMiddleware(req: NextRequest) {
   try {
     const { data: session } = await authClient.getSession({
       fetchOptions: {
-        headers: {
-          cookie: req.headers.get("cookie") || "",
-        },
+        headers: req.headers,
       },
     });
+
+    console.log("Auth Session:", session?.user ? "Authenticated" : "Not Authenticated", pathname);
 
     if (!session?.user) {
       if (pathname.startsWith("/admin")) {
@@ -42,6 +42,7 @@ export default async function authMiddleware(req: NextRequest) {
       }
     }
   } catch (error) {
+    console.error("AuthMiddleware error:", error);
     if (pathname.startsWith("/admin")) {
       return NextResponse.redirect(new URL("/admin/login", req.url));
     }
