@@ -27,8 +27,6 @@ export default async function authMiddleware(req: NextRequest) {
       },
     });
 
-    console.log("Auth Session:", session?.user ? "Authenticated" : "Not Authenticated", pathname);
-
     if (!session?.user) {
       if (pathname.startsWith("/admin")) {
         return NextResponse.redirect(new URL("/admin/login", req.url));
@@ -42,7 +40,6 @@ export default async function authMiddleware(req: NextRequest) {
       }
     }
   } catch (error) {
-    console.error("AuthMiddleware error:", error);
     if (pathname.startsWith("/admin")) {
       return NextResponse.redirect(new URL("/admin/login", req.url));
     }
