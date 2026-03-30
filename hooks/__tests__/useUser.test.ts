@@ -46,4 +46,19 @@ describe("useUser Hook", () => {
     expect(result.current.isLoading).toBe(false);
     expect(result.current.user?.name).toBe("Test User");
   });
+
+  test("should indicate isError when data fetching fails", () => {
+    (useSWR as any).mockReturnValue({
+      data: undefined,
+      error: new Error("Failed to fetch"),
+      isLoading: false,
+      isValidating: false,
+      mutate: vi.fn(),
+    });
+
+    const { result } = renderHook(() => useUser());
+
+    expect(result.current.isError).toBe(true);
+    expect(result.current.user).toBeNull();
+  });
 });
